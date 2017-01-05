@@ -4,6 +4,8 @@ import { Route, IndexRoute } from 'react-router';
 import Layout from '../containers/Layout';
 import Home from '../containers/Home';
 import About from '../containers/About';
+import Organizations from '../containers/Organizations';
+import Organization from '../containers/Organization';
 
 import privateRoute from './privateRoute';
 import Login from '../containers/Login';
@@ -29,9 +31,13 @@ export default function getRoutes(onLogout, store, client) {
   return (
     <Route path="/" component={Layout}>
       <IndexRoute component={Home} />
-      <Route name="About (secret ;) ;) )" path="about" component={privateRoute(About)} />
-      <Route name="Login" path="login" component={Login} />
-      <Route name="Logout" path="logout" onEnter={logout} />
+      <Route path="about" component={privateRoute(About)} />
+      <Route path="login" component={Login} />
+      <Route path="logout" onEnter={logout} />
+      <Route path="organizations">
+        <IndexRoute component={Organizations} />
+        <Route path=":organizationId" component={Organization} />
+      </Route>
     </Route>
   );
 }
