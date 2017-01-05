@@ -15,22 +15,6 @@ const Layout = ({ children, /* params, */ location }) => (
 
         <ul className="nav navbar-nav">
           <NavbarLink
-            title="Counter"
-            href="/localCounter"
-            active={location.pathname.indexOf('localCounter') !== -1}
-          />
-        </ul>
-
-        <ul className="nav navbar-nav">
-          <NavbarLink
-            title="Counter2"
-            href="/remoteCounter"
-            active={location.pathname.indexOf('remoteCounter') !== -1}
-          />
-        </ul>
-
-        <ul className="nav navbar-nav">
-          <NavbarLink
             title="About"
             href="/about"
             active={location.pathname.indexOf('about') !== -1}

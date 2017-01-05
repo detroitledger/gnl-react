@@ -31,40 +31,39 @@ module.exports = {
       "process.env": {
         NODE_ENV: JSON.stringify('production'),
         'PORT': JSON.stringify('8080'),
-        'WS_PORT': JSON.stringify('8082')
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
-        warnings: false
+        warnings: false,
       }
     }),
-    new ExtractTextPlugin('[name]-[hash].min.css')
+    new ExtractTextPlugin('[name]-[hash].min.css'),
   ],
   resolve: {
     extensions: ['', '.js'],
-    root: path.join(__dirname, 'src')
+    root: path.join(__dirname, 'src'),
   },
   module: {
     preLoaders: [
       {
         test: /\.css$/,
-        loader: 'stripcomment'
+        loader: 'stripcomment',
       },
     ],
     loaders: [{
       test: /\.js$/,
       loaders: ['babel'],
-      include: path.join(__dirname, 'src')
+      include: path.join(__dirname, 'src'),
     }, {
       test: /\.scss$/,
-      loader: ExtractTextPlugin.extract('style', 'css!postcss!sass')
+      loader: ExtractTextPlugin.extract('style', 'css!postcss!sass'),
     }, {
       test: /\.json/,
-      loaders: ['json-loader']
+      loaders: ['json-loader'],
     }]
   },
     postcss: [
-        require('autoprefixer')
-    ]
+        require('autoprefixer'),
+    ],
 };

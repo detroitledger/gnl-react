@@ -30,7 +30,6 @@
     "express": "^4.14.0",
     "graphql": "^0.8.2",
     "graphql-server-express": "^0.4.3",
-    "graphql-subscriptions": "^0.2.2",
     "graphql-tag": "^1.1.2",
     "graphql-tools": "^0.8.3",
     "http-proxy-middleware": "^0.17.2",
@@ -51,8 +50,7 @@
     "react-router-redux": "^4.0.7",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^1.0.0",
-    "redux-form": "^6.2.1",
-    "subscriptions-transport-ws": "^0.3.1"
+    "redux-form": "^6.2.1"
   },
   "devDependencies": {
     "ava": "^0.16.0",

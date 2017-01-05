@@ -9,7 +9,6 @@ export default function Index() {
         <h2>Welcome to my demo app.</h2>
         <h3>Check out these links</h3>
         <ul>
-          <li><Link to="/localCounter">Counter</Link></li>
           <li><Link to="/about">About</Link></li>
         </ul>
       </Col>

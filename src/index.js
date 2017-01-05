@@ -7,12 +7,10 @@ import jwtDecode from 'jwt-decode';
 
 import { createNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
-import { Client } from 'subscriptions-transport-ws';
 
 import configureStore from './store/configureStore';
 
 import createApolloClient from './network/create-apollo-client';
-import addGraphQLSubscriptions from './network/subscriptions';
 
 import getRoutes from './routes';
 import setupAxiosInterceptors from './middleware/axios';
@@ -21,9 +19,6 @@ import { redirectToLoginWithMessage, signOutUser } from './actions/auth';
 import './styles/main.scss';
 
 const PORT = process.env.PORT || '3000';
-const WS_PORT = process.env.WS_PORT || '8082';
-const wsClient = new Client(window.location.origin.replace(/^http/, 'ws')
-  .replace(`:${PORT}`, `:${WS_PORT}`));
 
 const networkInterface = createNetworkInterface({ uri: '/graphql' });
 networkInterface.use([{
@@ -44,13 +39,8 @@ networkInterface.use([{
   },
 }]);
 
-const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-  networkInterface,
-  wsClient,
-);
-
 const client = createApolloClient({
-  networkInterface: networkInterfaceWithSubscriptions,
+  networkInterface,
   initialState: window['__APOLLO_STATE__'],
   ssrForceFetchDelay: 100,
 });
