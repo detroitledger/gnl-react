@@ -54,7 +54,6 @@
     "redux-form": "^6.2.1"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
     "babel-core": "^6.21.0",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.8",
@@ -71,6 +70,7 @@
     "eslint-plugin-react": "^6.7.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.24.1",
+    "jest": "^18.1.0",
     "json-loader": "^0.5.4",
     "node-sass": "^3.13.0",
     "postcss-loader": "^1.2.0",
