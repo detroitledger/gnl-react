@@ -2,10 +2,12 @@
   "name": "react-redux-graphql-hot-demo",
   "version": "1.0.0",
   "description": "demo for react-redux with graphql and hot",
+  "main": "src",
   "scripts": {
+    "start": "node .",
     "dev": "concurrently --kill-others 'nodemon --watch src src' 'node webpack/webpack-dev-server.js'",
     "prebuild": "rimraf dist",
-    "build": "./node_modules/.bin/cross-env NODE_ENV=production webpack -p --optimize-dedupe --config webpack.prod.config.js",
+    "build": "./node_modules/.bin/cross-env NODE_ENV=production webpack -p --optimize-dedupe --config webpack/webpack.config.js",
     "eslint": "eslint ."
   },
   "keywords": [
