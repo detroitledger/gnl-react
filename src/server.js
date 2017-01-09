@@ -1,16 +1,18 @@
-import React from 'react'
-import serialize from 'serialize-javascript'
-import csrf from 'csurf'
-import { renderToString, renderToStaticMarkup } from 'react-dom/server'
-import { ApolloProvider } from 'react-apollo';
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import React from 'react';
+import serialize from 'serialize-javascript';
+import csrf from 'csurf';
+import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import { ApolloProvider, getDataFromTree } from 'react-apollo';
+import { createNetworkInterface } from 'apollo-client';
 import { createMemoryHistory, RouterContext, match } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import proxy from 'http-proxy-middleware';
+import 'isomorphic-fetch';
 
+import createApolloClient from './network/create-apollo-client';
 import getRoutes from './routes';
 import configureStore from './store/configureStore';
 import { setCsrfToken } from './actions/form';
@@ -39,7 +41,7 @@ router.use((req, res, next) => {
     global.webpackIsomorphicTools.refresh();
   }
 
-  const client = new ApolloClient({
+  const client = createApolloClient({
     ssrMode: true,
     networkInterface: createNetworkInterface({
       uri: process.env.API_URL || 'http://detroitledger.org:8081',
@@ -54,7 +56,7 @@ router.use((req, res, next) => {
   const store = configureStore({}, client);
   const history = syncHistoryWithStore(memoryHistory, store);
 
-  store.dispatch(setCsrfToken(req.csrfToken()));
+  //store.dispatch(setCsrfToken(req.csrfToken()));
 
   match({ history, routes, location: req.url }, (error, redirectLocation, renderProps) => {
     if (redirectLocation) {
@@ -65,44 +67,30 @@ router.use((req, res, next) => {
       return next(error);
     }
 
-    const fetchData = () => new Promise((resolve, reject) => {
-      const method = req.method.toLowerCase();
-      const { params, location, components } = renderProps;
-      let promises = [];
+    const reactApp = (
+      <ApolloProvider client={client}>
+        <RouterContext {...renderProps} />
+      </ApolloProvider>
+    );
 
-      components.forEach((component) => {
-        if (component) {
-          while (component && !component[method]) {
-            component = component.WrappedComponent;
-          }
-          component &&
-          component[method] &&
-          promises.push(component[method]({ req, res, params, location, store }));
-        }
-      })
+    getDataFromTree(reactApp).then(() => {
+      const content = renderToString(reactApp);
+      debugger;
 
-      Promise.all(promises).then(resolve).catch(reject);
-    });
-
-    const render = (store) => {
-      const content = renderToString(
-        <ApolloProvider client={client}>
-          <RouterContext {...renderProps} />
-        </ApolloProvider>
-      );
-
-      const initialState = store.getState();
       const assets = global.webpackIsomorphicTools.assets();
-      const state = `window.__INITIAL_STATE__ = ${serialize(initialState)}`;
-      const markup = <Html {...{ assets, state, content }} />;
+      const initialState = `window.__INITIAL_STATE__ = ${serialize(store.getState())}`;
+
+      const apolloStateData = {[client.reduxRootKey]: {
+        data: client.store.getState()[client.reduxRootKey].data,
+      }};
+      const apolloState = `window.__APOLLO_STATE__ = ${serialize(apolloStateData)}`;
+
+
+      const markup = <Html {...{ assets, initialState, apolloState, content }} />;
       const doctype = '<!doctype html>\n';
       const html = renderToStaticMarkup(markup);
 
       res.send(doctype + html);
-    }
-
-    fetchData().then(() => {
-      render(configureStore(store.getState(), client));
     }).catch((err) => {
       console.log(err);
       res.status(500).end();

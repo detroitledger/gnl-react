@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
-const Html = ({ assets, state, content }) => {
+const Html = ({ assets, initialState, apolloState, content }) => {
   const helmet = Helmet.rewind();
   const attrs = helmet.htmlAttributes.toComponent();
 
@@ -22,7 +22,8 @@ const Html = ({ assets, state, content }) => {
       </head>
       <body>
         <main id="app" dangerouslySetInnerHTML={{ __html: content }} />
-        <script dangerouslySetInnerHTML={{ __html: state }} />
+        <script dangerouslySetInnerHTML={{ __html: initialState }} />
+        <script dangerouslySetInnerHTML={{ __html: apolloState }} />
         {Object.keys(assets.javascript).map((key) =>
           <script key={key} src={assets.javascript[key]} />
         )}
@@ -33,7 +34,8 @@ const Html = ({ assets, state, content }) => {
 
 Html.propTypes = {
   assets: PropTypes.object.isRequired,
-  state: PropTypes.string.isRequired,
+  initialState: PropTypes.string.isRequired,
+  apolloState: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
 };
 
