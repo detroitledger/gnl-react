@@ -4,8 +4,7 @@ import csrf from 'csurf';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { createNetworkInterface } from 'apollo-client';
-import { createMemoryHistory, RouterContext, match } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
+import { RouterContext, match } from 'react-router';
 import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -44,7 +43,7 @@ router.use((req, res, next) => {
   const client = createApolloClient({
     ssrMode: true,
     networkInterface: createNetworkInterface({
-      uri: process.env.API_URL || 'http://detroitledger.org:8081',
+      uri: (process.env.API_URL || 'http://detroitledger.org:8081') + '/graphql',
       opts: {
         credentials: 'same-origin',
         headers: req.headers,
@@ -52,13 +51,11 @@ router.use((req, res, next) => {
     }),
   });
 
-  const memoryHistory = createMemoryHistory(req.url);
   const store = configureStore({}, client);
-  const history = syncHistoryWithStore(memoryHistory, store);
 
-  //store.dispatch(setCsrfToken(req.csrfToken()));
+  store.dispatch(setCsrfToken(req.csrfToken()));
 
-  match({ history, routes, location: req.url }, (error, redirectLocation, renderProps) => {
+  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
     if (redirectLocation) {
       res.redirect(redirectLocation.pathname + redirectLocation.search);
     }
@@ -73,9 +70,8 @@ router.use((req, res, next) => {
       </ApolloProvider>
     );
 
-    getDataFromTree(reactApp).then(() => {
+    getDataFromTree(reactApp, {client}).then(() => {
       const content = renderToString(reactApp);
-      debugger;
 
       const assets = global.webpackIsomorphicTools.assets();
       const initialState = `window.__INITIAL_STATE__ = ${serialize(store.getState())}`;
