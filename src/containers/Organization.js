@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import update from 'immutability-helper';
+import Helmet from 'react-helmet';
 
 class Organization extends React.Component {
 
@@ -17,7 +18,12 @@ class Organization extends React.Component {
       return <p>Loading...</p>;
     }
 
-    return <h4>{ledgerOrganization.name}</h4>;
+    return (
+      <div>
+        <Helmet title={ledgerOrganization.name} />
+        <h4>{ledgerOrganization.name}</h4>
+      </div>
+    );
   }
 
 }
