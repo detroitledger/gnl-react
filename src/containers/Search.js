@@ -4,19 +4,29 @@ import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import update from 'immutability-helper';
 
-/** TODO store ein search value as state, pass to query, return results - and learn more about compose */
+import SearchResult from './SearchResult.js';
 
+// Parent component to render search input, store value as state and pass down to query/SearchResult component
 class Search extends React.Component {
-  
-  constructor(args) {
-    super(args);
+  constructor(...args) {
+    super(...args);
+
+    this.state = { value: '' };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
-  	console.log({value: event.target.value});
+    this.setState({ value: event.target.value });
+  	console.log(this.state);
   }
 
   render() {
+    // const { loading, irsOrganization } = this.props.data;
+
+    // if (loading) {
+    //   return <p>Loading...</p>;
+    // }
+
     return (
         <div>
           <h3>Search organizations</h3>
@@ -25,33 +35,10 @@ class Search extends React.Component {
             onChange = {this.handleChange} />
           <br />
           <h4>Results: </h4>
+          <SearchResult ein={this.state.value} />
         </div>
     );
   }
-
 }
 
-Search.propTypes = {
-  data: PropTypes.shape({
-    irsOrganization: PropTypes.object,
-  }).isRequired,
-};
-
-const EIN_QUERY = gql`
-query getEIN($ein: String!) {
-  irsOrganization(ein: $ein) {
-    ein
-  }
-}
-`;
-
-export default compose(
-  graphql(EIN_QUERY, {
-    options: ({ params }) => ({
-      variables: { ein: params.search_value },
-    }),
-    props({ data: { irsOrganization } }) {
-      return { data: { irsOrganization } };
-    },
-  }),
-)(Search);
+export default Search;
