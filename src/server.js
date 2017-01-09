@@ -68,7 +68,7 @@ router.use((req, res, next) => {
     }
 
     const reactApp = (
-      <ApolloProvider client={client}>
+      <ApolloProvider client={client} store={store}>
         <RouterContext {...renderProps} />
       </ApolloProvider>
     );
