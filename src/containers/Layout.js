@@ -26,7 +26,7 @@ const Layout = ({ children, /* params, */ location }) => (
           />
           <NavbarLink
             title="An organization"
-            href="/organizations/hihi"
+            href="/organizations/111"
             active={location.pathname.indexOf('organizations/') !== -1}
           />
         </ul>
