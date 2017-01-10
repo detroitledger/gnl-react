@@ -10,6 +10,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import proxy from 'http-proxy-middleware';
 import 'isomorphic-fetch';
+import Helmet from 'react-helmet';
 
 import createApolloClient from './network/create-apollo-client';
 import getRoutes from './routes';
@@ -85,6 +86,9 @@ router.use((req, res, next) => {
       const markup = <Html {...{ assets, initialState, apolloState, content }} />;
       const doctype = '<!doctype html>\n';
       const html = renderToStaticMarkup(markup);
+
+      // ensure we don't leak
+      Helmet.rewind();
 
       res.send(doctype + html);
     }).catch((err) => {
