@@ -8,7 +8,8 @@
     "dev": "concurrently --kill-others 'nodemon --watch src src' 'node webpack/webpack-dev-server.js'",
     "prebuild": "rimraf dist",
     "build": "./node_modules/.bin/cross-env NODE_ENV=production webpack -p --optimize-dedupe --config webpack/webpack.config.js",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "test": "jest"
   },
   "keywords": [
     "react",
