@@ -11,13 +11,7 @@ const middlewares = [applyMiddleware(promiseMiddleware, middleware)];
 
 export default function configureStore(initialState = {}, apolloClient) {
   const hasWindow = typeof window !== 'undefined';
-/*
-  const finalCreateStore = compose(
-    applyMiddleware(apolloClient.middleware()),
-    ...middlewares,
-    hasWindow && window.devToolsExtension ? window.devToolsExtensions() : (f) => f,
-  )(createStore);
-*/
+
   const store = createStore(
     getReducer(apolloClient),
     initialState,
@@ -27,13 +21,7 @@ export default function configureStore(initialState = {}, apolloClient) {
       hasWindow && window.devToolsExtension ? window.devToolsExtension() : (f) => f,
     ),
   );
-/*
-  const store = createStore(
-    getReducer(apolloClient),
-    initialState,
-    composeWithDevTools(applyMiddleware(apolloClient.middleware()), ...middlewares),
-  );
-*/
+
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers', () => {
