@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import Helmet from 'react-helmet';
 
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
   <div className="form-group">
@@ -25,6 +26,7 @@ export default class LoginForm extends Component {
 
     return (
       <form onSubmit={handleSubmit}>
+        <Helmet title="Log in" />
         {errorMsg && <div className="alert alert-danger">{errorMsg}</div>}
         <Field name="username" className="form-control" component={renderField} type="text" label="Login name"/>
         <Field name="password" className="form-control" component={renderField} type="password" label="Password"/>
