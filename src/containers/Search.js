@@ -1,12 +1,9 @@
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { graphql, compose } from 'react-apollo';
-import gql from 'graphql-tag';
-import update from 'immutability-helper';
+import React from 'react';
 
 import SearchResult from './SearchResult.js';
 
-// Parent component to render search input, store value as state and pass down to query/SearchResult component
+// Container component to render search, store input value as state and pass as props to SearchResult component
+// @todo add debounce func to only process full ein value, not every character
 class Search extends React.Component {
   constructor(...args) {
     super(...args);
@@ -17,24 +14,17 @@ class Search extends React.Component {
 
   handleChange(event) {
     this.setState({ value: event.target.value });
-  	console.log(this.state);
   }
 
   render() {
-    // const { loading, irsOrganization } = this.props.data;
-
-    // if (loading) {
-    //   return <p>Loading...</p>;
-    // }
-
     return (
         <div>
           <h3>Search organizations</h3>
           <input type='text' 
-            placeholder='Search by EIN' 
+            placeholder='Enter an EIN'
             onChange = {this.handleChange} />
           <br />
-          <h4>Results: </h4>
+          <h4>Search result: </h4>
           <SearchResult ein={this.state.value} />
         </div>
     );

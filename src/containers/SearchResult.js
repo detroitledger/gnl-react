@@ -1,67 +1,60 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import update from 'immutability-helper';
 
-// Child component to display query results
-class SearchResult extends React.Component {
-  render() {
-    const { loading, irsOrganization } = this.props.data;
+// Presentational component to display search result
+const SearchResult = ({ loading, irsOrganization }) => {
+  if (loading) {
+    return <div>Loading...</div>;
+  } 
 
-    if (this.props.data.loading) {
-      return <div>Loading...</div>;
-    } else {
-      // Find Ledger org name(s) that match EIN search value
-      const orgName = irsOrganization.ledgerOrganizations.map(org =>
-        <h1>{org.name}</h1>
-      );
-    }
+  // @todo fix error "can't read property ledgerOrganizations of null"
+  // else {
+  //   const orgName = irsOrganization.ledgerOrganizations.map(org =>
+  //       <h1>{org.name}</h1>
+  //   );
+  // }
 
-    return(
-      <div>
-        {orgName}
-      </div>
-    );
-  }
-}
-
-SearchResult.propTypes = {
-  data: PropTypes.shape({
-    loading: PropTypes.bool.isRequired,
-    irsOrganization: PropTypes.object,
-  }).isRequired,
+  return (
+    <div>
+      <p>EIN: {irsOrganization.ein}</p>
+      <p>Filing type: {irsOrganization.filing_type}</p>
+      <p>Tax period: {irsOrganization.tax_period}</p>
+    </div>
+  );
 };
 
-// Define graphql query with ein search parameter
+SearchResult.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  irsOrganization: PropTypes.object // Not required bc null until query is successfully run
+};
+
+// Graphql query using ein as search parameter on irs organizations
 const EIN_QUERY = gql`
-query getIrsOrgByEIN($ein: String!) {
-  irsOrganization(ein: $ein) {
-    ein,
-    id,
-    subsccd,
-    filing_type,
-    start_year,
-    end_year,
-    irs_year,
-    filing_date,
-    tax_period
-  },
-  ledgerOrganizations {
-    name, 
-    description
+  query getIrsOrgByEIN($ein: String!) {
+    irsOrganization(ein: $ein) {
+      ein,
+      id,
+      subsccd,
+      filing_type,
+      start_year,
+      end_year,
+      irs_year,
+      filing_date,
+      tax_period,
+      ledgerOrganizations {
+        name,
+        description
+      }
+    }
   }
-}
 `;
 
-// Run query and set ein as props on SearchResult wrapper component
-export default compose(
-  graphql(EIN_QUERY, {
-    options: ({ ein }) => ({
-      variables: { ein },
-    }),
-    props({ data: { loading, irsOrganization } }) {
-      return { data: { loading, irsOrganization } };
-    },
+export default graphql(EIN_QUERY, {
+  options: ({ ein }) => ({ 
+    variables: { ein } 
   }),
-)(SearchResult);
+  props: ({ data: { loading, irsOrganization } }) => ({
+    loading, irsOrganization,
+  }),
+})(SearchResult);
