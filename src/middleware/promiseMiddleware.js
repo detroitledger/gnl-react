@@ -12,7 +12,7 @@ function createThunkMiddleware(extraArgument) {
       return next(action);
     }
 
-    const [REQUEST, SUCCESS, FAILURE] = types;
+    const { REQUEST, SUCCESS, FAILURE } = types;
 
     next({ ...rest, type: REQUEST });
 

@@ -4,7 +4,7 @@ import {
 
 export default function fetchUser() {
   return {
-    types: [FETCH_USER, FETCH_USER_SUCCESS, FETCH_USER_FAILED],
+    types: { REQUEST: FETCH_USER, SUCCESS: FETCH_USER_SUCCESS, FAILURE: FETCH_USER_FAILED },
     promise: client => client.post('/user'),
   };
 }
