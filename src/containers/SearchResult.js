@@ -11,10 +11,10 @@ const SearchResult = ({ loading, irsOrganization }) => {
   if (!irsOrganization) {
     return <em>Not found</em>;
   }
- 
+
   // Iterate over all ledger orgs that match irs org ein and return their name(s)
-  const orgName = irsOrganization.ledgerOrganizations.map(org =>
-    <li key={org.id}>
+  const orgName = irsOrganization.ledgerOrganizations.map((org, i) =>
+    <li key={i}>
       {org.name}
     </li>
   );
