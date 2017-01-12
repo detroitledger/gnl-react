@@ -6,14 +6,11 @@ import gql from 'graphql-tag';
 const SearchResult = ({ loading, irsOrganization }) => {
   if (loading) {
     return <div>Loading...</div>;
-  } 
+  }
 
-  // @todo fix error "can't read property ledgerOrganizations of null"
-  // else {
-  //   const orgName = irsOrganization.ledgerOrganizations.map(org =>
-  //       <h1>{org.name}</h1>
-  //   );
-  // }
+  if (!irsOrganization) {
+    return <em>Not found</em>;
+  }
 
   return (
     <div>
