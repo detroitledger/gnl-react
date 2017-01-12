@@ -6,6 +6,7 @@ import Home from '../containers/Home';
 import About from '../containers/About';
 import Organizations from '../containers/Organizations';
 import Organization from '../containers/Organization';
+import Search from '../containers/Search';
 
 import privateRoute from './privateRoute';
 import Login from '../containers/Login';
@@ -40,6 +41,7 @@ export default function getRoutes(onLogout, store, client) {
         <IndexRoute component={Organizations} />
         <Route path=":organizationId" component={Organization} />
       </Route>
+      <Route path="search" component={Search} />
     </Route>
   );
 }
