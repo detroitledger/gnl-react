@@ -5,21 +5,22 @@ based on mtiger2k/react-redux-graphql-passport-starter and bnchdrff/react-redux-
 ### Installation
 
 ```bash
-npm install
+yarn
+# or
+#npm install
 cp .env.example .env # we don't have any secrets yet ;)
 ```
 
 ## Running Dev Server
 
 ```bash
-npm start
+npm run dev
 ```
 
-## Building and Running Production Server
+## Tests
 
 ```bash
-npm run build
-# site is in dist now... go there & run `python -mSimpleHTTPServer` or whatever!
+npm test
 ```
 
 ## Explanation
