@@ -6,11 +6,12 @@ import {
   SIGN_IN_FAILED,
   SIGN_OUT,
 } from './types';
+
 import fetchUser from './user';
 
 export function signInUser(username, password) {
   return {
-    types: [SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_FAILED],
+    types: { REQUEST: SIGN_IN, SUCCESS: SIGN_IN_SUCCESS, FAILURE: SIGN_IN_FAILED },
     promise(client) {
       return client.post('/signin', {
         username,

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
-import { reducer as formReducer } from 'redux-form';
 
 import errors from './errors';
 import auth from './auth';
 import user from './user';
+import form from './form';
 
 export default function combiner(apolloClient) {
   return combineReducers({
@@ -12,7 +12,7 @@ export default function combiner(apolloClient) {
     auth,
     user,
     routing,
-    form: formReducer,
+    form,
     apollo: apolloClient.reducer(),
   });
 }

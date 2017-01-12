@@ -6,12 +6,15 @@ import Home from '../containers/Home';
 import About from '../containers/About';
 import Organizations from '../containers/Organizations';
 import Organization from '../containers/Organization';
+import Search from '../containers/Search';
 
 import privateRoute from './privateRoute';
 import Login from '../containers/Login';
 import fetchUser from '../actions/user';
 
 export default function getRoutes(onLogout, store, client) {
+  const hasWindow = typeof window !== 'undefined';
+
   const logout = (nextState, replace, cb) => {
     onLogout();
     if (client) {
@@ -21,7 +24,7 @@ export default function getRoutes(onLogout, store, client) {
     cb();
   };
 
-  if (store) { // from client
+  if (store && hasWindow && typeof window.localStorage !== 'undefined') { // from client
     const token = localStorage.getItem('auth-token');
     if (token !== null) {
       store.dispatch(fetchUser());
@@ -38,6 +41,7 @@ export default function getRoutes(onLogout, store, client) {
         <IndexRoute component={Organizations} />
         <Route path=":organizationId" component={Organization} />
       </Route>
+      <Route path="search" component={Search} />
     </Route>
   );
 }
