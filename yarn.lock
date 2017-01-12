@@ -5176,6 +5176,10 @@ redux-form@^6.2.1:
     lodash-es "^4.17.3"
     shallowequal "^0.2.2"
 
+redux-mock-store@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/redux-mock-store/-/redux-mock-store-1.2.1.tgz#630c0e2642927d1417c844d935266b501f2fc231"
+
 redux@^3.4.0, redux@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.6.0.tgz#887c2b3d0b9bd86eca2be70571c27654c19e188d"
