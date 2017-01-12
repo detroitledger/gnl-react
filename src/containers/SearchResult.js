@@ -38,18 +38,46 @@ SearchResult.propTypes = {
 const EIN_QUERY = gql`
   query getIrsOrgByEIN($ein: String!) {
     irsOrganization(ein: $ein) {
-      ein,
       id,
+      ein,
       subsccd,
+      pdf,
       filing_type,
       start_year,
       end_year,
       irs_year,
       filing_date,
       tax_period,
+      contributions_and_grants,
+      program_service_revenue,
+      investment_income,
+      other_revenue,
+      total_revenue,
+      grants_paid,
+      benefits_paid,
+      compensation,
+      fundraising_fees,
+      total_fundraising_expenses,
+      other_expenses,
+      total_expenses,
+      revenue_less_expenses,
+      total_assets,
+      total_liabilities,
+      net_assets,
       ledgerOrganizations {
+        id,
+        ein,
         name,
-        description
+        description,
+        ntees {
+          id,
+          name
+        },
+        start,
+        end,
+        received,
+        funded,
+        stateCorpId
       }
     }
   }
