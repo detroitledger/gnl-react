@@ -12,3 +12,5 @@ export const SET_ERROR = 'SET_ERROR';
 export const DISMISS_ERROR = 'DISMISS_ERROR';
 
 export const FORM_SET_CSRF_TOKEN = 'FORM_SET_CSRF_TOKEN';
+
+export const UI_SET_GRANT_VIEW = 'UI_SET_GRANT_VIEW';
