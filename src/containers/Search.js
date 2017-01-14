@@ -20,6 +20,7 @@ class Search extends React.Component {
     return (
         <div>
           <h3>Search organizations</h3>
+          <p>(Hint: Try EIN 237080478 to return Wayne State University)</p>
           <input type='text' 
             placeholder='Enter an EIN'
             onChange = {this.handleChange} />

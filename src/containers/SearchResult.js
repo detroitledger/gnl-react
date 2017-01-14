@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import IrsData from '../components/IrsData';
+
 // Presentational component to display search result
 const SearchResult = ({ loading, irsOrganization }) => {
   if (loading) {
@@ -20,12 +22,7 @@ const SearchResult = ({ loading, irsOrganization }) => {
   );
 
   return (
-    <div>
-      <p>EIN: {irsOrganization.ein}</p>
-      <p>Filing type: {irsOrganization.filing_type}</p>
-      <p>Tax period: {irsOrganization.tax_period}</p>
-      <p>Ledger name(s): {orgName}</p>
-    </div>
+    <IrsData irsOrganization={irsOrganization} />
   );
 };
 
