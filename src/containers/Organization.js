@@ -30,6 +30,7 @@ class Organization extends React.Component {
       <div>
         <Helmet title={ledgerOrganization.name} />
         <h3>{ledgerOrganization.name}</h3>
+        <p>{ledgerOrganization.description}</p>
         <OrgFinances forms990={this.props.data.forms990} />
         <h4>Grant Data</h4>
         <p>
@@ -63,6 +64,7 @@ const ORG_QUERY = gql`
 query getOrg($id: Int!) {
   ledgerOrganization(id: $id) {
     name
+    description
     ledgerGrantsFunded(limit: 10000) {
       id
       start
