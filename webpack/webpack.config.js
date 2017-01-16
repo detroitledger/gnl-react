@@ -8,6 +8,37 @@ var ip = process.env.IP || '0.0.0.0';
 var port = (+process.env.PORT + 1) || 3001;
 var DEBUG = process.env.NODE_ENV !== 'production';
 
+// These are the same as what we have in .babelrc
+// but with the addition of react-transform-hmr
+// to allow for hot module reloading during development.
+// Using hmr won't work during the isomorphic build process, though,
+// so it is excluded from .babelrc.
+var babelSettings = {
+  presets: ['react', 'es2015', 'stage-0'],
+  env: {
+    development: {
+      plugins: [
+        'transform-decorators-legacy',
+        'react-hot-loader/babel',
+        ['react-transform', {
+          transforms: [
+            {
+              transform: 'react-transform-hmr',
+              imports: [ 'react' ],
+              locals: [ 'module' ],
+            },
+          ],
+        }],
+      ],
+    },
+    production: {
+      plugins: [
+        'transform-react-remove-prop-types'
+      ],
+    },
+  },
+};
+
 var config = {
   devtool: DEBUG ? 'inline-source-map' : false,
   entry: [
@@ -34,7 +65,7 @@ var config = {
     loaders: [
       {
         test: /\.js?$/,
-        loader: 'babel',
+        loader: 'babel?' + JSON.stringify(babelSettings),
         exclude: /node_modules/,
       },
       {
