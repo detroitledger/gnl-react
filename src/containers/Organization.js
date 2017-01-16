@@ -10,6 +10,7 @@ import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
 import { setGrantSide } from '../actions/ui';
 
+import OrgFinances from '../components/OrgFinances';
 import Grants from '../components/Grants';
 
 class Organization extends React.Component {
@@ -26,27 +27,26 @@ class Organization extends React.Component {
     }
 
     return (
-      <Grid>
+      <div>
         <Helmet title={ledgerOrganization.name} />
-        <Row>
-          <Col xs={12}>
-            <h3>{ledgerOrganization.name}</h3>
-          </Col>
-          <Col xs={12}>
-            <Nav bsStyle="tabs" activeKey={this.props.grantSide} onSelect={this.props.handleSetGrantSide}>
-              <NavItem eventKey="funded">Grants funded</NavItem>
-              <NavItem eventKey="received">Grants received</NavItem>
-            </Nav>
-            <Grants
-              verb={this.props.grantSide}
-              grantsReceived={this.props.data.grantsReceived}
-              grantsFunded={this.props.data.grantsFunded}
-              fundedYearlySums={this.props.data.fundedYearlySums}
-              receivedYearlySums={this.props.data.receivedYearlySums}
-            />
-          </Col>
-        </Row>
-      </Grid>
+        <h3>{ledgerOrganization.name}</h3>
+        <OrgFinances forms990={this.props.data.forms990} />
+        <h4>Grant Data</h4>
+        <p>
+          Describes grants Ledger staff have been able to document. Does not reflect a full, official record of all funding.
+        </p>
+        <Nav bsStyle="tabs" activeKey={this.props.grantSide} onSelect={this.props.handleSetGrantSide}>
+          <NavItem eventKey="funded">Grants funded</NavItem>
+          <NavItem eventKey="received">Grants received</NavItem>
+        </Nav>
+        <Grants
+          verb={this.props.grantSide}
+          grantsReceived={this.props.data.grantsReceived}
+          grantsFunded={this.props.data.grantsFunded}
+          fundedYearlySums={this.props.data.fundedYearlySums}
+          receivedYearlySums={this.props.data.receivedYearlySums}
+        />
+      </div>
     );
   }
 
@@ -84,6 +84,13 @@ query getOrg($id: Int!) {
       }
       amount
       description
+    }
+    forms990(limit: 999) {
+      tax_period
+      total_assets
+      total_expenses
+      total_revenue
+      grants_paid
     }
   }
 }
@@ -159,6 +166,14 @@ export default compose(
       const { grants: grantsFunded, yearlySums: fundedYearlySums } = addSummaryRows(flattenedGrantsFunded);
       const { grants: grantsReceived, yearlySums: receivedYearlySums } = addSummaryRows(flattenedGrantsReceived);
 
+      // Augment IRS data
+      const forms990 = ledgerOrganization.forms990.map((form990) => ({
+        ...form990,
+        year: Number(form990.tax_period.substring(0, 4)),
+        month: Number(form990.tax_period.substring(4)),
+        monthText: moment.months()[Number(form990.tax_period.substring(4) - 1)]
+      }));
+
       return {
         data: {
           loading,
@@ -167,6 +182,7 @@ export default compose(
           fundedYearlySums,
           grantsReceived,
           receivedYearlySums,
+          forms990,
         },
       };
     },
