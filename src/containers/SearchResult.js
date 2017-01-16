@@ -4,26 +4,33 @@ import gql from 'graphql-tag';
 
 import IrsData from '../components/IrsData';
 
-// Presentational component to display search result
+// Component to query and process search result
 const SearchResult = ({ loading, irsOrganization }) => {
+  
   if (loading) {
-    return <div>Loading...</div>;
+    return <p>Loading...</p>;
   }
 
   if (!irsOrganization) {
-    return <em>Not found</em>;
+    return <p><em>EIN not found in IRS database</em></p>;
   }
 
   // Iterate over all ledger orgs that match irs org ein and return their name(s)
+  // @todo dynamically set href to './organizations/{org.id}'
   const orgName = irsOrganization.ledgerOrganizations.map((org, i) =>
     <li key={i}>
-      {org.name}
+      <a href='./organizations/'>{org.name}</a>
     </li>
   );
 
   return (
-    <IrsData irsOrganization={irsOrganization} />
+    <div>
+      <IrsData irsOrganization={irsOrganization} />
+      <h4>Ledger organizations with EIN {irsOrganization.ein}</h4>
+      <p>{orgName}</p>
+    </div>
   );
+
 };
 
 SearchResult.propTypes = {
@@ -61,20 +68,19 @@ const EIN_QUERY = gql`
       total_assets,
       total_liabilities,
       net_assets,
+      forms990 {
+        id,
+        ein,
+        irs_year,
+        tax_period,
+        total_revenue,
+        total_expenses,
+        total_assets
+      },
       ledgerOrganizations {
         id,
         ein,
-        name,
-        description,
-        ntees {
-          id,
-          name
-        },
-        start,
-        end,
-        received,
-        funded,
-        stateCorpId
+        name
       }
     }
   }
