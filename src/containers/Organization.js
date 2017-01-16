@@ -37,7 +37,13 @@ class Organization extends React.Component {
               <NavItem eventKey="funded">Grants funded</NavItem>
               <NavItem eventKey="received">Grants received</NavItem>
             </Nav>
-            <Grants verb={this.props.grantSide} grantsReceived={received} grantsFunded={funded} />
+            <Grants
+              verb={this.props.grantSide}
+              grantsReceived={this.props.data.grantsReceived}
+              grantsFunded={this.props.data.grantsFunded}
+              fundedYearlySums={this.props.data.fundedYearlySums}
+              receivedYearlySums={this.props.data.receivedYearlySums}
+            />
           </Col>
         </Row>
       </Grid>
@@ -103,35 +109,64 @@ export default compose(
       variables: { id: params.organizationId },
     }),
     props({ data: { loading, ledgerOrganization } }) {
-      // Sort lists by org
-      const flattenedGrantsReceived = sortBy(ledgerOrganization.ledgerGrantsReceived.map((grant) => ({
-        org: grant.funder.name,
-        orgId: grant.funder.id,
-        description: grant.description || 'n/a',
-        amount: grant.amount,
-        id: grant.id,
-        start: moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year(),
-        end: moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year(),
-        summary: false,
-      })), 'orgId');
+      if (loading) {
+        return { data: { loading: true } };
+      }
 
-      const flattenedGrantsFunded = sortBy(ledgerOrganization.ledgerGrantsFunded.map((grant) => ({
-        org: grant.recipient.name,
-        orgId: grant.recipient.id,
-        description: grant.recipient.name || 'n/a',
-        amount: grant.amount,
-        id: grant.id,
-        start: moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year(),
-        end: moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year(),
-        summary: false,
-      })), 'orgId');
+      // Sort lists by org
+      const flattenedGrantsReceived = sortBy(ledgerOrganization.ledgerGrantsReceived.map((grant) => {
+        const start = moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+        const end = moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+        const years = `${start} - ${end}`;
+
+        return {
+          org: grant.funder.name,
+          orgId: grant.funder.id,
+          description: grant.description || 'n/a',
+          amount: grant.amount,
+          id: grant.id,
+          start,
+          end,
+          years,
+          summary: false,
+        };
+      }), function(grant) {
+        // Sort by org id (boring) and then the inverse of the start year.
+        return grant.orgId + (1 / grant.start);
+      });
+
+      const flattenedGrantsFunded = sortBy(ledgerOrganization.ledgerGrantsFunded.map((grant) => {
+        const start = moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+        const end = moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+        const years = `${start} - ${end}`;
+
+        return {
+          org: grant.recipient.name,
+          orgId: grant.recipient.id,
+          description: grant.description || 'n/a',
+          amount: grant.amount,
+          id: grant.id,
+          start,
+          end,
+          years,
+          summary: false,
+        };
+      }), function(grant) {
+        // Sort by org id (boring) and then the inverse of the start year.
+        return grant.orgId + (1 / grant.start);
+      });
+
+      const { grants: grantsFunded, yearlySums: fundedYearlySums } = addSummaryRows(flattenedGrantsFunded);
+      const { grants: grantsReceived, yearlySums: receivedYearlySums } = addSummaryRows(flattenedGrantsReceived);
 
       return {
         data: {
           loading,
           ledgerOrganization,
-          funded: addSummaryRows(flattenedGrantsFunded),
-          received: addSummaryRows(flattenedGrantsReceived),
+          grantsFunded,
+          fundedYearlySums,
+          grantsReceived,
+          receivedYearlySums,
         },
       };
     },
@@ -140,7 +175,8 @@ export default compose(
 )(Organization);
 
 /**
- * Mutate the grants to fit our needs.
+ * Add summary rows to table data,
+ * and provide yearly totals.
  */
 function addSummaryRows(grantsOrig) {
   // Copy the provided array.
@@ -186,5 +222,5 @@ function addSummaryRows(grantsOrig) {
     });
   });
 
-  return grants;
+  return { grants, yearlySums };
 }
