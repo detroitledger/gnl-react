@@ -5414,6 +5414,12 @@ react-side-effect@1.0.2:
   dependencies:
     fbjs "0.1.0-alpha.10"
 
+react-svg-chart@^4.0.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-svg-chart/-/react-svg-chart-4.0.1.tgz#22f6c99c9f0e5c1c441ea2bcad2b7839a91e790a"
+  dependencies:
+    tweening "^1.2.0"
+
 react-test-renderer@^15.4.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-15.6.2.tgz#d0333434fc2c438092696ca770da5ed48037efa8"
@@ -6434,6 +6440,16 @@ tunnel-agent@^0.6.0:
 tunnel-agent@~0.4.1:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.4.3.tgz#6373db76909fe570e08d73583365ed828a74eeeb"
+
+tween-functions@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tween-functions/-/tween-functions-1.2.0.tgz#1ae3a50e7c60bb3def774eac707acbca73bbc3ff"
+
+tweening@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tweening/-/tweening-1.2.0.tgz#7e1b4f4559c32ee350610d080797390b6883a3ed"
+  dependencies:
+    tween-functions "^1.2.0"
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
