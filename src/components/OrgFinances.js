@@ -60,7 +60,7 @@ const OrgFinances = (props) => {
       </Grid>
     </div>
   );
-}
+};
 
 OrgFinances.propTypes = {
   forms990: PropTypes.array.isRequired,

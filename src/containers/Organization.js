@@ -11,6 +11,7 @@ import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 import { setGrantSide } from '../actions/ui';
 
 import OrgFinances from '../components/OrgFinances';
+import OrgNteeLinks from '../components/OrgNteeLinks';
 import Grants from '../components/Grants';
 
 class Organization extends React.Component {
@@ -30,6 +31,7 @@ class Organization extends React.Component {
       <div>
         <Helmet title={ledgerOrganization.name} />
         <h3>{ledgerOrganization.name}</h3>
+        <OrgNteeLinks ntees={ledgerOrganization.ntees} />
         <p>{ledgerOrganization.description}</p>
         <OrgFinances forms990={this.props.data.forms990} />
         <h4>Grant Data</h4>
@@ -93,6 +95,10 @@ query getOrg($id: Int!) {
       total_expenses
       total_revenue
       grants_paid
+    }
+    ntees {
+      id
+      name
     }
   }
 }
