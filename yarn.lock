@@ -5038,6 +5038,12 @@ react-side-effect@1.0.2:
   dependencies:
     fbjs "0.1.0-alpha.10"
 
+react-svg-chart@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-svg-chart/-/react-svg-chart-4.0.0.tgz#9e5647b91bca9f51976e35f9f57a8abe8aa30a04"
+  dependencies:
+    svg-tween "^1.2.0"
+
 react-transform-catch-errors@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-transform-catch-errors/-/react-transform-catch-errors-1.0.2.tgz#1b4d4a76e97271896fc16fe3086c793ec88a9eeb"
@@ -5790,6 +5796,22 @@ supports-color@^3.1.0, supports-color@^3.1.1, supports-color@^3.1.2:
   dependencies:
     has-flag "^1.0.0"
 
+svg-arc-to-cubic-bezier@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/svg-arc-to-cubic-bezier/-/svg-arc-to-cubic-bezier-1.0.1.tgz#4494fb85708951ce9fd006ff1269cc171849c672"
+
+svg-shapes@^1.9.1:
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/svg-shapes/-/svg-shapes-1.9.2.tgz#7156b28af15441e4371345f398e10d5cc5659747"
+
+svg-tween@^1.2.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/svg-tween/-/svg-tween-1.4.0.tgz#59823341597a5961e9b42086006d5a4db857e72d"
+  dependencies:
+    svg-arc-to-cubic-bezier "^1.0.0"
+    svg-shapes "^1.9.1"
+    tweening "^1.1.0"
+
 svgo@^0.7.0:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/svgo/-/svgo-0.7.1.tgz#287320fed972cb097e72c2bb1685f96fe08f8034"
@@ -5958,6 +5980,16 @@ tty-browserify@0.0.0:
 tunnel-agent@~0.4.1:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.4.3.tgz#6373db76909fe570e08d73583365ed828a74eeeb"
+
+tween-functions@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tween-functions/-/tween-functions-1.2.0.tgz#1ae3a50e7c60bb3def774eac707acbca73bbc3ff"
+
+tweening@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tweening/-/tweening-1.2.0.tgz#7e1b4f4559c32ee350610d080797390b6883a3ed"
+  dependencies:
+    tween-functions "^1.2.0"
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
