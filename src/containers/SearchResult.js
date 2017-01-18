@@ -16,10 +16,10 @@ const SearchResult = ({ loading, irsOrganization }) => {
   }
 
   // Iterate over all ledger orgs that match irs org ein and return their name(s)
-  // @todo dynamically set href to './organizations/{org.id}'
-  const orgName = irsOrganization.ledgerOrganizations.map((org, i) =>
+  // @todo debug href
+  const linkedOrgNames = irsOrganization.ledgerOrganizations.map((org, i) =>
     <li key={i}>
-      <a href='./organizations/'>{org.name}</a>
+      <a href='/organizations/{org.id}'>{org.name}</a>
     </li>
   );
 
@@ -27,7 +27,7 @@ const SearchResult = ({ loading, irsOrganization }) => {
     <div>
       <IrsData irsOrganization={irsOrganization} />
       <h4>Ledger organizations with EIN {irsOrganization.ein}</h4>
-      <p>{orgName}</p>
+      <p>{linkedOrgNames}</p>
     </div>
   );
 
