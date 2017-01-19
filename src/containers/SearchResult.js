@@ -15,11 +15,10 @@ const SearchResult = ({ loading, irsOrganization }) => {
     return <p><em>EIN not found in IRS database</em></p>;
   }
 
-  // Iterate over all ledger orgs that match irs org ein and return their name(s)
-  // @todo debug href
+  // Iterate over all ledger orgs that match irs ein
   const linkedOrgNames = irsOrganization.ledgerOrganizations.map((org, i) =>
     <li key={i}>
-      <a href='/organizations/{org.id}'>{org.name}</a>
+      <a href={'/organizations/' + org.id}>{org.name}</a>
     </li>
   );
 
