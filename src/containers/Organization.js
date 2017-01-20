@@ -12,6 +12,7 @@ import { setGrantSide } from '../actions/ui';
 
 import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
+import OrgNewsArticles from '../components/OrgNewsArticles';
 import Grants from '../components/Grants';
 
 class Organization extends React.Component {
@@ -32,6 +33,7 @@ class Organization extends React.Component {
         <Helmet title={ledgerOrganization.name} />
         <h3>{ledgerOrganization.name}</h3>
         <OrgNteeLinks ntees={ledgerOrganization.ntees} />
+        <OrgNewsArticles newses={ledgerOrganization.ledgerNewsArticles} />
         <p>{ledgerOrganization.description}</p>
         <OrgFinances forms990={this.props.data.forms990} />
         <h4>Grant Data</h4>
@@ -99,6 +101,12 @@ query getOrg($id: Int!) {
     ntees {
       id
       name
+    }
+    ledgerNewsArticles {
+      link
+      title
+      date
+      desc
     }
   }
 }
