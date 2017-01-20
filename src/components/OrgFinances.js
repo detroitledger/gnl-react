@@ -9,7 +9,7 @@ const OrgFinances = (props) => {
       grants_paid = (
         <tr>
           <td>Grants Paid</td>
-          <td class="amt">${numeral(form990.grants_paid).format('0,0[.]00')}</td>
+          <td className="amt">${numeral(form990.grants_paid).format('0,0[.]00')}</td>
         </tr>
       );
     }
