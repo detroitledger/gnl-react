@@ -2,9 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import update from 'immutability-helper';
 import Helmet from 'react-helmet';
-import { Grid, Row, Col, Nav, NavItem } from 'react-bootstrap';
+import { Nav, NavItem } from 'react-bootstrap';
 import moment from 'moment';
 import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
@@ -17,12 +16,15 @@ import Grants from '../components/Grants';
 
 class Organization extends React.Component {
 
-  constructor(args) {
-    super(args);
-  }
-
   render() {
-    const { loading, ledgerOrganization, funded, received } = this.props.data;
+    const {
+      loading,
+      ledgerOrganization,
+      grantsFunded,
+      grantsReceived,
+      fundedYearlySums,
+      receivedYearlySums,
+    } = this.props.data;
 
     if (loading) {
       return <p>Loading...</p>;
@@ -46,10 +48,10 @@ class Organization extends React.Component {
         </Nav>
         <Grants
           verb={this.props.grantSide}
-          grantsReceived={this.props.data.grantsReceived}
-          grantsFunded={this.props.data.grantsFunded}
-          fundedYearlySums={this.props.data.fundedYearlySums}
-          receivedYearlySums={this.props.data.receivedYearlySums}
+          grantsReceived={grantsReceived}
+          grantsFunded={grantsFunded}
+          fundedYearlySums={fundedYearlySums}
+          receivedYearlySums={receivedYearlySums}
         />
       </div>
     );
@@ -61,6 +63,7 @@ Organization.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     ledgerOrganization: PropTypes.object,
+    grantSide: PropTypes.string,
   }).isRequired,
 };
 
@@ -153,10 +156,10 @@ export default compose(
           years,
           summary: false,
         };
-      }), function(grant) {
+      }), grant => (
         // Sort by org id (boring) and then the inverse of the start year.
-        return grant.orgId + (1 / grant.start);
-      });
+        grant.orgId + (1 / grant.start)
+      ));
 
       const flattenedGrantsFunded = sortBy(ledgerOrganization.ledgerGrantsFunded.map((grant) => {
         const start = moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
@@ -174,20 +177,26 @@ export default compose(
           years,
           summary: false,
         };
-      }), function(grant) {
+      }), grant => (
         // Sort by org id (boring) and then the inverse of the start year.
-        return grant.orgId + (1 / grant.start);
-      });
+        grant.orgId + (1 / grant.start)
+      ));
 
-      const { grants: grantsFunded, yearlySums: fundedYearlySums } = addSummaryRows(flattenedGrantsFunded);
-      const { grants: grantsReceived, yearlySums: receivedYearlySums } = addSummaryRows(flattenedGrantsReceived);
+      const {
+        grants: grantsFunded,
+        yearlySums: fundedYearlySums,
+      } = addSummaryRows(flattenedGrantsFunded);
+      const {
+        grants: grantsReceived,
+        yearlySums: receivedYearlySums,
+      } = addSummaryRows(flattenedGrantsReceived);
 
       // Augment IRS data
-      const forms990 = ledgerOrganization.forms990.map((form990) => ({
+      const forms990 = ledgerOrganization.forms990.map(form990 => ({
         ...form990,
         year: Number(form990.tax_period.substring(0, 4)),
         month: Number(form990.tax_period.substring(4)),
-        monthText: moment.months()[Number(form990.tax_period.substring(4) - 1)]
+        monthText: moment.months()[Number(form990.tax_period.substring(4) - 1)],
       }));
 
       return {
@@ -220,7 +229,7 @@ function addSummaryRows(grantsOrig) {
   // Get stats per org, and stick em right in the array of grants as summary rows!
   const yearlySums = {};
   let insertAt = 0;
-  uniqOrgs.map((orgId) => {
+  uniqOrgs.forEach((orgId) => {
     let org = '';
 
     const sum = filter(grants, { orgId }).reduce((memo, grant) => {
