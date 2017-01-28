@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { AutoSizer, Table, Column } from 'react-virtualized';
+import { AutoSizer, WindowScroller, Table, Column } from 'react-virtualized';
 import numeral from 'numeral';
 
 import YearlySumsBarchart from './YearlySumsBarchart';
@@ -25,37 +25,43 @@ const Grants = (props) => {
     <div>
       <YearlySumsBarchart sums={sums} />
       <div style={{ minHeight: '300px', height: '100%' }}>
-        <AutoSizer>
-          {({ height, width }) => (
-            <Table
-              headerHeight={30}
-              height={height}
-              width={width}
-              rowCount={grants.length}
-              rowGetter={({ index }) => grants[index]}
-              rowClassName={getClassName}
-              rowHeight={({ index }) => 50}
-            >
-              <Column
-                width={200}
-                flexGrow={1}
-                label={label}
-                dataKey='description'
-              />
-              <Column
-                width={100}
-                label='Years'
-                dataKey='years'
-              />
-              <Column
-                width={100}
-                label='Amount'
-                dataKey='amount'
-                cellRenderer={renderDollars}
-              />
-            </Table>
+        <WindowScroller>
+          {({ height, scrollTop }) => (
+            <AutoSizer disableHeight={true}>
+              {({ width }) => (
+                <Table
+                  autoHeight
+                  scrollTop={scrollTop}
+                  headerHeight={30}
+                  height={height}
+                  width={width}
+                  rowCount={grants.length}
+                  rowGetter={({ index }) => grants[index]}
+                  rowClassName={getClassName}
+                  rowHeight={({ index }) => 50}
+                >
+                  <Column
+                    width={200}
+                    flexGrow={1}
+                    label={label}
+                    dataKey='description'
+                  />
+                  <Column
+                    width={100}
+                    label='Years'
+                    dataKey='years'
+                  />
+                  <Column
+                    width={100}
+                    label='Amount'
+                    dataKey='amount'
+                    cellRenderer={renderDollars}
+                  />
+                </Table>
+              )}
+            </AutoSizer>
           )}
-        </AutoSizer>
+        </WindowScroller>
       </div>
     </div>
   );
@@ -63,10 +69,9 @@ const Grants = (props) => {
 
 Grants.propTypes = {
   grantsReceived: PropTypes.array.isRequired,
-  grantsReceived: PropTypes.array.isRequired,
+  grantsFunded: PropTypes.array.isRequired,
   fundedYearlySums: PropTypes.object.isRequired,
   receivedYearlySums: PropTypes.object.isRequired,
-  grantsFunded: PropTypes.array.isRequired,
   verb: PropTypes.string.isRequired,
 };
 
