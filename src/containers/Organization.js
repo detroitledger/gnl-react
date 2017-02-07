@@ -7,7 +7,7 @@ import { Nav, NavItem } from 'react-bootstrap';
 import moment from 'moment';
 import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
-import { setGrantSide } from '../actions/ui';
+import { setGrantsVerb, setGrantsIds } from '../actions/grants';
 
 import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
@@ -15,6 +15,12 @@ import OrgNewsArticles from '../components/OrgNewsArticles';
 import Grants from '../components/Grants';
 
 class Organization extends React.Component {
+
+  componentWillReceiveProps({ data: { grantsFunded } }) {
+    // Set some intitial state.
+    //this.props.handleSetGrantsIds(grantsFunded.map(grant => grant.id));
+    //this.props.handleSetGrantsVerb('funded');
+  }
 
   render() {
     const {
@@ -42,12 +48,13 @@ class Organization extends React.Component {
         <p>
           Describes grants Ledger staff have been able to document. Does not reflect a full, official record of all funding.
         </p>
-        <Nav bsStyle="tabs" activeKey={this.props.grantSide} onSelect={this.props.handleSetGrantSide}>
+        <Nav bsStyle="tabs" activeKey={this.props.grantsVerb} onSelect={this.props.handleSetGrantsVerb}>
           <NavItem eventKey="funded">Grants funded</NavItem>
           <NavItem eventKey="received">Grants received</NavItem>
         </Nav>
         <Grants
-          verb={this.props.grantSide}
+          ids={this.props.grantsIds}
+          verb={this.props.grantsVerb}
           grantsReceived={grantsReceived}
           grantsFunded={grantsFunded}
           fundedYearlySums={fundedYearlySums}
@@ -63,7 +70,7 @@ Organization.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     ledgerOrganization: PropTypes.object,
-    grantSide: PropTypes.string,
+    grantsVerb: PropTypes.string,
   }).isRequired,
 };
 
@@ -117,24 +124,29 @@ query getOrg($id: Int!) {
 
 const mapStateToProps = (state) => {
   return {
-    grantSide: state.ui.grantSide,
+    grantsVerb: state.grants.verb,
+    grantsIds: state.grants.ids,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleSetGrantSide: (side) => {
-      dispatch(setGrantSide(side));
+    handleSetGrantsVerb: (verb) => {
+      dispatch(setGrantsVerb(verb));
+    },
+    handleSetGrantsIds: (ids) => {
+      dispatch(setGrantsIds(ids));
     },
   };
 };
 
 export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(ORG_QUERY, {
     options: ({ params }) => ({
       variables: { id: params.organizationId },
     }),
-    props({ data: { loading, ledgerOrganization } }) {
+    props({ data: { loading, ledgerOrganization }, ownProps: { handleSetGrantsIds, handleSetGrantsVerb } }) {
       if (loading) {
         return { data: { loading: true } };
       }
@@ -212,7 +224,6 @@ export default compose(
       };
     },
   }),
-  connect(mapStateToProps, mapDispatchToProps),
 )(Organization);
 
 /**

@@ -5,7 +5,7 @@ import errors from './errors';
 import auth from './auth';
 import user from './user';
 import form from './form';
-import ui from './ui';
+import grants from './grants';
 
 export default function combiner(apolloClient) {
   return combineReducers({
@@ -14,7 +14,7 @@ export default function combiner(apolloClient) {
     user,
     routing,
     form,
-    ui,
+    grants,
     apollo: apolloClient.reducer(),
   });
 }

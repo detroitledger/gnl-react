@@ -5,6 +5,7 @@ import numeral from 'numeral';
 import YearlySumsBarchart from './YearlySumsBarchart';
 
 const Grants = (props) => {
+  const ids = props.ids;
   const grants = (props.verb === 'funded') ? props.grantsFunded : props.grantsReceived;
   const sums = (props.verb === 'funded') ? props.fundedYearlySums : props.receivedYearlySums;
   const label = (props.verb === 'funded') ? 'Recipient' : 'Funder';
@@ -36,7 +37,7 @@ const Grants = (props) => {
                   height={height}
                   width={width}
                   rowCount={grants.length}
-                  rowGetter={({ index }) => grants[index]}
+                  rowGetter={({ index }) => grants[ids[index]]}
                   rowClassName={getClassName}
                   rowHeight={({ index }) => 50}
                 >
@@ -73,6 +74,7 @@ Grants.propTypes = {
   fundedYearlySums: PropTypes.object.isRequired,
   receivedYearlySums: PropTypes.object.isRequired,
   verb: PropTypes.string.isRequired,
+  ids: PropTypes.array,
 };
 
 export default Grants;
