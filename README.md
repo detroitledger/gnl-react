@@ -5,22 +5,20 @@ based on mtiger2k/react-redux-graphql-passport-starter and bnchdrff/react-redux-
 ### Installation
 
 ```bash
-yarn
-# or
-#npm install
+yarn install --frozen-lockfile
 cp .env.example .env # we don't have any secrets yet ;)
 ```
 
 ## Running Dev Server
 
 ```bash
-npm run dev
+yarn run dev
 ```
 
 ## Tests
 
 ```bash
-npm test
+yarn test
 ```
 
 ## Explanation
