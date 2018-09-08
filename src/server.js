@@ -1,4 +1,5 @@
 import React from 'react';
+import path from 'path';
 import serialize from 'serialize-javascript';
 import csrf from 'csurf';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
@@ -101,7 +102,7 @@ router.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.static('../dist'));
+app.use('/dist', express.static(path.join(__dirname, '../dist')));
 app.use(router);
 
 app.listen(PORT, (error) => {
