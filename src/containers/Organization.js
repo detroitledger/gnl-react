@@ -49,7 +49,6 @@ class Organization extends React.Component {
             <GrantTable grants={ledgerGrantsReceived} />
           </Tab>
         </Tabs>
-        ;
       </Page>
     );
   }
