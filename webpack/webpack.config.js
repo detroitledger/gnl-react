@@ -33,7 +33,7 @@ var babelSettings = {
     },
     production: {
       plugins: [
-        'transform-react-remove-prop-types'
+        'transform-decorators-legacy',
       ],
     },
   },
