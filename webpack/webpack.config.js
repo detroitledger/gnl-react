@@ -48,7 +48,7 @@ var config = {
   output: {
     path: path.join(__dirname, '../dist'),
     filename: 'bundle.[hash].js',
-    publicPath: DEBUG ? 'http://' + ip + ':' + port + '/' : '/',
+    publicPath: DEBUG ? 'http://' + ip + ':' + port + '/dist/' : '/dist/',
   },
   plugins: [
     new webpack.DefinePlugin({

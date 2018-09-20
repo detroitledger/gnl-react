@@ -8,6 +8,7 @@
     "dev": "concurrently --kill-others 'nodemon --watch src src' 'node webpack/webpack-dev-server.js'",
     "prebuild": "rimraf dist",
     "build": "./node_modules/.bin/cross-env NODE_ENV=production webpack -p --optimize-dedupe --config webpack/webpack.config.js",
+    "heroku-postbuild": "./node_modules/.bin/cross-env NODE_ENV=production webpack -p --optimize-dedupe --config webpack/webpack.config.js",
     "eslint": "eslint .",
     "test": "jest"
   },
@@ -19,6 +20,9 @@
     "babel",
     "webpack"
   ],
+  "engines" : {
+    "node" : ">=10.0 <12"
+  },
   "author": "Benjamin Chodoroff",
   "license": "ISC",
   "dependencies": {
