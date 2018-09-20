@@ -1,0 +1,77 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  padding-top: 50px;
+  color: $body-color;
+  font-size: 16px;
+  line-height: 1.85;
+  font-weight: 400;
+  font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+
+}
+
+a:link,
+a:visited {
+  color: $blue;
+  text-decoration: none;
+}
+
+a:active,
+a:hover {
+  border-bottom: 1px dotted $blue;
+}
+
+a.active-trail {
+  color: black;
+  text-decoration: none;
+}
+
+p {
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.l-header,
+.l-header a,
+h1, h2, h3, h4, h5 {
+  //font-family: "Source Sans Pro", sans-serif; //Helvetica Neue, sans-serif;
+  font-weight: 300;
+}
+
+h1, h2, h3 {
+  font-size: 1em;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+
+h2 {
+  font-size: 1.75em;
+  margin-top: 0;
+}
+
+html.js .form-autocomplete {
+  background-position: 100% 7px;
+}
+
+.view-id-orgs .views-exposed-form .views-exposed-widget .form-submit {
+  margin-top: 0;
+}
+
+#content {
+  input[type="submit"],
+  select {
+    margin-bottom: 1em;
+    padding: 6px;
+    font-family: $font-family;
+    color: #fff;
+    border: 5px solid $blue-accent;
+    text-align: center;
+    background: $blue-accent;
+    border-left:0px none;
+  }
+}
+
+
