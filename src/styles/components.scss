@@ -1,11 +1,13 @@
 $banker-bar: 2px solid $body-color;
 
 /* Header ------------------------------------------------------------------- */
-.navbar-inverse {
+nav.navbar-inverse {
   background: $blue;
   border: none;
   border-bottom: 1px solid #fff; // #006395;
   color: #fff;
+  border-radius: 0;
+  padding: 0;
 
   .navbar-brand {
     font-weight: bold;

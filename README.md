@@ -15,6 +15,10 @@ cp .env.example .env # we don't have any secrets yet ;)
 yarn run dev
 ```
 
+## API
+
+Check out http://detroitledger.org:8081/graphiql for an explorer
+
 ## Tests
 
 ```bash
