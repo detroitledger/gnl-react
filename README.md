@@ -21,6 +21,15 @@ yarn run dev
 yarn test
 ```
 
+## Deploy
+
+For Heroku deploy, set this config:
+
+```
+NPM_CONFIG_PRODUCTION=false
+YARN_PRODUCTION=false
+```
+
 ## Explanation
 
 #### Client Side

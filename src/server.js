@@ -1,4 +1,6 @@
+import dotenv from 'dotenv';
 import React from 'react';
+import path from 'path';
 import serialize from 'serialize-javascript';
 import csrf from 'csurf';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
@@ -17,6 +19,8 @@ import getRoutes from './routes';
 import configureStore from './store/configureStore';
 import { setCsrfToken } from './actions/form';
 import Html from './components/Html';
+
+dotenv.config();
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const IP = process.env.IP || '0.0.0.0';
@@ -71,7 +75,7 @@ router.use((req, res, next) => {
       </ApolloProvider>
     );
 
-    getDataFromTree(reactApp, {client}).then(() => {
+    getDataFromTree(reactApp, { client }).then(() => {
       const content = renderToString(reactApp);
 
       const assets = global.webpackIsomorphicTools.assets();
@@ -101,7 +105,7 @@ router.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.static('../dist'));
+app.use('/dist', express.static(path.join(__dirname, '../dist')));
 app.use(router);
 
 app.listen(PORT, (error) => {

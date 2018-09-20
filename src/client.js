@@ -16,6 +16,10 @@ import getRoutes from './routes';
 import setupAxiosInterceptors from './middleware/axios';
 import { redirectToLoginWithMessage, signOutUser } from './actions/auth';
 
+import 'react-virtualized/styles.css';
+
+import './styles/main.scss';
+
 const PORT = process.env.PORT || '3000';
 
 const networkInterface = createNetworkInterface({ uri: '/graphql' });

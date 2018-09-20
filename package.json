@@ -8,6 +8,7 @@
     "dev": "concurrently --kill-others 'nodemon --watch src src' 'node webpack/webpack-dev-server.js'",
     "prebuild": "rimraf dist",
     "build": "./node_modules/.bin/cross-env NODE_ENV=production webpack -p --optimize-dedupe --config webpack/webpack.config.js",
+    "heroku-postbuild": "./node_modules/.bin/cross-env NODE_ENV=production webpack -p --optimize-dedupe --config webpack/webpack.config.js",
     "eslint": "eslint .",
     "test": "jest"
   },
@@ -19,6 +20,9 @@
     "babel",
     "webpack"
   ],
+  "engines" : {
+    "node" : ">=10.0 <12"
+  },
   "author": "Benjamin Chodoroff",
   "license": "ISC",
   "dependencies": {
@@ -44,12 +48,14 @@
     "jwt-decode": "^2.1.0",
     "jwt-simple": "^0.5.1",
     "lodash": "^4.17.2",
+    "moment": "^2.17.1",
     "nodemon": "^1.11.0",
     "numeral": "^2.0.4",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
     "passport-local": "^1.0.0",
     "react": "^15.4.1",
+    "react-addons-shallow-compare": "^15.4.2",
     "react-apollo": "^0.8.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
@@ -58,6 +64,8 @@
     "react-redux": "^4.4.6",
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.7",
+    "react-svg-chart": "^4.0.0",
+    "react-virtualized": "^8.9.0",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^1.0.0",
     "redux-form": "^6.2.1",
