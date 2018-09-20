@@ -1,0 +1,147 @@
+.homepage-org {
+  padding: 1.5em 0;
+  border-bottom: 1px solid $darker-tan;
+
+  .timeframe {
+    color: $body-color;
+    font-size: 16px;
+  }
+
+  a,
+  .received,
+  .granted {
+    @include highlight-tan;
+  }
+}
+
+.grants-received {
+  margin: 0;
+}
+
+.timeframe,
+.submitted {
+  margin: 0;
+  color: #999;
+}
+
+div.description {
+  margin-bottom: 1.5em;
+}
+
+.eins {
+  text-align: right;
+}
+
+#news {
+  .read-all {
+    font-weight: 700;
+    margin-top: 0;
+  }
+
+  .more-news {
+    display: none;
+  }
+
+  .article { 
+    max-height: 9em;
+    margin-bottom: 1em;
+
+    h3 {
+      font-weight: 600;
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+
+    .date {
+      color: $gray;
+      font-weight: 300;
+    }
+
+    p {
+      font-weight: 300;
+      line-height: 1.4;
+    }
+  }
+}
+
+#finances {
+  margin-top: 1em;
+  margin-bottom: 2em;
+
+  .article {
+    margin-bottom: 1em;
+  }
+
+  table {
+    width: 100%;
+    overflow: hidden;
+
+    th {
+      border-bottom: 2px solid #000;
+    }
+
+    td {
+      border-bottom: 1px dotted #eee;
+    }
+
+    td.amt {
+      text-align: right;
+    }
+  }
+}
+
+.tags {
+  margin-bottom: 1em;
+}
+
+.ein,
+.tag {
+  color: $body-color;
+  border: 0px none;
+  border-radius: 3px;
+  display: inline-block;
+  padding: 0px 5px;
+  background: $light-gray;
+  font-size: .75em;
+}
+
+
+#ntee-organizations .org {
+  display: inline-block;
+  text-align: left;
+  width: 21%;
+  margin-right: 4%;
+  vertical-align: top;
+  border-top: 1px solid $blue-accent;
+  padding: 10px 0px 20px 0px;
+
+  &:hover {
+    // border-top-color: $bright-tan;
+  }
+
+  &:nth-child(4n+4){
+    margin-right: 0;
+  }
+
+  &.no-results {
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+    border-top: 0;
+  }
+
+  p {
+    // color: #fff;
+  }
+
+  a {
+    line-height: 1.1em;
+    display: inline-block;
+    border-bottom: 1px solid #fff;
+  }
+
+  a:hover {
+    // color: $bright-tan;
+    // border-bottom-color: $bright-tan;
+  }
+}
