@@ -1,12 +1,10 @@
-import ApolloClient, { addTypename } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createHttpLink } from 'apollo-link-http';
+import ApolloClient from 'apollo-client';
 
-export default options => new ApolloClient(Object.assign({}, {
-  queryTransformer: addTypename,
-  dataIdFromObject: (result) => {
-    if (result.id && result['__typename']) {
-      return result['__typename'] + result.id;
-    }
-    return null;
-  },
-  // shouldBatch: true,
-}, options));
+export default options =>
+  new ApolloClient({
+    link: createHttpLink({
+      uri: `${process.env.API_URL || 'http://detroitledger.org:8081'}/graphql`,
+    }),
+  });

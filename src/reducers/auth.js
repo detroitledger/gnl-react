@@ -1,9 +1,9 @@
-import {
-  SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_FAILED,
-  SIGN_OUT,
-} from '../actions/types';
+import { SIGN_IN, SIGN_IN_SUCCESS, SIGN_IN_FAILED, SIGN_OUT } from '../actions/types';
 
-export default function authReducer(auth = { authenticated: false, token: null, logging: false, errorMsg: '' }, action) {
+export default function authReducer(
+  auth = { authenticated: false, token: null, logging: false, errorMsg: '' },
+  action,
+) {
   switch (action.type) {
     case SIGN_IN:
       return Object.assign({}, auth, {

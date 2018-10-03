@@ -20,13 +20,15 @@
     "babel",
     "webpack"
   ],
-  "engines" : {
-    "node" : ">=10.0 <12"
+  "engines": {
+    "node": ">=10.0 <12"
   },
   "author": "Benjamin Chodoroff",
   "license": "ISC",
   "dependencies": {
-    "apollo-client": "^0.7.0",
+    "apollo-cache-inmemory": "^1.2.10",
+    "apollo-client": "2.4.2",
+    "apollo-link-http": "^1.5.5",
     "axios": "^0.15.3",
     "babel-cli": "^6.18.0",
     "bcrypt-nodejs": "0.0.3",

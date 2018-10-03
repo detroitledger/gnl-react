@@ -3,29 +3,28 @@ import { routerMiddleware } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 
 import promiseMiddleware from '../middleware/promiseMiddleware';
-import getReducer from '../reducers';
+import combiner from '../reducers';
 
 const middleware = routerMiddleware(browserHistory);
 
 const middlewares = [applyMiddleware(promiseMiddleware, middleware)];
 
-export default function configureStore(initialState = {}, apolloClient) {
+export default function configureStore(initialState = {}) {
   const hasWindow = typeof window !== 'undefined';
 
   const store = createStore(
-    getReducer(apolloClient),
+    combiner(),
     initialState,
     compose(
-      applyMiddleware(apolloClient.middleware()),
       ...middlewares,
-      hasWindow && window.devToolsExtension ? window.devToolsExtension() : (f) => f,
+      hasWindow && window.devToolsExtension ? window.devToolsExtension() : f => f,
     ),
   );
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers', () => {
-      const nextReducer = require('../reducers/index')(apolloClient).default; // eslint-disable-line
+      const nextReducer = require('../reducers/index')().default; // eslint-disable-line
       store.replaceReducer(nextReducer);
     });
   }

@@ -30,8 +30,13 @@ NPM_CONFIG_PRODUCTION=false
 YARN_PRODUCTION=false
 ```
 
+## Explore graphql
+
+http://detroitledger.org:8081/graphiql
+
 ## Explanation
 
 #### Client Side
 
 Use react-apollo and apollo-client to fetch data via graphql api.
+

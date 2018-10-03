@@ -23,23 +23,25 @@ import './styles/main.scss';
 const PORT = process.env.PORT || '3000';
 
 const networkInterface = createNetworkInterface({ uri: '/graphql' });
-networkInterface.use([{
-  applyMiddleware(req, next) {
-    /* eslint-disable no-param-reassign */
-    if (!req.options.headers) {
-      req.options.headers = {};  // Create the header object if needed.
-    }
+networkInterface.use([
+  {
+    applyMiddleware(req, next) {
+      /* eslint-disable no-param-reassign */
+      if (!req.options.headers) {
+        req.options.headers = {}; // Create the header object if needed.
+      }
 
-    const token = localStorage.getItem('auth-token');
+      const token = localStorage.getItem('auth-token');
 
-    if (token) {
-      req.options.headers['Authorization'] = 'JWT '.concat(token);
-    }
+      if (token) {
+        req.options.headers['Authorization'] = 'JWT '.concat(token);
+      }
 
-    next();
-    /* eslint-enable no-param-reassign */
+      next();
+      /* eslint-enable no-param-reassign */
+    },
   },
-}]);
+]);
 
 const client = createApolloClient({
   networkInterface,
@@ -62,20 +64,23 @@ if (token) {
   }
 }
 
-const store = configureStore(initialState, client);
+const store = configureStore(initialState);
 const history = syncHistoryWithStore(browserHistory, store);
 
-const actions = bindActionCreators({
-  redirectToLoginWithMessage,
-  signOutUser,
-}, store.dispatch);
+const actions = bindActionCreators(
+  {
+    redirectToLoginWithMessage,
+    signOutUser,
+  },
+  store.dispatch,
+);
 
 setupAxiosInterceptors(() => actions.redirectToLoginWithMessage());
 
 const routes = getRoutes(actions.signOutUser, store, client);
 
 ReactDOM.render(
-  <ApolloProvider client={client} store={store}>
+  <ApolloProvider client={client}>
     <Router history={history} routes={routes} />
   </ApolloProvider>,
   document.getElementById('app'),
