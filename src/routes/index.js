@@ -12,19 +12,17 @@ import privateRoute from './privateRoute';
 import Login from '../containers/Login';
 import fetchUser from '../actions/user';
 
-export default function getRoutes(onLogout, store, client) {
+export default function getRoutes(onLogout, store) {
   const hasWindow = typeof window !== 'undefined';
 
   const logout = (nextState, replace, cb) => {
     onLogout();
-    if (client) {
-      client.resetStore();
-    }
     replace('/');
     cb();
   };
 
-  if (store && hasWindow && typeof window.localStorage !== 'undefined') { // from client
+  if (store && hasWindow && typeof window.localStorage !== 'undefined') {
+    // from client
     const token = localStorage.getItem('auth-token');
     if (token !== null) {
       store.dispatch(fetchUser());

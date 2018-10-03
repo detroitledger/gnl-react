@@ -5,7 +5,6 @@ import serialize from 'serialize-javascript';
 import csrf from 'csurf';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 
-import { ApolloClient } from 'apollo-client';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -49,12 +48,7 @@ router.use((req, res, next) => {
     global.webpackIsomorphicTools.refresh();
   }
 
-  const client = new ApolloClient({
-    link: createHttpLink({
-      uri: `${process.env.API_URL || 'http://detroitledger.org:8081'}/graphql`,
-    }),
-    cache: new InMemoryCache(),
-  });
+  const client = createApolloClient();
 
   const store = configureStore({});
   store.dispatch(setCsrfToken(req.csrfToken()));
