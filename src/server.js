@@ -46,7 +46,7 @@ router.use((req, res, next) => {
     global.webpackIsomorphicTools.refresh();
   }
 
-  const client = createApolloClient();
+  const client = createApolloClient({ ssrMode: true });
 
   const store = configureStore({});
   store.dispatch(setCsrfToken(req.csrfToken()));
