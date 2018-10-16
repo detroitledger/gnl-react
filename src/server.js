@@ -6,8 +6,6 @@ import csrf from 'csurf';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
-import { createHttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { RouterContext, match } from 'react-router';
 import express, { Router } from 'express';
