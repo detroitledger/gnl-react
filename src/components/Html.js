@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
 const Html = ({ apolloState, assets, content, initialState, state }) => {
-  console.debug(state);
   const helmet = Helmet.rewind();
   const attrs = helmet.htmlAttributes.toComponent();
 
