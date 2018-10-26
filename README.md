@@ -18,6 +18,7 @@ yarn start
 ## Running in production
 
 ```bash
+yarn build
 yarn start-production
 ```
 
