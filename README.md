@@ -12,7 +12,13 @@ cp .env.example .env # we don't have any secrets yet ;)
 ## Running Dev Server
 
 ```bash
-yarn run dev
+yarn start
+```
+
+## Running in production
+
+```bash
+yarn start-production
 ```
 
 ## Tests
