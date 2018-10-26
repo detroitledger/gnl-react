@@ -72,8 +72,9 @@ router.use((req, res, next) => {
 
         const assets = global.webpackIsomorphicTools.assets();
         const initialState = `window.__INITIAL_STATE__ = ${serialize(store.getState())}`;
+        const apolloState = client.extract();
 
-        const markup = <Html {...{ assets, initialState, content }} />;
+        const markup = <Html {...{ assets, initialState, apolloState, content }} />;
         const doctype = '<!doctype html>\n';
         const html = renderToStaticMarkup(markup);
 

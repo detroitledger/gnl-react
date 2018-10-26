@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
-const Html = ({ assets, initialState, content }) => {
+const Html = ({ apolloState, assets, content, initialState, state }) => {
+  console.debug(state);
   const helmet = Helmet.rewind();
   const attrs = helmet.htmlAttributes.toComponent();
 
@@ -34,6 +35,14 @@ const Html = ({ assets, initialState, content }) => {
       </head>
       <body>
         <main id="app" dangerouslySetInnerHTML={{ __html: content }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__APOLLO_STATE__=${JSON.stringify(apolloState).replace(
+              /</g,
+              '\\u003c',
+            )};`,
+          }}
+        />
         <script dangerouslySetInnerHTML={{ __html: initialState }} />
         {Object.keys(assets.javascript).map(key => (
           <script key={key} src={assets.javascript[key]} />
