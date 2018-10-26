@@ -4,8 +4,9 @@ import path from 'path';
 import serialize from 'serialize-javascript';
 import csrf from 'csurf';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
-import { createNetworkInterface } from 'apollo-client';
+
 import { RouterContext, match } from 'react-router';
 import express, { Router } from 'express';
 import bodyParser from 'body-parser';
@@ -45,19 +46,9 @@ router.use((req, res, next) => {
     global.webpackIsomorphicTools.refresh();
   }
 
-  const client = createApolloClient({
-    ssrMode: true,
-    networkInterface: createNetworkInterface({
-      uri: (process.env.API_URL || 'http://detroitledger.org:8081') + '/graphql',
-      opts: {
-        credentials: 'same-origin',
-        headers: req.headers,
-      },
-    }),
-  });
+  const client = createApolloClient({ ssrMode: true });
 
-  const store = configureStore({}, client);
-
+  const store = configureStore({});
   store.dispatch(setCsrfToken(req.csrfToken()));
 
   match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
@@ -75,30 +66,27 @@ router.use((req, res, next) => {
       </ApolloProvider>
     );
 
-    getDataFromTree(reactApp, { client }).then(() => {
-      const content = renderToString(reactApp);
+    getDataFromTree(reactApp)
+      .then(() => {
+        const content = renderToString(reactApp);
 
-      const assets = global.webpackIsomorphicTools.assets();
-      const initialState = `window.__INITIAL_STATE__ = ${serialize(store.getState())}`;
+        const assets = global.webpackIsomorphicTools.assets();
+        const initialState = `window.__INITIAL_STATE__ = ${serialize(store.getState())}`;
+        const apolloState = client.extract();
 
-      const apolloStateData = {[client.reduxRootKey]: {
-        data: client.store.getState()[client.reduxRootKey].data,
-      }};
-      const apolloState = `window.__APOLLO_STATE__ = ${serialize(apolloStateData)}`;
+        const markup = <Html {...{ assets, initialState, apolloState, content }} />;
+        const doctype = '<!doctype html>\n';
+        const html = renderToStaticMarkup(markup);
 
+        // ensure we don't leak
+        Helmet.rewind();
 
-      const markup = <Html {...{ assets, initialState, apolloState, content }} />;
-      const doctype = '<!doctype html>\n';
-      const html = renderToStaticMarkup(markup);
-
-      // ensure we don't leak
-      Helmet.rewind();
-
-      res.send(doctype + html);
-    }).catch((err) => {
-      console.log(err);
-      res.status(500).end();
-    });
+        res.send(doctype + html);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).end();
+      });
   });
 });
 
@@ -117,4 +105,3 @@ app.listen(PORT, (error) => {
 });
 
 export default app;
-

@@ -5,7 +5,6 @@ import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import jwtDecode from 'jwt-decode';
 
-import { createNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 import configureStore from './store/configureStore';
@@ -20,32 +19,7 @@ import 'react-virtualized/styles.css';
 
 import './styles/main.scss';
 
-const PORT = process.env.PORT || '3000';
-
-const networkInterface = createNetworkInterface({ uri: '/graphql' });
-networkInterface.use([{
-  applyMiddleware(req, next) {
-    /* eslint-disable no-param-reassign */
-    if (!req.options.headers) {
-      req.options.headers = {};  // Create the header object if needed.
-    }
-
-    const token = localStorage.getItem('auth-token');
-
-    if (token) {
-      req.options.headers['Authorization'] = 'JWT '.concat(token);
-    }
-
-    next();
-    /* eslint-enable no-param-reassign */
-  },
-}]);
-
-const client = createApolloClient({
-  networkInterface,
-  initialState: window['__APOLLO_STATE__'],
-  ssrForceFetchDelay: 100,
-});
+const client = createApolloClient();
 
 let initialState = window['__INITIAL_STATE__'];
 
@@ -62,13 +36,16 @@ if (token) {
   }
 }
 
-const store = configureStore(initialState, client);
+const store = configureStore(initialState);
 const history = syncHistoryWithStore(browserHistory, store);
 
-const actions = bindActionCreators({
-  redirectToLoginWithMessage,
-  signOutUser,
-}, store.dispatch);
+const actions = bindActionCreators(
+  {
+    redirectToLoginWithMessage,
+    signOutUser,
+  },
+  store.dispatch,
+);
 
 setupAxiosInterceptors(() => actions.redirectToLoginWithMessage());
 
