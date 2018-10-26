@@ -18,30 +18,6 @@ import { redirectToLoginWithMessage, signOutUser } from './actions/auth';
 import 'react-virtualized/styles.css';
 
 import './styles/main.scss';
-/*
-const PORT = process.env.PORT || '3000';
-
-const networkInterface = createHttpLink({ uri: '/graphql' });
-networkInterface.use([
-  {
-    applyMiddleware(req, next) {
-      // eslint-disable no-param-reassign **
-      if (!req.options.headers) {
-        req.options.headers = {}; // Create the header object if needed.
-      }
-
-      const token = localStorage.getItem('auth-token');
-
-      if (token) {
-        req.options.headers['Authorization'] = 'JWT '.concat(token);
-      }
-
-      next();
-      // eslint-enable no-param-reassign **
-    },
-  },
-]);
-*/
 
 const client = createApolloClient();
 
