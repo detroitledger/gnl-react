@@ -8,42 +8,29 @@ import Footer from '../components/Footer';
 
 const Layout = ({ children, /* params, */ location }) => (
   <div>
-    <nav className="navbar navbar-default">
+    <nav className="navbar navbar-inverse">
       <div className="container">
         <div className="navbar-header">
-          <Link className="navbar-brand" to="/">SharedApp</Link>
+          <Link className="navbar-brand" to="/">
+            The Detroit Ledger
+          </Link>
         </div>
 
         <ul className="nav navbar-nav">
-          <NavbarLink
-            title="About"
-            href="/about"
-            active={location.pathname === '/about'}
-          />
-          <NavbarLink
-            title="Organizations"
-            href="/organizations"
-            active={location.pathname === '/organizations'}
-          />
+          <NavbarLink title="About" href="/about" active={location.pathname === '/about'} />
           <NavbarLink
             title="An organization"
             href="/organizations/111"
             active={location.pathname.indexOf('organizations/') !== -1}
           />
-          <NavbarLink
-            title="Search"
-            href="/search"
-            active={location.pathname === '/search'}
-          />
+          <NavbarLink title="Search" href="/search" active={location.pathname === '/search'} />
         </ul>
 
         <Profile />
       </div>
     </nav>
     <Errors />
-    <div className="container">
-      {children}
-    </div>
+    <div className="container">{children}</div>
     <Footer />
   </div>
 );
