@@ -22,7 +22,6 @@ const Grants = (props) => {
   };
 
   const renderOrgName = ({ rowData }) => {
-    console.log(rowData);
     if (rowData.summary) {
       return <a href={`/organizations/${rowData.orgID}`}>{rowData.org}</a>;
     }

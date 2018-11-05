@@ -1,4 +1,6 @@
 .grantsTable {
+  width: 100%;
+
   h2 {
     margin-top: 0.5em;
   }
@@ -14,10 +16,11 @@
     }
   }
 
-  .grantRow {
-    border-bottom: 1px dotted $body-color;
+  .dates {
+    min-width: 125px;
   }
 
+  tr,
   .grantRow {
     border-bottom: 1px dotted $body-color;
   }
