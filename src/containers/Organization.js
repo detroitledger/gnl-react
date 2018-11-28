@@ -10,6 +10,7 @@ import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 import { setGrantSide } from '../actions/ui';
 
 import Grants from '../components/Grants';
+import GrantTable from '../components/GrantTable';
 import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
 import OrgNewsArticles from '../components/OrgNewsArticles';
@@ -54,7 +55,7 @@ class Organization extends React.Component {
           <NavItem eventKey="funded">Grants funded</NavItem>
           <NavItem eventKey="received">Grants received</NavItem>
         </Nav>
-        <Grants
+        <GrantTable
           verb={this.props.grantSide}
           grantsReceived={grantsReceived}
           grantsFunded={grantsFunded}

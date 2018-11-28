@@ -5,20 +5,27 @@ import numeral from 'numeral';
 import YearlySumsBarchart from './YearlySumsBarchart';
 
 const Grants = (props) => {
-  const grants = (props.verb === 'funded') ? props.grantsFunded : props.grantsReceived;
-  const sums = (props.verb === 'funded') ? props.fundedYearlySums : props.receivedYearlySums;
-  const label = (props.verb === 'funded') ? 'Recipient' : 'Funder';
+  const grants = props.verb === 'funded' ? props.grantsFunded : props.grantsReceived;
+  const sums = props.verb === 'funded' ? props.fundedYearlySums : props.receivedYearlySums;
+  const label = props.verb === 'funded' ? 'Recipient' : 'Funder';
 
   const getClassName = ({ index }) => {
     if (grants[index] && grants[index].hasOwnProperty('summary') && grants[index].summary) {
       return 'summary';
     }
 
-    return null;
+    return 'row';
   };
 
   const renderDollars = ({ cellData }) => {
     return numeral(cellData).format('0,0[.]00');
+  };
+
+  const renderOrgName = ({ rowData }) => {
+    if (rowData.summary) {
+      return <a href={`/organizations/${rowData.orgID}`}>{rowData.org}</a>;
+    }
+    return rowData.description;
   };
 
   return (
@@ -39,23 +46,16 @@ const Grants = (props) => {
                   rowGetter={({ index }) => grants[index]}
                   rowClassName={getClassName}
                   rowHeight={({ index }) => 50}
+                  className="grantsTable"
                 >
-                  <Column
-                    width={200}
-                    flexGrow={1}
-                    label={label}
-                    dataKey='description'
-                  />
+                  <Column width={200} flexGrow={1} label={label} cellRenderer={renderOrgName} />
+                  <Column width={100} label="Years" dataKey="years" />
                   <Column
                     width={100}
-                    label='Years'
-                    dataKey='years'
-                  />
-                  <Column
-                    width={100}
-                    label='Amount'
-                    dataKey='amount'
+                    label="Amount"
+                    dataKey="amount"
                     cellRenderer={renderDollars}
+                    className="amount"
                   />
                 </Table>
               )}
@@ -65,7 +65,7 @@ const Grants = (props) => {
       </div>
     </div>
   );
-}
+};
 
 Grants.propTypes = {
   grantsReceived: PropTypes.array.isRequired,
@@ -76,4 +76,3 @@ Grants.propTypes = {
 };
 
 export default Grants;
-
