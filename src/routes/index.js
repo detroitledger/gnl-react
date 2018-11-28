@@ -4,7 +4,6 @@ import { Route, IndexRoute } from 'react-router';
 import Layout from '../containers/Layout';
 import Home from '../containers/Home';
 import About from '../containers/About';
-import Organizations from '../containers/Organizations';
 import Organization from '../containers/Organization';
 import Search from '../containers/Search';
 
@@ -36,7 +35,6 @@ export default function getRoutes(onLogout, store) {
       <Route path="login" component={Login} />
       <Route path="logout" onEnter={logout} />
       <Route path="organizations">
-        <IndexRoute component={Organizations} />
         <Route path=":organizationId" component={Organization} />
       </Route>
       <Route path="search" component={Search} />

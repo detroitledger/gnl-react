@@ -1,0 +1,104 @@
+table.grants {
+  width: 100%;
+  table-layout: fixed;
+  margin-top: 1em;
+   h2 {
+    margin-top: 0.5em;
+  }
+   .org-search {
+    input {
+      display: inline-block;
+      height: 1.75em;
+      border: 0px none;
+      border-bottom: 2px solid $body-color;
+      color: $green;
+       $placeholder: $gray;
+      &::placeholder {
+        color: $placeholder;
+      }
+      &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        color: $placeholder;
+      }
+      &::-moz-placeholder { /* Firefox 19+ */
+        color: $placeholder;
+      }
+      &:-ms-input-placeholder { /* IE 10+ */
+        color: $placeholder;
+      }
+      &:-moz-placeholder { /* Firefox 18- */
+        color: $placeholder;
+      }
+    }
+     input:active,
+    input:valid {
+      border-bottom-color: $green;
+    }
+     .filter-container {
+      display: -webkit-flex;
+      display: flex;
+       input.org-name-filter {
+        width: 25%;
+        margin-right: 10px;
+      }
+       input.grant-description-filter {
+        flex: 1;
+      }
+       .filterbytag {
+        max-width: 35%;
+        margin-left: 10px;
+      }
+    }
+  }
+}
+ .row.related {
+  margin-bottom: 20px;
+}
+ th.name,
+td.name {
+  width: 70%;
+}
+ .grant td {
+  width: 70%;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+ .organization td {
+  padding-top: 0.75em;
+  padding-bottom: 0.25em;
+  border-top: 2px solid $body-color;
+  border-bottom: 1px dotted $body-color;
+}
+ .grant td.years,
+th.years {
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+}
+ .grant td.description {
+  padding-right: 0.75em;
+   .glyphicon {
+    font-size: 0.9em;
+  }
+}
+ .grant:hover td.description a {
+  color: $blue;
+  border-bottom: 1px dotted $blue;
+}
+ .grant a {
+  color: $blue;
+  border-bottom: 1px dotted $blue;
+}
+ .grant a:hover {
+  color: $blue;
+  border-bottom: 1px solid $blue;
+}
+ .grant h3 .glyphicon {
+  font-size: 12px;
+}
+ .grant-details ul {
+  list-style: none;
+  padding: 0;
+}

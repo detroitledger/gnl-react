@@ -2,9 +2,11 @@ import React, { PropTypes } from 'react';
 
 const OrgNteeLinks = (props) => {
   return (
-    <div>
+    <div className="tags">
       {props.ntees.map((ntee, i) => (
-        <a key={i} href="/ntees/{ntee.id}">{ntee.name}</a>
+        <a key={i} href={`/ntees/${ntee.id}`} className="tag">
+          {ntee.name}
+        </a>
       ))}
     </div>
   );

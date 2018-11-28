@@ -9,13 +9,13 @@ import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
 import { setGrantSide } from '../actions/ui';
 
+import Grants from '../components/Grants';
 import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
 import OrgNewsArticles from '../components/OrgNewsArticles';
-import Grants from '../components/Grants';
+import Page from '../components/Page';
 
 class Organization extends React.Component {
-
   render() {
     const {
       loading,
@@ -31,18 +31,26 @@ class Organization extends React.Component {
     }
 
     return (
-      <div>
+      <Page>
         <Helmet title={ledgerOrganization.name} />
-        <h3>{ledgerOrganization.name}</h3>
+        <h1>{ledgerOrganization.name}</h1>
+        <p>{ledgerOrganization.description}</p>
+        <div className="ein">{ledgerOrganization.ein}</div>
+
         <OrgNteeLinks ntees={ledgerOrganization.ntees} />
         <OrgNewsArticles newses={ledgerOrganization.ledgerNewsArticles} />
-        <p>{ledgerOrganization.description}</p>
         <OrgFinances forms990={this.props.data.forms990} />
-        <h4>Grant Data</h4>
+
+        <h2>Grant Data</h2>
         <p>
-          Describes grants Ledger staff have been able to document. Does not reflect a full, official record of all funding.
+          Describes grants Ledger staff have been able to document. Does not reflect a full,
+          official record of all funding.
         </p>
-        <Nav bsStyle="tabs" activeKey={this.props.grantSide} onSelect={this.props.handleSetGrantSide}>
+        <Nav
+          bsStyle="tabs"
+          activeKey={this.props.grantSide}
+          onSelect={this.props.handleSetGrantSide}
+        >
           <NavItem eventKey="funded">Grants funded</NavItem>
           <NavItem eventKey="received">Grants received</NavItem>
         </Nav>
@@ -53,10 +61,9 @@ class Organization extends React.Component {
           fundedYearlySums={fundedYearlySums}
           receivedYearlySums={receivedYearlySums}
         />
-      </div>
+      </Page>
     );
   }
-
 }
 
 Organization.propTypes = {
@@ -68,51 +75,52 @@ Organization.propTypes = {
 };
 
 const ORG_QUERY = gql`
-query getOrg($id: Int!) {
-  ledgerOrganization(id: $id) {
-    name
-    description
-    ledgerGrantsFunded(limit: 10000) {
-      id
-      start
-      end
-      recipient {
-        name
-        id
-      }
-      amount
-      description
-    }
-    ledgerGrantsReceived(limit: 10000) {
-      id
-      start
-      end
-      funder {
-        name
-        id
-      }
-      amount
-      description
-    }
-    forms990(limit: 999) {
-      tax_period
-      total_assets
-      total_expenses
-      total_revenue
-      grants_paid
-    }
-    ntees {
-      id
+  query getOrg($id: Int!) {
+    ledgerOrganization(id: $id) {
       name
-    }
-    ledgerNewsArticles {
-      link
-      title
-      date
-      desc
+      description
+      ein
+      ledgerGrantsFunded(limit: 10000) {
+        id
+        start
+        end
+        recipient {
+          name
+          id
+        }
+        amount
+        description
+      }
+      ledgerGrantsReceived(limit: 10000) {
+        id
+        start
+        end
+        funder {
+          name
+          id
+        }
+        amount
+        description
+      }
+      forms990(limit: 999) {
+        tax_period
+        total_assets
+        total_expenses
+        total_revenue
+        grants_paid
+      }
+      ntees {
+        id
+        name
+      }
+      ledgerNewsArticles {
+        link
+        title
+        date
+        desc
+      }
     }
   }
-}
 `;
 
 const mapStateToProps = (state) => {
@@ -140,56 +148,58 @@ export default compose(
       }
 
       // Sort lists by org
-      const flattenedGrantsReceived = sortBy(ledgerOrganization.ledgerGrantsReceived.map((grant) => {
-        const start = moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-        const end = moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-        const years = `${start} - ${end}`;
+      const flattenedGrantsReceived = sortBy(
+        ledgerOrganization.ledgerGrantsReceived.map((grant) => {
+          const start = moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const end = moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const years = `${start} - ${end}`;
 
-        return {
-          org: grant.funder.name,
-          orgId: grant.funder.id,
-          description: grant.description || 'n/a',
-          amount: grant.amount,
-          id: grant.id,
-          start,
-          end,
-          years,
-          summary: false,
-        };
-      }), grant => (
-        // Sort by org id (boring) and then the inverse of the start year.
-        grant.orgId + (1 / grant.start)
-      ));
+          return {
+            org: grant.funder.name,
+            orgId: grant.funder.id,
+            description: grant.description || 'n/a',
+            amount: grant.amount,
+            id: grant.id,
+            start,
+            end,
+            years,
+            summary: false,
+          };
+        }),
+        grant =>
+          // Sort by org id (boring) and then the inverse of the start year.
+          grant.orgId + 1 / grant.start,
+      );
 
-      const flattenedGrantsFunded = sortBy(ledgerOrganization.ledgerGrantsFunded.map((grant) => {
-        const start = moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-        const end = moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-        const years = `${start} - ${end}`;
+      const flattenedGrantsFunded = sortBy(
+        ledgerOrganization.ledgerGrantsFunded.map((grant) => {
+          const start = moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const end = moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const years = `${start} - ${end}`;
 
-        return {
-          org: grant.recipient.name,
-          orgId: grant.recipient.id,
-          description: grant.description || 'n/a',
-          amount: grant.amount,
-          id: grant.id,
-          start,
-          end,
-          years,
-          summary: false,
-        };
-      }), grant => (
-        // Sort by org id (boring) and then the inverse of the start year.
-        grant.orgId + (1 / grant.start)
-      ));
+          return {
+            org: grant.recipient.name,
+            orgId: grant.recipient.id,
+            description: grant.description || 'n/a',
+            amount: grant.amount,
+            id: grant.id,
+            start,
+            end,
+            years,
+            summary: false,
+          };
+        }),
+        grant =>
+          // Sort by org id (boring) and then the inverse of the start year.
+          grant.orgId + 1 / grant.start,
+      );
 
-      const {
-        grants: grantsFunded,
-        yearlySums: fundedYearlySums,
-      } = addSummaryRows(flattenedGrantsFunded);
-      const {
-        grants: grantsReceived,
-        yearlySums: receivedYearlySums,
-      } = addSummaryRows(flattenedGrantsReceived);
+      const { grants: grantsFunded, yearlySums: fundedYearlySums } = addSummaryRows(
+        flattenedGrantsFunded,
+      );
+      const { grants: grantsReceived, yearlySums: receivedYearlySums } = addSummaryRows(
+        flattenedGrantsReceived,
+      );
 
       // Augment IRS data
       const forms990 = ledgerOrganization.forms990.map(form990 => ({
@@ -212,7 +222,10 @@ export default compose(
       };
     },
   }),
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(Organization);
 
 /**
