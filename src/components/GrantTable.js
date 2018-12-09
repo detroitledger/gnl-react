@@ -21,7 +21,7 @@ const Grants = (props) => {
         </thead>
         <tbody>
           {grants.map(grant => (
-            <GrantRow {...grant} key={grant.id} />
+            <GrantRow {...grant} key={grant.uuid} />
           ))}
         </tbody>
       </table>

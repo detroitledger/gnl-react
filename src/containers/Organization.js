@@ -9,62 +9,59 @@ import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
 import { setGrantSide } from '../actions/ui';
 
-import Grants from '../components/Grants';
 import GrantTable from '../components/GrantTable';
 import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
 import OrgNewsArticles from '../components/OrgNewsArticles';
 import Page from '../components/Page';
 
-class Organization extends React.Component {
-  render() {
-    const {
-      loading,
-      organization,
-      grantsFunded,
-      grantsReceived,
-      fundedYearlySums,
-      receivedYearlySums,
-    } = this.props.data;
+const Organization = (props) => {
+  const {
+    loading,
+    organization,
+    grantsFunded,
+    grantsReceived,
+    fundedYearlySums,
+    receivedYearlySums,
+  } = props.data;
 
-    if (loading) {
-      return <p>Loading...</p>;
-    }
-
-    return (
-      <Page>
-        <Helmet title={organization.name} />
-        <h1>{organization.name}</h1>
-        <p>{organization.description}</p>
-        <div className="ein">{organization.ein}</div>
-
-        <OrgNteeLinks ntees={organization.nteeOrganizationTypes} />
-        <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/[]} />
-        <OrgFinances forms990={this.props.data.forms990} />
-
-        <h2>Grant Data</h2>
-        <p>
-          Describes grants Ledger staff have been able to document. Does not reflect a full,
-          official record of all funding.
-        </p>
-        <Nav
-          bsStyle="tabs"
-          activeKey={this.props.grantSide}
-          onSelect={this.props.handleSetGrantSide}
-        >
-          <NavItem eventKey="funded">Grants funded</NavItem>
-          <NavItem eventKey="received">Grants received</NavItem>
-        </Nav>
-        <GrantTable
-          verb={this.props.grantSide}
-          grantsReceived={grantsReceived}
-          grantsFunded={grantsFunded}
-          fundedYearlySums={fundedYearlySums}
-          receivedYearlySums={receivedYearlySums}
-        />
-      </Page>
-    );
+  if (loading) {
+    return <p>Loading...</p>;
   }
+
+  return (
+    <Page>
+      <Helmet title={organization.name} />
+      <h1>{organization.name}</h1>
+      <p>{organization.description}</p>
+      <div className="ein">{organization.ein}</div>
+
+      <OrgNteeLinks ntees={organization.nteeOrganizationTypes} />
+      <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/[]} />
+      <OrgFinances forms990={props.data.forms990} />
+
+      <h2>Grant Data</h2>
+      <p>
+        Describes grants Ledger staff have been able to document. Does not reflect a full,
+        official record of all funding.
+      </p>
+      <Nav
+        bsStyle="tabs"
+        activeKey={props.grantSide}
+        onSelect={props.handleSetGrantSide}
+      >
+        <NavItem eventKey="funded">Grants funded</NavItem>
+        <NavItem eventKey="received">Grants received</NavItem>
+      </Nav>
+      <GrantTable
+        verb={props.grantSide}
+        grantsReceived={grantsReceived}
+        grantsFunded={grantsFunded}
+        fundedYearlySums={fundedYearlySums}
+        receivedYearlySums={receivedYearlySums}
+      />
+    </Page>
+  );
 }
 
 Organization.propTypes = {
@@ -155,7 +152,7 @@ export default compose(
             orgUuid: grant.from.uuid,
             description: grant.description || 'n/a',
             amount: grant.amount,
-            id: grant.id,
+            uuid: grant.uuid,
             dateFrom,
             dateTo,
             years,
@@ -197,6 +194,13 @@ export default compose(
         flattenedGrantsReceived,
       );
 
+      // Create a map containing a union of years in funded & received sums with zero values
+      // This is used to ensure that the bar charts for funded/received have the same y axis
+      // categories.
+      const allYears = Object
+        .keys({ ...fundedYearlySums, ...receivedYearlySums })
+        .reduce((acc, cur) => ({ ...acc, [cur]: 0 }), {});
+
       // Augment IRS data
       const forms990 = organization.forms990.map(form990 => ({
         ...form990,
@@ -210,9 +214,9 @@ export default compose(
           loading,
           organization,
           grantsFunded,
-          fundedYearlySums,
+          fundedYearlySums: { ...allYears, ...fundedYearlySums },
           grantsReceived,
-          receivedYearlySums,
+          receivedYearlySums: { ...allYears, ...receivedYearlySums },
           forms990,
         },
       };
@@ -265,7 +269,7 @@ function addSummaryRows(grantsOrig) {
       description: `${org}:`,
       orgUuid,
       amount: sum,
-      id: `summaryrow-${orgUuid}`,
+      uuid: `summaryrow-${orgUuid}`,
       start: null,
       end: null,
       summary: true,
