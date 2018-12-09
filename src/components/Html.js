@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
-const Html = ({ apolloState, assets, content, initialState, state }) => {
+const Html = ({ apolloState, assets, content, initialState, state, config }) => {
   const helmet = Helmet.rewind();
   const attrs = helmet.htmlAttributes.toComponent();
 
@@ -37,6 +37,9 @@ const Html = ({ apolloState, assets, content, initialState, state }) => {
         <script
           dangerouslySetInnerHTML={{
             __html: `window.__APOLLO_STATE__=${JSON.stringify(apolloState).replace(
+              /</g,
+              '\\u003c',
+            )}; window.config=${JSON.stringify(config).replace(
               /</g,
               '\\u003c',
             )};`,

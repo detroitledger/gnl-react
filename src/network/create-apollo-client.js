@@ -2,7 +2,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createHttpLink } from 'apollo-link-http';
 import ApolloClient from 'apollo-client';
 
-export default (options = {}) => {
+export default (options = {}, apiUrl) => {
   const cache = new InMemoryCache();
   if (typeof window !== 'undefined') {
     cache.restore(window.__APOLLO_STATE__);
@@ -10,7 +10,7 @@ export default (options = {}) => {
   return new ApolloClient({
     ssrMode: options.ssrMode,
     link: createHttpLink({
-      uri: `${process.env.API_URL || 'http://detroitledger.org:8081'}/graphql`,
+      uri: apiUrl || window.config.apiUrl,
     }),
     cache,
   });
