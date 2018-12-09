@@ -4,7 +4,7 @@ const OrgNteeLinks = (props) => {
   return (
     <div className="tags">
       {props.ntees.map((ntee, i) => (
-        <a key={i} href={`/ntees/${ntee.id}`} className="tag">
+        <a key={i} href={`/ntees/${ntee.uuid}`} className="tag">
           {ntee.name}
         </a>
       ))}

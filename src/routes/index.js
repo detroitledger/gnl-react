@@ -35,7 +35,7 @@ export default function getRoutes(onLogout, store) {
       <Route path="login" component={Login} />
       <Route path="logout" onEnter={logout} />
       <Route path="organizations">
-        <Route path=":organizationId" component={Organization} />
+        <Route path=":organizationUuid" component={Organization} />
       </Route>
       <Route path="search" component={Search} />
     </Route>
