@@ -6,7 +6,6 @@ based on mtiger2k/react-redux-graphql-passport-starter and bnchdrff/react-redux-
 
 ```bash
 yarn install --frozen-lockfile
-cp .env.example .env # we don't have any secrets yet ;)
 ```
 
 ## Running Dev Server
@@ -39,7 +38,7 @@ YARN_PRODUCTION=false
 
 ## Explore graphql
 
-http://detroitledger.org:8081/graphiql
+https://gnl-graphql.herokuapp.com
 
 ## Explanation
 
