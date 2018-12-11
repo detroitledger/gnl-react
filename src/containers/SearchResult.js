@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Link } from 'react-router';
 
 // Component to query and process search result
 const SearchResult = ({ loading, organizations }) => {
@@ -16,7 +17,7 @@ const SearchResult = ({ loading, organizations }) => {
   // Iterate over all ledger orgs that match name
   const linkedOrgNames = organizations.map((org, i) =>
     <li key={i}>
-      <a href={'/organizations/' + org.uuid}>{org.name}</a>
+      <Link to={'/organizations/' + org.uuid}>{org.name}</Link>
     </li>
   );
 
@@ -37,7 +38,7 @@ SearchResult.propTypes = {
 // Graphql query using name as search parameter on irs organizations
 const NAME_QUERY = gql`
   query getOrganizationsByName($name: String!) {
-    organizations(where: { name: { iLike: $name } }) {
+    organizations(limit: 50, where: { name: { iLike: $name } }) {
       name,
       uuid,
     }
