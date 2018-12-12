@@ -17,7 +17,7 @@ export default function configureStore(initialState = {}) {
     initialState,
     compose(
       ...middlewares,
-      hasWindow && window.devToolsExtension ? window.devToolsExtension() : f => f,
+      hasWindow && window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
     ),
   );
 

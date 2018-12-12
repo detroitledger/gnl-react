@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import numeral from 'numeral';
 
-const GrantRow = ({ amount, description, org, orgId, summary, years }) => {
+const GrantRow = ({ amount, description, org, orgUuid, summary, years }) => {
   let name = description;
   if (summary) {
-    name = <a href={`/organizations/${orgId}`}>{org}</a>;
+    name = <a href={`/organizations/${orgUuid}`}>{org}</a>;
   }
   return (
     <tr className={summary ? 'summary' : ''}>

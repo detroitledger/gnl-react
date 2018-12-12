@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import config from 'config'
 import React from 'react';
 import path from 'path';
 import serialize from 'serialize-javascript';
@@ -21,12 +21,10 @@ import configureStore from './store/configureStore';
 import { setCsrfToken } from './actions/form';
 import Html from './components/Html';
 
-dotenv.config();
-
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const IP = process.env.IP || '0.0.0.0';
-const PORT = process.env.PORT || 3000;
-const API_URL = process.env.API_URL || 'http://detroitledger.org:8081';
+const PORT = config.get('port');
+const API_URL = config.get('api_url');
 
 const app = express();
 
@@ -46,7 +44,7 @@ router.use((req, res, next) => {
     global.webpackIsomorphicTools.refresh();
   }
 
-  const client = createApolloClient({ ssrMode: true });
+  const client = createApolloClient({ ssrMode: true }, config.get('api_url'));
 
   const store = configureStore({});
   store.dispatch(setCsrfToken(req.csrfToken()));
@@ -73,8 +71,10 @@ router.use((req, res, next) => {
         const assets = global.webpackIsomorphicTools.assets();
         const initialState = `window.__INITIAL_STATE__ = ${serialize(store.getState())}`;
         const apolloState = client.extract();
+        // DANGER: remove private config here, if we add any
+        const clientConfig = { apiUrl: config.get('api_url') };
 
-        const markup = <Html {...{ assets, initialState, apolloState, content }} />;
+        const markup = <Html {...{ assets, initialState, apolloState, content, config: clientConfig }} />;
         const doctype = '<!doctype html>\n';
         const html = renderToStaticMarkup(markup);
 

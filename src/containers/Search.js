@@ -24,7 +24,7 @@ class Search extends React.Component {
           placeholder="Find an organization or funder you care about"
           onChange={this.handleChange}
         />
-        <SearchResult ein={this.state.value} />
+        <SearchResult name={this.state.value} />
       </div>
     );
   }

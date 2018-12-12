@@ -9,116 +9,108 @@ import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
 import { setGrantSide } from '../actions/ui';
 
-import Grants from '../components/Grants';
 import GrantTable from '../components/GrantTable';
 import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
 import OrgNewsArticles from '../components/OrgNewsArticles';
 import Page from '../components/Page';
 
-class Organization extends React.Component {
-  render() {
-    const {
-      loading,
-      ledgerOrganization,
-      grantsFunded,
-      grantsReceived,
-      fundedYearlySums,
-      receivedYearlySums,
-    } = this.props.data;
+const Organization = (props) => {
+  const {
+    loading,
+    organization,
+    grantsFunded,
+    grantsReceived,
+    fundedYearlySums,
+    receivedYearlySums,
+  } = props.data;
 
-    if (loading) {
-      return <p>Loading...</p>;
-    }
-
-    return (
-      <Page>
-        <Helmet title={ledgerOrganization.name} />
-        <h1>{ledgerOrganization.name}</h1>
-        <p>{ledgerOrganization.description}</p>
-        <div className="ein">{ledgerOrganization.ein}</div>
-
-        <OrgNteeLinks ntees={ledgerOrganization.ntees} />
-        <OrgNewsArticles newses={ledgerOrganization.ledgerNewsArticles} />
-        <OrgFinances forms990={this.props.data.forms990} />
-
-        <h2>Grant Data</h2>
-        <p>
-          Describes grants Ledger staff have been able to document. Does not reflect a full,
-          official record of all funding.
-        </p>
-        <Nav
-          bsStyle="tabs"
-          activeKey={this.props.grantSide}
-          onSelect={this.props.handleSetGrantSide}
-        >
-          <NavItem eventKey="funded">Grants funded</NavItem>
-          <NavItem eventKey="received">Grants received</NavItem>
-        </Nav>
-        <GrantTable
-          verb={this.props.grantSide}
-          grantsReceived={grantsReceived}
-          grantsFunded={grantsFunded}
-          fundedYearlySums={fundedYearlySums}
-          receivedYearlySums={receivedYearlySums}
-        />
-      </Page>
-    );
+  if (loading) {
+    return <p>Loading...</p>;
   }
+
+  return (
+    <Page>
+      <Helmet title={organization.name} />
+      <h1>{organization.name}</h1>
+      <p>{organization.description}</p>
+      <div className="ein">{organization.ein}</div>
+
+      <OrgNteeLinks ntees={organization.nteeOrganizationTypes} />
+      <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/[]} />
+      <OrgFinances forms990={props.data.forms990} />
+
+      <h2>Grant Data</h2>
+      <p>
+        Describes grants Ledger staff have been able to document. Does not reflect a full,
+        official record of all funding.
+      </p>
+      <Nav
+        bsStyle="tabs"
+        activeKey={props.grantSide}
+        onSelect={props.handleSetGrantSide}
+      >
+        <NavItem eventKey="funded">Grants funded</NavItem>
+        <NavItem eventKey="received">Grants received</NavItem>
+      </Nav>
+      <GrantTable
+        verb={props.grantSide}
+        grantsReceived={grantsReceived}
+        grantsFunded={grantsFunded}
+        fundedYearlySums={fundedYearlySums}
+        receivedYearlySums={receivedYearlySums}
+      />
+    </Page>
+  );
 }
 
 Organization.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
-    ledgerOrganization: PropTypes.object,
+    organization: PropTypes.object,
     grantSide: PropTypes.string,
   }).isRequired,
 };
 
 const ORG_QUERY = gql`
-  query getOrg($id: Int!) {
-    ledgerOrganization(id: $id) {
+  query getOrg($uuid: String!) {
+    organization(uuid: $uuid) {
       name
       description
       ein
-      ledgerGrantsFunded(limit: 10000) {
-        id
-        start
-        end
-        recipient {
+      grantsFunded {
+        uuid
+        dateFrom
+        dateTo
+        to {
           name
-          id
+          uuid
         }
         amount
         description
       }
-      ledgerGrantsReceived(limit: 10000) {
-        id
-        start
-        end
-        funder {
+      grantsReceived {
+        uuid
+        dateFrom
+        dateTo
+        from {
           name
-          id
+          uuid
         }
         amount
         description
       }
-      forms990(limit: 999) {
+      forms990 {
+        id
         tax_period
         total_assets
         total_expenses
         total_revenue
         grants_paid
       }
-      ntees {
-        id
+      nteeOrganizationTypes {
+        uuid
         name
-      }
-      ledgerNewsArticles {
-        link
-        title
-        date
-        desc
       }
     }
   }
@@ -141,58 +133,58 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
   graphql(ORG_QUERY, {
     options: ({ params }) => ({
-      variables: { id: params.organizationId },
+      variables: { uuid: params.organizationUuid },
     }),
-    props({ data: { loading, ledgerOrganization } }) {
+    props({ data: { loading, organization } }) {
       if (loading) {
         return { data: { loading: true } };
       }
 
       // Sort lists by org
       const flattenedGrantsReceived = sortBy(
-        ledgerOrganization.ledgerGrantsReceived.map((grant) => {
-          const start = moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-          const end = moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-          const years = `${start} - ${end}`;
+        organization.grantsReceived.map((grant) => {
+          const dateFrom = moment(grant.dateFrom, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const dateTo = moment(grant.dateTo, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const years = `${dateFrom} - ${dateTo}`;
 
           return {
-            org: grant.funder.name,
-            orgId: grant.funder.id,
+            org: grant.from.name,
+            orgUuid: grant.from.uuid,
             description: grant.description || 'n/a',
             amount: grant.amount,
-            id: grant.id,
-            start,
-            end,
+            uuid: grant.uuid,
+            dateFrom,
+            dateTo,
             years,
             summary: false,
           };
         }),
         grant =>
           // Sort by org id (boring) and then the inverse of the start year.
-          grant.orgId + 1 / grant.start,
+          grant.orgUuid + 1 / grant.dateFrom,
       );
 
       const flattenedGrantsFunded = sortBy(
-        ledgerOrganization.ledgerGrantsFunded.map((grant) => {
-          const start = moment(grant.start, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-          const end = moment(grant.end, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-          const years = `${start} - ${end}`;
+        organization.grantsFunded.map((grant) => {
+          const dateFrom = moment(grant.dateFrom, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const dateTo = moment(grant.dateTo, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const years = `${dateFrom} - ${dateTo}`;
 
           return {
-            org: grant.recipient.name,
-            orgId: grant.recipient.id,
+            org: grant.to.name,
+            orgUuid: grant.to.uuid,
             description: grant.description || 'n/a',
             amount: grant.amount,
-            id: grant.id,
-            start,
-            end,
+            uuid: grant.uuid,
+            dateFrom,
+            dateTo,
             years,
             summary: false,
           };
         }),
         grant =>
           // Sort by org id (boring) and then the inverse of the start year.
-          grant.orgId + 1 / grant.start,
+          grant.orgUuid + 1 / grant.dateFrom,
       );
 
       const { grants: grantsFunded, yearlySums: fundedYearlySums } = addSummaryRows(
@@ -202,8 +194,15 @@ export default compose(
         flattenedGrantsReceived,
       );
 
+      // Create a map containing a union of years in funded & received sums with zero values
+      // This is used to ensure that the bar charts for funded/received have the same y axis
+      // categories.
+      const allYears = Object
+        .keys({ ...fundedYearlySums, ...receivedYearlySums })
+        .reduce((acc, cur) => ({ ...acc, [cur]: 0 }), {});
+
       // Augment IRS data
-      const forms990 = ledgerOrganization.forms990.map(form990 => ({
+      const forms990 = organization.forms990.map(form990 => ({
         ...form990,
         year: Number(form990.tax_period.substring(0, 4)),
         month: Number(form990.tax_period.substring(4)),
@@ -213,11 +212,11 @@ export default compose(
       return {
         data: {
           loading,
-          ledgerOrganization,
+          organization,
           grantsFunded,
-          fundedYearlySums,
+          fundedYearlySums: { ...allYears, ...fundedYearlySums },
           grantsReceived,
-          receivedYearlySums,
+          receivedYearlySums: { ...allYears, ...receivedYearlySums },
           forms990,
         },
       };
@@ -238,20 +237,20 @@ function addSummaryRows(grantsOrig) {
   const grants = grantsOrig;
 
   // Get orgs
-  const uniqOrgs = uniq(map(grants, 'orgId'));
+  const uniqOrgs = uniq(map(grants, 'orgUuid'));
 
   // Get stats per org, and stick em right in the array of grants as summary rows!
   const yearlySums = {};
   let insertAt = 0;
-  uniqOrgs.forEach((orgId) => {
+  uniqOrgs.forEach((orgUuid) => {
     let org = '';
 
-    const sum = filter(grants, { orgId }).reduce((memo, grant) => {
+    const sum = filter(grants, { orgUuid }).reduce((memo, grant) => {
       // along the way, build our yearly sums!
-      if (yearlySums[grant.start] > 0) {
-        yearlySums[grant.start] += grant.amount;
+      if (yearlySums[grant.dateFrom] > 0) {
+        yearlySums[grant.dateFrom] += grant.amount;
       } else {
-        yearlySums[grant.start] = grant.amount;
+        yearlySums[grant.dateFrom] = grant.amount;
       }
 
       // This'll happen over and over but that is just fine. We just want the right name.
@@ -261,16 +260,16 @@ function addSummaryRows(grantsOrig) {
     }, 0);
 
     // Find first row of this org's grant
-    insertAt = findIndex(grants, { orgId }, insertAt);
+    insertAt = findIndex(grants, { orgUuid }, insertAt);
 
     // Splice in their stats row there
     // Add 1 to search index since we inserted another row
     grants.splice(insertAt, 0, {
       org,
       description: `${org}:`,
-      orgId,
+      orgUuid,
       amount: sum,
-      id: `summaryrow-${orgId}`,
+      uuid: `summaryrow-${orgUuid}`,
       start: null,
       end: null,
       summary: true,
