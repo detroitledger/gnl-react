@@ -2,8 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import NavbarLink from '../components/NavbarLink';
-import Profile from '../components/Profile';
-import Errors from '../containers/Errors';
 import Footer from '../components/Footer';
 
 const Layout = ({ children, /* params, */ location }) => (
@@ -25,11 +23,8 @@ const Layout = ({ children, /* params, */ location }) => (
           />
           <NavbarLink title="Search" href="/search" active={location.pathname === '/search'} />
         </ul>
-
-        <Profile />
       </div>
     </nav>
-    <Errors />
     <div className="container">{children}</div>
     <Footer />
   </div>

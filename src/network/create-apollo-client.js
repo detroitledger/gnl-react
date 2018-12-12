@@ -1,17 +1,10 @@
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { createHttpLink } from 'apollo-link-http';
 import ApolloClient from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 export default (options = {}, apiUrl) => {
-  const cache = new InMemoryCache();
-  if (typeof window !== 'undefined') {
-    cache.restore(window.__APOLLO_STATE__);
-  }
   return new ApolloClient({
-    ssrMode: options.ssrMode,
-    link: createHttpLink({
-      uri: apiUrl || window.config.apiUrl,
-    }),
-    cache,
+    link: new HttpLink({ uri: 'https://gnl-graphql.herokuapp.com' }),
+    cache: new InMemoryCache(),
   });
 };
