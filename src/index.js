@@ -1,17 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
-import { Router, browserHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 
 import { ApolloProvider } from 'react-apollo';
+import { Provider } from 'react-redux';
 
 import configureStore from './store/configureStore';
 
 import createApolloClient from './network/create-apollo-client';
 
-import getRoutes from './routes';
+import Home from './containers/Home';
+import About from './containers/About';
+import Organization from './containers/Organization';
+import Search from './containers/Search';
+
+import NavbarLink from './components/NavbarLink';
+import Footer from './components/Footer';
 
 import './styles/main.scss';
 
@@ -19,27 +25,54 @@ const client = createApolloClient();
 
 let initialState = window['__INITIAL_STATE__'];
 
-const token = localStorage.getItem('auth-token');
-if (token) {
-  try {
-    const user = jwtDecode(token);
-    initialState = {
-      auth: { authenticated: true, token, logging: false },
-      user: { user, loading: false },
-    };
-  } catch (ex) {
-    console.error(ex);
-  }
-}
-
 const store = configureStore(initialState);
-const history = syncHistoryWithStore(browserHistory, store);
-
-const routes = getRoutes(store, client);
 
 ReactDOM.render(
-  <ApolloProvider client={client} store={store}>
-    <Router history={history} routes={routes} />
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <Router>
+        <div>
+          <nav className="navbar navbar-inverse">
+            <div className="container">
+              <div className="navbar-header">
+                <Link className="navbar-brand" to="/">
+                  The Detroit Ledger
+                </Link>
+              </div>
+
+              <ul className="nav navbar-nav">
+                <NavbarLink title="About" href="/about" />
+                <NavbarLink
+                  title="An organization"
+                  href="/organizations/111"
+                />
+                <NavbarLink title="Search" href="/search" />
+              </ul>
+            </div>
+          </nav>
+          <div className="container">
+            <Route
+              exact
+              path="/"
+              component={Home}
+            />
+            <Route
+              path="/about"
+              component={About}
+            />
+            <Route
+              path="/organizations/:organizationUuid"
+              component={Organization}
+            />
+            <Route
+              path="search"
+              component={Search}
+            />
+          </div>
+          <Footer />
+        </div>
+      </Router>
+    </Provider>
   </ApolloProvider>,
   document.getElementById('root'),
 );

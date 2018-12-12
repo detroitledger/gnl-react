@@ -133,8 +133,8 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
   graphql(ORG_QUERY, {
-    options: ({ params }) => ({
-      variables: { uuid: params.organizationUuid },
+    options: ({ match }) => ({
+      variables: { uuid: match.params.organizationUuid },
     }),
     props({ data: { loading, organization } }) {
       if (loading) {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 // Component to query and process search result
 const SearchResult = ({ loading, organizations }) => {
