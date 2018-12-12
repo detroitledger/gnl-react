@@ -61,7 +61,7 @@ ReactDOM.render(
               component={About}
             />
             <Route
-              path="/organizations/:organizationUuid"
+              path="/organizations/:name/:uuid"
               component={Organization}
             />
             <Route

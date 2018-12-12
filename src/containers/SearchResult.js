@@ -4,6 +4,8 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 
+import { slugify } from '../utils';
+
 // Component to query and process search result
 const SearchResult = ({ loading, organizations }) => {
   
@@ -18,7 +20,7 @@ const SearchResult = ({ loading, organizations }) => {
   // Iterate over all ledger orgs that match name
   const linkedOrgNames = organizations.map((org, i) =>
     <li key={i}>
-      <Link to={'/organizations/' + org.uuid}>{org.name}</Link>
+      <Link to={`/organizations/${slugify(org.name)}/${org.uuid}`}>{org.name}</Link>
     </li>
   );
 
