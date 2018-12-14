@@ -4,11 +4,20 @@ import renderer from 'react-test-renderer';
 
 // this test passes, but expected jest to export a .snap file in this directory??
 test('IrsData component renders irsOrganization data', () => {
-  it('renders correctly', () => {
-    const irsOrganization = { id: 1, ein: '111222333', filing_type: '990', total_revenue: 300 };
-    const rendered = renderer.create(
-  	  <IrsData irsOrganization={irsOrganization} />
-  	);
-  	expect(rendered.toJSON()).toMatchSnapshot();
-  });
+  const form990 = {
+    id: 1,
+    ein: '111222333',
+    filing_type: '990',
+    tax_period: '201206',
+    total_revenue: 300,
+    total_expenses: 301,
+    total_assets: 302,
+    total_liabilities: 303,
+  };
+
+  const rendered = renderer.create(
+    <IrsData form990={form990} />
+  );
+
+  expect(rendered.toJSON()).toMatchSnapshot();
 });
