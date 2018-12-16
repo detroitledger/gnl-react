@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IrsData component renders irsOrganization data 1`] = `
+<div>
+  <p>
+    This organization files a Form 
+    990
+     with the IRS.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>
+          Totals for tax period ending 
+          Jun 2012
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          Revenue
+        </td>
+        <td>
+          $300
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Expenses
+        </td>
+        <td>
+          $301
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Assets
+        </td>
+        <td>
+          $302
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Liabilities
+        </td>
+        <td>
+          $303
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;

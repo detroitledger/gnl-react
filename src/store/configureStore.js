@@ -1,13 +1,9 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
-import { browserHistory } from 'react-router';
 
 import promiseMiddleware from '../middleware/promiseMiddleware';
 import combiner from '../reducers';
 
-const middleware = routerMiddleware(browserHistory);
-
-const middlewares = [applyMiddleware(promiseMiddleware, middleware)];
+const middlewares = [applyMiddleware(promiseMiddleware)];
 
 export default function configureStore(initialState = {}) {
   const hasWindow = typeof window !== 'undefined';

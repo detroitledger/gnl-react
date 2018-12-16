@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import { BarChart } from 'react-svg-chart';
+import React from 'react';
+import PropTypes from 'prop-types';
 import numeral from 'numeral';
 
 const YearlySumsBarchart = ({ sums }) => {
@@ -9,12 +9,7 @@ const YearlySumsBarchart = ({ sums }) => {
   }));
 
   return (
-    <BarChart
-      bars={data}
-      height={ 400 }
-      width={ 600 }
-      formatValue={v => `$${numeral(v).format('0,0[.]00')}`}
-    />
+  <div>todo: new barchart lib</div>
   );
 };
 

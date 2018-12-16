@@ -7,7 +7,7 @@ export default () => (
       <input placeholder="Your email" type="email" name="EMAIL" />
       <input type="submit" value="Subscribe" name="subscribe" />
       <div style={{position: 'absolute', left: '-5000px'}}>
-        <input type="text" name="b_5f6c82c52e266389140a08ab5_ffe8bfd2f0" tabIndex="-1" value="" />
+        <input type="text" name="b_5f6c82c52e266389140a08ab5_ffe8bfd2f0" tabIndex="-1" readOnly value="" />
       </div>
     </form>
 

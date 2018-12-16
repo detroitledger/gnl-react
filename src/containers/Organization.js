@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -132,8 +133,8 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
   graphql(ORG_QUERY, {
-    options: ({ params }) => ({
-      variables: { uuid: params.organizationUuid },
+    options: ({ match }) => ({
+      variables: { uuid: match.params.uuid },
     }),
     props({ data: { loading, organization } }) {
       if (loading) {
