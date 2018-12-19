@@ -15,6 +15,7 @@ import Home from './containers/Home';
 import About from './containers/About';
 import Organization from './containers/Organization';
 import Search from './containers/Search';
+import Methods from './containers/Methods';
 
 import NavbarLink from './components/NavbarLink';
 import Footer from './components/Footer';
@@ -41,11 +42,9 @@ ReactDOM.render(
               </div>
 
               <ul className="nav navbar-nav">
+                <NavbarLink title="Home" href="/" />
                 <NavbarLink title="About" href="/about" />
-                <NavbarLink
-                  title="An organization"
-                  href="/organizations/111"
-                />
+                <NavbarLink title="Data & Methods" href="/methods" />
                 <NavbarLink title="Search" href="/search" />
               </ul>
             </div>
@@ -67,6 +66,10 @@ ReactDOM.render(
             <Route
               path="search"
               component={Search}
+            />
+            <Route
+              path="/methods"
+              component={Methods}
             />
           </div>
           <Footer />
