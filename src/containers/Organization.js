@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import Helmet from 'react-helmet';
-import { Nav, NavItem } from 'react-bootstrap';
+import { Col, Nav, NavItem, Row} from 'react-bootstrap';
 import moment from 'moment';
 import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
@@ -15,6 +15,12 @@ import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
 import OrgNewsArticles from '../components/OrgNewsArticles';
 import Page from '../components/Page';
+
+
+const EIN = ({ein}) => {
+  if (!ein) return null;
+  return (<div className="ein">EIN: {ein}</div>)
+}
 
 const Organization = (props) => {
   const {
@@ -35,9 +41,14 @@ const Organization = (props) => {
       <Helmet title={organization.name} />
       <h1>{organization.name}</h1>
       <p>{organization.description}</p>
-      <div className="ein">EIN: {organization.ein}</div>
 
-      <OrgNteeLinks ntees={organization.nteeOrganizationTypes} />
+      <Row>
+        <Col md={10}>
+          <OrgNteeLinks ntees={organization.nteeOrganizationTypes} />
+        </Col>
+        <Col md={2} className="eins"><EIN ein={organization.ein} /></Col>
+      </Row>
+
       <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/[]} />
       <OrgFinances forms990={props.data.forms990} />
 
