@@ -44,20 +44,19 @@ const OrgFinances = (props) => {
           </tbody>
         </table>
       </Col>
-    )
+    );
   });
 
   return (
     <div>
-      <h4>Finances</h4>
-      <p>Dates represent the end of the organization's fiscal year, often different
-      from the calendar year. Not all figures are available for all organizations. 
-      Data is from IRS 990 filings.</p>
+      <h2>Finances</h2>
+      <p>
+        Dates represent the end of the organization's fiscal year, often different from the calendar
+        year. Not all figures are available for all organizations. Data is from IRS 990 filings.
+      </p>
 
       <Grid>
-        <Row>
-          {finances}
-        </Row>
+        <Row>{finances}</Row>
       </Grid>
     </div>
   );
