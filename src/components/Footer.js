@@ -2,7 +2,7 @@ import React from 'react';
 
 export default () => (
   <footer>
-    <div class="container">
+    <div className="container">
       <form
         action="https://detroitledger.us7.list-manage.com/subscribe/post?u=5f6c82c52e266389140a08ab5&amp;id=ffe8bfd2f0"
         method="post"
