@@ -24,6 +24,7 @@ const EIN = ({ein}) => {
 
 const Organization = (props) => {
   const {
+    error,
     loading,
     organization,
     grantsFunded,
@@ -35,6 +36,22 @@ const Organization = (props) => {
   if (loading) {
     return <p>Loading...</p>;
   }
+
+  if (error) {
+    return <h1>Sorry, we couldn't load this organization</h1>;
+  }
+
+  // Decide if we show grants funded or received
+  // We default to funded if there are any
+  let grantSide = props.grantSide;
+  if (grantSide === 'none') {
+    if (grantsFunded && grantsFunded.length > 0) {
+      grantSide = 'funded'
+    } else {
+      grantSide = 'received'
+    }
+  }
+
 
   return (
     <Page>
@@ -59,14 +76,14 @@ const Organization = (props) => {
       </p>
       <Nav
         bsStyle="tabs"
-        activeKey={props.grantSide}
+        activeKey={grantSide}
         onSelect={props.handleSetGrantSide}
       >
         <NavItem eventKey="funded">Grants funded</NavItem>
         <NavItem eventKey="received">Grants received</NavItem>
       </Nav>
       <GrantTable
-        verb={props.grantSide}
+        verb={grantSide}
         grantsReceived={grantsReceived}
         grantsFunded={grantsFunded}
         fundedYearlySums={fundedYearlySums}
@@ -148,9 +165,13 @@ export default compose(
     options: ({ match }) => ({
       variables: { uuid: match.params.uuid },
     }),
-    props({ data: { loading, organization } }) {
+    props({ data: { error, loading, organization } }) {
       if (loading) {
         return { data: { loading: true } };
+      }
+      if (error) {
+        console.error(error);
+        return { data: { error: true, loading: false } };
       }
 
       // Sort lists by org
