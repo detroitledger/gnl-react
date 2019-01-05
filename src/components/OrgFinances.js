@@ -3,14 +3,20 @@ import PropTypes from 'prop-types';
 import { Grid, Row, Col } from 'react-bootstrap';
 import numeral from 'numeral';
 
-const OrgFinances = (props) => {
-  const finances = props.forms990.map((form990, i) => {
-    let grants_paid = false;
+const Amt = ({ value }) => <td className="amt">{numeral(value).format('0,0[.]00')}</td>;
+
+const OrgFinances = ({ forms990 }) => {
+  if (!forms990 || forms990.length === 0) return null;
+
+  const sortedForms = forms990.sort(f => f.year);
+
+  const finances = sortedForms.map((form990, i) => {
+    let grantsPaid = false;
     if (form990.grants_paid) {
-      grants_paid = (
+      grantsPaid = (
         <tr>
           <td>Grants Paid</td>
-          <td className="amt">${numeral(form990.grants_paid).format('0,0[.]00')}</td>
+          <Amt value={form990.grants_paid} />
         </tr>
       );
     }
@@ -26,20 +32,20 @@ const OrgFinances = (props) => {
             </tr>
             <tr>
               <td>Revenue</td>
-              <td className="amt">${numeral(form990.total_revenue).format('0,0[.]00')}</td>
+              <Amt value={form990.total_revenue} />
             </tr>
-            {grants_paid || null}
+            {grantsPaid || null}
             <tr>
               <td>Total Expenses</td>
-              <td className="amt">${numeral(form990.total_expenses).format('0,0[.]00')}</td>
+              <Amt value={form990.total_expenses} />
             </tr>
             <tr>
               <td>Assets</td>
-              <td className="amt">${numeral(form990.total_assets).format('0,0[.]00')}</td>
+              <Amt value={form990.total_assets} />
             </tr>
             <tr>
               <td>Liabilities</td>
-              <td className="amt">${numeral(form990.total_liabilities).format('0,0[.]00')}</td>
+              <Amt value={form990.total_liabilities} />
             </tr>
           </tbody>
         </table>
@@ -48,16 +54,14 @@ const OrgFinances = (props) => {
   });
 
   return (
-    <div>
+    <div className="finances">
       <h2>Finances</h2>
       <p>
         Dates represent the end of the organization's fiscal year, often different from the calendar
         year. Not all figures are available for all organizations. Data is from IRS 990 filings.
       </p>
 
-      <Grid>
-        <Row>{finances}</Row>
-      </Grid>
+      <Row>{finances}</Row>
     </div>
   );
 };

@@ -35,7 +35,7 @@ const Organization = (props) => {
       <Helmet title={organization.name} />
       <h1>{organization.name}</h1>
       <p>{organization.description}</p>
-      <div className="ein">{organization.ein}</div>
+      <div className="ein">EIN: {organization.ein}</div>
 
       <OrgNteeLinks ntees={organization.nteeOrganizationTypes} />
       <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/[]} />
@@ -106,8 +106,9 @@ const ORG_QUERY = gql`
         tax_period
         total_assets
         total_expenses
-        total_revenue
+        total_liabilities
         grants_paid
+        total_revenue
       }
       nteeOrganizationTypes {
         uuid

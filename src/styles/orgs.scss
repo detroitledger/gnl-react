@@ -52,7 +52,7 @@
     }
   }
 }
- #finances {
+ .finances {
   margin-top: 1em;
   margin-bottom: 2em;
    .article {
@@ -61,6 +61,8 @@
    table {
     width: 100%;
     overflow: hidden;
+    margin-bottom: 1em;
+
      th {
       border-bottom: 2px solid #000;
     }
@@ -69,6 +71,10 @@
     }
      td.amt {
       text-align: right;
+
+      span.dollarsign {
+        color: $gray;
+      }
     }
   }
 }
