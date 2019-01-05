@@ -10,11 +10,11 @@ body {
 
 }
 
-
 a:link,
 a:visited {
   color: $blue;
   text-decoration: none;
+  border-bottom: 1px solid white;
 }
 
 a:active,
@@ -58,6 +58,12 @@ html.js .form-autocomplete {
 
 .view-id-orgs .views-exposed-form .views-exposed-widget .form-submit {
   margin-top: 0;
+}
+
+nav {
+  a, a:link, a:hover, a:active {
+    border-bottom: 0px none;
+  }
 }
 
 #content {
