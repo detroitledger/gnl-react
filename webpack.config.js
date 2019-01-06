@@ -1,4 +1,6 @@
 const path = require('path');
+const config = require('config');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -22,6 +24,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.DefinePlugin({
+      API_URL: JSON.stringify(config.get('api_url')),
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),

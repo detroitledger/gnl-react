@@ -21,7 +21,7 @@ import Footer from './components/Footer';
 
 import './styles/main.scss';
 
-const client = createApolloClient();
+const client = createApolloClient(API_URL); // via webpack config
 
 let initialState = window['__INITIAL_STATE__'];
 
