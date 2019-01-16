@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { bindActionCreators } from 'redux';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import jwtDecode from 'jwt-decode';
 
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
@@ -24,7 +22,7 @@ import './styles/main.scss';
 
 const client = createApolloClient();
 
-let initialState = window['__INITIAL_STATE__'];
+const initialState = window['__INITIAL_STATE__'];
 
 const store = configureStore(initialState);
 
@@ -42,10 +40,8 @@ ReactDOM.render(
               </div>
 
               <ul className="nav navbar-nav">
-                <NavbarLink title="Home" href="/" />
                 <NavbarLink title="About" href="/about" />
                 <NavbarLink title="Data & Methods" href="/methods" />
-                <NavbarLink title="Search" href="/search" />
               </ul>
             </div>
           </nav>
