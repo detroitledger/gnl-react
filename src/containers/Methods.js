@@ -56,16 +56,16 @@ export default function Methods() {
         </p>
         <h5>Field notes</h5>
         <ul>2014
-          <li>Allie Gross, Detroit Charter Data</li>
-          <li>Patrick Cooper-McCann, PhD Candidate, U of M</li>
-          <li>Mike Medow, Allied Media Projects</li>
-          <li>Gabriell Turner, Detroit Digital Steward</li>
+          <li><a href="https://drive.google.com/open?id=1tyrok4bmtyQFC4Yo6GaFh7YfCun-6A9L63v8m1cBr-o">Allie Gross</a>, Detroit Charter Data</li>
+          <li><a href="https://drive.google.com/open?id=135K3nIeG_4LPF7ABjHGWfhz2UrGgmLhK2KHlvFR_zWE">Patrick Cooper-McCann</a>, PhD Candidate, U of M</li>
+          <li><a href="https://drive.google.com/open?id=1GdNTnQiyxbiE2yFP-Op-raeh0SX-qW5C7yJp9KNkdbU">Mike Medow</a>, Allied Media Projects</li>
+          <li><a href="https://drive.google.com/open?id=1-tIYor5xDr6rCL9mqHcMN6QZ2QMd2LDomFm6llVL-_w">Gabriell Turner</a>, Detroit Digital Steward</li>
         </ul>
         <ul>2013
-          <li>Richard Murphy, Michigan Suburbs Alliance</li>
-          <li>Keith Hernandez and Ellen Chung, Community Planning and Development, City of Detroit</li>
-          <li>Jennifer Riker Fahenstock, M.M. Fisher Foundation</li>
-          <li>Peri Weisberg, United Way for Southeastern Michigan</li>
+          <li><a href="https://drive.google.com/open?id=1BmkSDKZsy8wHAvrDF2dVWZeIwkE999N5ShpfZ4y69tY">Richard Murphy</a>, Michigan Suburbs Alliance</li>
+          <li><a href="https://drive.google.com/open?id=1cQ_NZTTrDA3uI-kvCCu_4bThx-AGHSBLNCRgLsuRHT0">Keith Hernandez and Ellen Chung</a>, Community Planning and Development, City of Detroit</li>
+          <li><a href="https://drive.google.com/open?id=1cVIMY3-O4m7FhjUJTPs0neC1E-SwwuZHs7zYf0LjUh4">Jennifer Riker Fahenstock</a>, M.M. Fisher Foundation</li>
+          <li><a href="https://drive.google.com/open?id=1NvQq7pj1iEU2sK7NCiQPjtmVb9ASQXYKiBA5XJ99NzA">Peri Weisberg</a>, United Way for Southeastern Michigan</li>
         </ul>
       </Col>
     </Row>
