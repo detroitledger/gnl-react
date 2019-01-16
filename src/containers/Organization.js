@@ -67,7 +67,7 @@ const Organization = (props) => {
       </Row>
 
       <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/[]} />
-      <OrgFinances forms990={props.data.forms990} />
+      {props.data.forms990 && <OrgFinances forms990={props.data.forms990} />}
 
       <h2>Grant Data</h2>
       <p>
@@ -236,7 +236,7 @@ export default compose(
         .reduce((acc, cur) => ({ ...acc, [cur]: 0 }), {});
 
       // Augment IRS data
-      const forms990 = organization.forms990.map(form990 => ({
+      const forms990 = organization.forms990 && organization.forms990.map(form990 => ({
         ...form990,
         year: Number(form990.tax_period.substring(0, 4)),
         month: Number(form990.tax_period.substring(4)),
