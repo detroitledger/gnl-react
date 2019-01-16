@@ -8,9 +8,7 @@ const YearlySumsBarchart = ({ sums }) => {
     value: sums[k],
   }));
 
-  return (
-  <div>todo: new barchart lib</div>
-  );
+  return <div />;
 };
 
 YearlySumsBarchart.propTypes = {

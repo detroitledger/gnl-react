@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import Helmet from 'react-helmet';
-import { Nav, NavItem } from 'react-bootstrap';
+import { Col, Nav, NavItem, Row} from 'react-bootstrap';
 import moment from 'moment';
 import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
@@ -16,8 +16,15 @@ import OrgNteeLinks from '../components/OrgNteeLinks';
 import OrgNewsArticles from '../components/OrgNewsArticles';
 import Page from '../components/Page';
 
+
+const EIN = ({ein}) => {
+  if (!ein) return null;
+  return (<div className="ein">EIN: {ein}</div>)
+}
+
 const Organization = (props) => {
   const {
+    error,
     loading,
     organization,
     grantsFunded,
@@ -30,16 +37,37 @@ const Organization = (props) => {
     return <p>Loading...</p>;
   }
 
+  if (error) {
+    return <h1>Sorry, we couldn't load this organization</h1>;
+  }
+
+  // Decide if we show grants funded or received
+  // We default to funded if there are any
+  let grantSide = props.grantSide;
+  if (grantSide === 'none') {
+    if (grantsFunded && grantsFunded.length > 0) {
+      grantSide = 'funded'
+    } else {
+      grantSide = 'received'
+    }
+  }
+
+
   return (
     <Page>
       <Helmet title={organization.name} />
       <h1>{organization.name}</h1>
       <p>{organization.description}</p>
-      <div className="ein">{organization.ein}</div>
 
-      <OrgNteeLinks ntees={organization.nteeOrganizationTypes} />
+      <Row>
+        <Col md={10}>
+          <OrgNteeLinks ntees={organization.nteeOrganizationTypes} />
+        </Col>
+        <Col md={2} className="eins"><EIN ein={organization.ein} /></Col>
+      </Row>
+
       <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/[]} />
-      <OrgFinances forms990={props.data.forms990} />
+      {props.data.forms990 && <OrgFinances forms990={props.data.forms990} />}
 
       <h2>Grant Data</h2>
       <p>
@@ -48,14 +76,14 @@ const Organization = (props) => {
       </p>
       <Nav
         bsStyle="tabs"
-        activeKey={props.grantSide}
+        activeKey={grantSide}
         onSelect={props.handleSetGrantSide}
       >
         <NavItem eventKey="funded">Grants funded</NavItem>
         <NavItem eventKey="received">Grants received</NavItem>
       </Nav>
       <GrantTable
-        verb={props.grantSide}
+        verb={grantSide}
         grantsReceived={grantsReceived}
         grantsFunded={grantsFunded}
         fundedYearlySums={fundedYearlySums}
@@ -106,8 +134,9 @@ const ORG_QUERY = gql`
         tax_period
         total_assets
         total_expenses
-        total_revenue
+        total_liabilities
         grants_paid
+        total_revenue
       }
       nteeOrganizationTypes {
         uuid
@@ -136,9 +165,13 @@ export default compose(
     options: ({ match }) => ({
       variables: { uuid: match.params.uuid },
     }),
-    props({ data: { loading, organization } }) {
+    props({ data: { error, loading, organization } }) {
       if (loading) {
         return { data: { loading: true } };
+      }
+      if (error) {
+        console.error(error);
+        return { data: { error: true, loading: false } };
       }
 
       // Sort lists by org
@@ -203,7 +236,7 @@ export default compose(
         .reduce((acc, cur) => ({ ...acc, [cur]: 0 }), {});
 
       // Augment IRS data
-      const forms990 = organization.forms990.map(form990 => ({
+      const forms990 = organization.forms990 && organization.forms990.map(form990 => ({
         ...form990,
         year: Number(form990.tax_period.substring(0, 4)),
         month: Number(form990.tax_period.substring(4)),
