@@ -90,7 +90,7 @@
     "style-loader": "0.23.1",
     "webpack": "4.27.1",
     "webpack-dev-middleware": "^1.8.4",
-    "webpack-dev-server": "3.1.10",
+    "webpack-dev-server": "3.1.11",
     "webpack-hot-middleware": "^2.13.2"
   },
   "eslintConfig": {
