@@ -2,11 +2,15 @@ new detroitledger.org frontend
 
 based on mtiger2k/react-redux-graphql-passport-starter and bnchdrff/react-redux-graphql-passport-starter
 
-### Installation
+## Installation
 
 ```bash
 yarn install --frozen-lockfile
 ```
+
+## Configuration
+
+`API_URL` points to the production server by default; to use a local dev server, either specify it as an env var or create a `config/local.toml` that contains `api_url = 'http://localhost:8081'`.
 
 ## Running Dev Server
 
