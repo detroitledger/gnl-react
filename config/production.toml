@@ -1,2 +1,2 @@
 port = 8080
-api_url = 'https://api.detroitledger.org'
+api_url = 'https://gnl-graphql.herokuapp.com'

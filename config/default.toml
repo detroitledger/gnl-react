@@ -1,2 +1,2 @@
 port = 8080
-api_url = 'https://graphql-gnl.herokuapp.com'
+api_url = 'https://gnl-graphql.herokuapp.com'
