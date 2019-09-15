@@ -1,9 +1,10 @@
+/* global jest */
 import IrsData from './IrsData.js';
 import React from 'react';
 import renderer from 'react-test-renderer';
 
 // this test passes, but expected jest to export a .snap file in this directory??
-test('IrsData component renders irsOrganization data', () => {
+it('IrsData component renders irsOrganization data', () => {
   const form990 = {
     id: 1,
     ein: '111222333',
@@ -15,9 +16,7 @@ test('IrsData component renders irsOrganization data', () => {
     total_liabilities: 303,
   };
 
-  const rendered = renderer.create(
-    <IrsData form990={form990} />
-  );
+  const rendered = renderer.create(<IrsData form990={form990} />);
 
   expect(rendered.toJSON()).toMatchSnapshot();
 });
