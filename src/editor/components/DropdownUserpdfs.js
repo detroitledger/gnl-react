@@ -7,6 +7,8 @@ import './DropdownUserpdfs.scss';
 
 class DropdownUserpdfs extends Component {
   _onSelect = ({ value }) => {
+    // XXX TODO
+    // This no longer works with the editor embedded in the Ledger react app
     this.props.dispatch(push('/' + value));
   };
 
@@ -25,7 +27,6 @@ class DropdownUserpdfs extends Component {
       } = this.props.userpdfs[i];
 
       const pagelabel = currentpg > 0 ? `(page ${currentpg})` : '(new!)';
-
       options.push({
         value: id,
         label:
