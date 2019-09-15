@@ -10,7 +10,7 @@ yarn install --frozen-lockfile
 
 ## Configuration
 
-`API_URL` points to the production server by default; to use a local dev server, either specify it as an env var or create a `config/local.toml` that contains `api_url = 'http://localhost:8081'`.
+`api_url` points to the production server by default; to use a local dev server, either specify it as an env var or create a `config/local.json` that contains `"api_url": "http://localhost:8081"`.
 
 ## Running Dev Server
 

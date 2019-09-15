@@ -1,0 +1,31 @@
+.Pdfviewer {
+  position: relative;
+}
+
+.Pdfviewer-controls {
+  position: fixed;
+  top: 5vh;
+  padding: 0;
+  background: rebeccapurple;
+}
+
+.Pdfviewer-controls button {
+  display: inline-block;
+  border: 0px none;
+  border-radius: 0;
+  background: rebeccapurple;
+  color: #fff;
+  padding: 3px 15px 6px 15px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.Pdfviewer-controls button:hover {
+  color: rebeccapurple;
+  background: #e5dcaa;
+}
+
+.Pdfviewer-controls button.disabled {
+  color: #a4b6be;
+}
