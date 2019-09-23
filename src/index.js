@@ -22,12 +22,8 @@ import Footer from './components/Footer';
 
 import './styles/main.scss';
 
-// XXX TODO
-// const config = require('config');
-// const API_URL = config.get('api_url');
-const config = require('./settings');
-
-const client = createApolloClient(config.api_url); // via webpack config
+const API_URL = process.env.REACT_APP_API_URL || 'https://gnl-graphql.herokuapp.com';
+const client = createApolloClient(API_URL);
 
 const initialState = window['__INITIAL_STATE__'];
 

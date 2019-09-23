@@ -22,7 +22,6 @@
     "apollo-client": "2.4.2",
     "apollo-link-http": "^1.5.5",
     "axios": "^0.15.3",
-    "config": "3.0.0",
     "cross-fetch": "^1.1.1",
     "graphql": "14.5.5",
     "graphql-tag": "2.10.0",
