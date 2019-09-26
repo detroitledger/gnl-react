@@ -1,3 +1,7 @@
+[build]
+  base = "gnl-react/"
+  publish = "gnl-react/build/"
+  command = "yarn build"
 [[redirects]]
   from = "/*"
   to = "/index.html"
