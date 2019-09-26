@@ -12,6 +12,8 @@ yarn install --frozen-lockfile
 
 The env var `REACT_APP_API_URL` points to the production server by default.
 
+The env var `REACT_APP_GOOGLE_CLIENT_ID` uses our prod google client id by default.
+
 ## Running Dev Server
 
 ```bash

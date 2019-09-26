@@ -34,7 +34,7 @@ const getGoogleOAuth2Session = async () => {
         timeout: 10000,
       });
     });
-    auth2session = await gapi.auth2.init({ client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID });
+    auth2session = await gapi.auth2.init({ client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID || '1031929397869-7oiem44eh6vtenga13efhob6vdugjfn2.apps.googleusercontent.com' });
   }
   return auth2session;
 };
