@@ -10,7 +10,9 @@ yarn install --frozen-lockfile
 
 ## Configuration
 
-`api_url` points to the production server by default; to use a local dev server, either specify it as an env var or create a `config/local.json` that contains `"api_url": "http://localhost:8081"`.
+The env var `REACT_APP_API_URL` points to the production server by default.
+
+The env var `REACT_APP_GOOGLE_CLIENT_ID` uses our prod google client id by default.
 
 ## Running Dev Server
 

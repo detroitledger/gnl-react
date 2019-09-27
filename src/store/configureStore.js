@@ -1,14 +1,13 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { routerMiddleware } from 'react-router-redux';
 
 import promiseMiddleware from '../middleware/promiseMiddleware';
 import combiner from '../reducers';
 
-export default function configureStore(initialState = {}, history) {
+export default function configureStore(initialState = {}) {
   const hasWindow = typeof window !== 'undefined';
 
-  const middleware = [thunk, routerMiddleware(history), promiseMiddleware];
+  const middleware = [thunk, promiseMiddleware];
 
   const store = createStore(
     combiner(),

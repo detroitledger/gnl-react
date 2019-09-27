@@ -1,7 +1,8 @@
 .idea
 node_modules
 npm-debug.log
-dist
+yarn-error.log
+build
 .env
 *.swp
 webpack/webpack-assets.json

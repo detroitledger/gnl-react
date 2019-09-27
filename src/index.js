@@ -1,10 +1,11 @@
-import { ApolloProvider } from 'react-apollo';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, Link } from 'react-router-dom';
-import createHashHistory from 'history/createHashHistory';
-import { ConnectedRouter } from 'react-router-redux';
+
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
 import { Provider } from 'react-redux';
+
+import { ApolloProvider } from '@apollo/react-hooks';
 
 import configureStore from './store/configureStore';
 
@@ -12,8 +13,9 @@ import createApolloClient from './network/create-apollo-client';
 
 import Home from './containers/Home';
 import About from './containers/About';
-import Editor from './editor/App';
-import Organization from './containers/Organization';
+import Admin from './containers/Admin';
+//import Editor from './editor/App';
+//import Organization from './containers/Organization';
 import Search from './containers/Search';
 import Methods from './containers/Methods';
 
@@ -22,23 +24,17 @@ import Footer from './components/Footer';
 
 import './styles/main.scss';
 
-// XXX TODO
-// const config = require('config');
-// const API_URL = config.get('api_url');
-const config = require('./settings');
-
-const client = createApolloClient(config.api_url); // via webpack config
+const API_URL = process.env.REACT_APP_API_URL || 'https://gnl-graphql.herokuapp.com';
+const client = createApolloClient(API_URL);
 
 const initialState = window['__INITIAL_STATE__'];
 
-const history = createHashHistory();
-
-const store = configureStore(initialState, history);
+const store = configureStore(initialState);
 
 ReactDOM.render(
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <ConnectedRouter history={history}>
+      <Router>
         <div>
           <nav className="navbar navbar-inverse">
             <div className="container">
@@ -51,22 +47,21 @@ ReactDOM.render(
               <ul className="nav navbar-nav">
                 <NavbarLink title="About" href="/about" />
                 <NavbarLink title="Data & Methods" href="/methods" />
-                <NavbarLink title="Add Grants" href="/editor" />
+                <NavbarLink title="Admin" href="/admin" />
               </ul>
             </div>
           </nav>
           <div className="container">
             <Route exact path="/" component={Home} />
             <Route path="/about" component={About} />
-            <Route path="/organizations/:name/:uuid" component={Organization} />
             <Route path="search" component={Search} />
             <Route path="/methods" component={Methods} />
-            <Route path="/editor" component={Editor} />
+            <Route path="/admin" component={Admin} />
           </div>
           <Footer />
         </div>
-      </ConnectedRouter>
-    </Provider>
+      </Router>
+    </Provider>,
   </ApolloProvider>,
   document.getElementById('root'),
 );

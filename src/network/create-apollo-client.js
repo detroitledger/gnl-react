@@ -1,10 +1,13 @@
-import ApolloClient from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-boost';
+import store from 'store/dist/store.modern';
 
 export default (apiUrl) => {
   return new ApolloClient({
-    link: new HttpLink({ uri: apiUrl }),
-    cache: new InMemoryCache(),
+    uri: apiUrl,
+    request: op => op.setContext({
+      headers: {
+        'X-Auth-Token': store.get('idToken'),
+      },
+    }),
   });
 };

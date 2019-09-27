@@ -1,15 +1,13 @@
 import { combineReducers } from 'redux';
 
+import auth from './auth';
 import errors from './errors';
-import form from './form';
 import ui from './ui';
-import editor from '../editor/reducers';
 
 export default function combiner() {
   return combineReducers({
+    auth,
     errors,
-    form,
     ui,
-    editor,
   });
 }
