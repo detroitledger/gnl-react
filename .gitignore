@@ -2,7 +2,7 @@
 node_modules
 npm-debug.log
 yarn-error.log
-dist
+build
 .env
 *.swp
 webpack/webpack-assets.json
