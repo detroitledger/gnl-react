@@ -8,14 +8,15 @@ import {
   AUTH_LOGOUT,
 } from '../actions/types';
 
+const API_URL = process.env.REACT_APP_API_URL || 'https://gnl-graphql.herokuapp.com';
+
 const authApiCall = async (path, id_token) => {
-  const res = await fetch(process.env.REACT_APP_API_URL + '/' + path, {
+  const res = await fetch(API_URL + '/' + path, {
     headers: {
       'Content-Type': 'application/json',
       'X-Auth-Token': id_token,
     },
   });
-
   const json = await res.json();
 
   return json;
@@ -143,4 +144,4 @@ export const callGoogleAuthEndpoint = (path) => async (dispatch, getState) => {
     }
   }
   return response;
-}; 
+};
