@@ -23,6 +23,7 @@
     "apollo-client": "2.4.2",
     "axios": "^0.15.3",
     "cross-fetch": "^1.1.1",
+    "eslint-plugin-react": "^7.14.3",
     "graphql": "14.5.5",
     "graphql-tag": "2.10.0",
     "graphql-tools": "^0.9.0",
@@ -60,9 +61,6 @@
   "devDependencies": {
     "css-loader": "2.0.0",
     "enzyme": "^2.7.0",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-react": "^6.7.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^3.2.0",
     "json-loader": "^0.5.4",
@@ -75,50 +73,8 @@
     "style-loader": "0.23.1"
   },
   "eslintConfig": {
-    "parser": "babel-eslint",
-    "ecmaFeatures": {
-      "jsx": true,
-      "modules": true
-    },
-    "env": {
-      "browser": true,
-      "node": true
-    },
     "extends": [
-      "airbnb/base",
-      "plugin:import/errors"
-    ],
-    "rules": {
-      "no-use-before-define": 0,
-      "arrow-body-style": 0,
-      "dot-notation": 0,
-      "import/no-named-as-default": 0,
-      "import/no-extraneous-dependencies": [
-        "error",
-        {
-          "devDependencies": true
-        }
-      ],
-      "indent": [
-        "error",
-        2,
-        {
-          "SwitchCase": 1
-        }
-      ],
-      "no-unused-vars": [
-        2,
-        {
-          "vars": "all",
-          "args": "after-used"
-        }
-      ],
-      "react/jsx-uses-react": 2,
-      "react/jsx-uses-vars": 2,
-      "react/react-in-jsx-scope": 2
-    },
-    "plugins": [
-      "react"
+      "react-app"
     ]
   },
   "ava": {
