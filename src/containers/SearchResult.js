@@ -1,19 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
 
-import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-import { Link } from 'react-router-dom';
-
-import { slugify } from '../utils';
+import { slugify } from "../utils";
 
 // Graphql query using name as search parameter on irs organizations
 const NAME_QUERY = gql`
   query getOrganizationsByName($name: String!) {
     organizations(limit: 50, nameLike: $name) {
-      name,
-      uuid,
+      name
+      uuid
     }
   }
 `;
@@ -29,15 +28,21 @@ export default ({ name }) => {
   }
 
   if (!data || !data.organizations) {
-    return <p><em>Name not found</em></p>;
+    return (
+      <p>
+        <em>Name not found</em>
+      </p>
+    );
   }
 
   // Iterate over all ledger orgs that match name
-  const linkedOrgNames = data.organizations.map((org, i) =>
+  const linkedOrgNames = data.organizations.map((org, i) => (
     <li key={i}>
-      <Link to={`/organizations/${slugify(org.name)}/${org.uuid}`}>{org.name}</Link>
+      <Link to={`/organizations/${slugify(org.name)}/${org.uuid}`}>
+        {org.name}
+      </Link>
     </li>
-  );
+  ));
 
   return (
     <div>
