@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-
-import { connect } from "react-redux";
 
 import { gql } from "apollo-boost";
-import { Mutation } from "@apollo/react-components";
+import { useMutation } from "@apollo/react-hooks";
+import DatePicker from "react-datepicker";
 
-import * as authActions from "../actions/auth";
 import OrganizationSelector from "./OrganizationSelector";
 
 const ADD_GRANT = gql`
@@ -19,48 +16,116 @@ const ADD_GRANT = gql`
 
 const AddGrant = () => {
   const [fromNameMatch, setFromNameMatch] = useState("");
-  const [fromUuid, setFromUuid] = useState("");
+  const [from, setFromUuid] = useState("");
   const [toNameMatch, setToNameMatch] = useState("");
-  const [toUuid, setToUuid] = useState("");
+  const [to, setToUuid] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [dateFrom, setDateFrom] = useState(new Date());
+  const [dateTo, setDateTo] = useState(new Date());
+  const [source, setSource] = useState();
+  const [description, setDescription] = useState();
+  const [internalNotes, setInternalNotes] = useState();
+
+  const [
+    addGrant,
+    { loading: addGrantLoading, error: addGrantError, data: addGrantData }
+  ] = useMutation(ADD_GRANT);
 
   // TODO
   // <Redirect to="/admin" /> or render a Login form if we're not
 
+  if (addGrantError) {
+    console.log(
+      "xxx",
+      addGrantError.message,
+      addGrantError.graphQLErrors,
+      addGrantError.extraInfo,
+      addGrantError.networkError,
+      addGrantError.errors,
+      addGrantData
+    );
+  }
+  const error = addGrantError && <p>{addGrantError.message}</p>;
+
   return (
     <div className="addGrant">
-      <Mutation mutation={ADD_GRANT}>
-        {addGrant => (
-          <div>
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                addGrant({
-                  variables: {
-                    input: {
-                      from: fromUuid,
-                      to: toUuid
-                    }
-                  }
-                });
-              }}
-            >
-              <label htmlFor="fromOrganization">From</label>
-              <OrganizationSelector
-                value={fromNameMatch}
-                setValue={setFromNameMatch}
-                onOrgSelected={setFromUuid}
-              />
-              <label htmlFor="toOrganization">To</label>
-              <OrganizationSelector
-                value={toNameMatch}
-                setValue={setToNameMatch}
-                onOrgSelected={setToUuid}
-              />
-              <button type="submit">Add Grant</button>
-            </form>
+      <div>
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            addGrant({
+              variables: {
+                input: {
+                  from,
+                  to,
+                  dateFrom,
+                  dateTo,
+                  amount,
+                  source,
+                  description,
+                  internalNotes
+                }
+              }
+            });
+          }}
+        >
+          <div className="form-group">
+            <label htmlFor="fromOrganization">From</label>
+            <OrganizationSelector
+              value={fromNameMatch}
+              setValue={setFromNameMatch}
+              onOrgSelected={setFromUuid}
+            />
           </div>
-        )}
-      </Mutation>
+
+          <div className="form-group">
+            <label htmlFor="toOrganization">To</label>
+            <OrganizationSelector
+              value={toNameMatch}
+              setValue={setToNameMatch}
+              onOrgSelected={setToUuid}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="amount">Amount</label>
+            <input value={amount} onChange={setAmount} name="amount" />
+          </div>
+
+          <div className="form-group">
+            <DatePicker
+              selected={dateFrom}
+              onChange={date => setDateFrom(date)}
+            />
+          </div>
+          <div className="form-group">
+            <DatePicker selected={dateTo} onChange={date => setDateTo(date)} />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="source">Source</label>
+            <input value={source} onChange={setSource} name="amount" />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea name="description" onChange={setDescription}>
+              {description}
+            </textarea>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="internalNotes">Internal notes</label>
+            <textarea name="internalNotes" onChange={setInternalNotes}>
+              {internalNotes}
+            </textarea>
+          </div>
+
+          <button type="submit">Add Grant</button>
+          {addGrantLoading && "Loading..."}
+          {error}
+        </form>
+      </div>
     </div>
   );
 };
