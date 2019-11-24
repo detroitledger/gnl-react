@@ -24,7 +24,7 @@ import Footer from "./components/Footer";
 
 import "./styles/main.scss";
 
-const API_URL =
+export const API_URL =
   process.env.REACT_APP_API_URL || "https://gnl-graphql.herokuapp.com";
 const client = createApolloClient(API_URL);
 

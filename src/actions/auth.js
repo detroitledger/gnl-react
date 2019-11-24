@@ -8,7 +8,7 @@ import {
   AUTH_LOGOUT,
 } from '../actions/types';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://gnl-graphql.herokuapp.com';
+import { API_URL } from '../';
 
 const authApiCall = async (path, id_token) => {
   const res = await fetch(API_URL + '/' + path, {
