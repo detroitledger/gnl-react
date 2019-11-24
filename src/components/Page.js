@@ -9,4 +9,9 @@ const Page = ({ children }) => (
     </Row>
   </Grid>
 );
+
+Page.propTypes = {
+  children: PropTypes.element.isRequired
+};
+
 export default Page;

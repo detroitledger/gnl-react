@@ -18,7 +18,7 @@ const NAME_QUERY = gql`
 `;
 
 // Component to query and process search result
-export default ({ name }) => {
+const SearchResult = ({ name }) => {
   const { loading, error, data } = useQuery(NAME_QUERY, {
     variables: { name: `%${name}%` }
   });
@@ -51,3 +51,9 @@ export default ({ name }) => {
     </div>
   );
 };
+
+SearchResult.propTypes = {
+  name: PropTypes.string.isRequired,
+};
+
+export default SearchResult;
