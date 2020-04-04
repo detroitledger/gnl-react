@@ -4,16 +4,12 @@ import PropTypes from 'prop-types';
 import YearlySumsBarchart from './YearlySumsBarchart';
 import GrantRow from './GrantRow';
 
-const Grants = (props) => {
-  const grants =
-    props.verb === 'funded' ? props.grantsFunded : props.grantsReceived;
-  const sums =
-    props.verb === 'funded' ? props.fundedYearlySums : props.receivedYearlySums;
-  const label = props.verb === 'funded' ? 'Recipient' : 'Funder';
+const Grants = ({ verb, grants, sums }) => {
+  const label = verb === 'funded' ? 'Recipient' : 'Funder';
 
   return (
     <div>
-      <YearlySumsBarchart sums={sums} />
+      {sums && <YearlySumsBarchart sums={sums} />}
       <table className="grantsTable">
         <thead>
           <tr>
@@ -23,9 +19,8 @@ const Grants = (props) => {
           </tr>
         </thead>
         <tbody>
-          {grants.map((grant) => (
-            <GrantRow {...grant} key={grant.uuid} />
-          ))}
+          {grants &&
+            grants.map((grant) => <GrantRow {...grant} key={grant.uuid} />)}
         </tbody>
       </table>
     </div>
@@ -33,10 +28,8 @@ const Grants = (props) => {
 };
 
 Grants.propTypes = {
-  grantsReceived: PropTypes.array.isRequired,
-  grantsFunded: PropTypes.array.isRequired,
-  fundedYearlySums: PropTypes.object.isRequired,
-  receivedYearlySums: PropTypes.object.isRequired,
+  grants: PropTypes.array,
+  sums: PropTypes.object.isRequired,
   verb: PropTypes.string.isRequired,
 };
 

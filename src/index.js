@@ -22,6 +22,8 @@ import Organizations from './containers/Organizations';
 import Search from './containers/Search';
 import Methods from './containers/Methods';
 
+import AdminLinks from './containers/AdminLinks';
+
 import NavbarLink from './components/NavbarLink';
 import Footer from './components/Footer';
 
@@ -51,7 +53,7 @@ ReactDOM.render(
               <ul className="nav navbar-nav">
                 <NavbarLink title="About" href="/about" />
                 <NavbarLink title="Data & Methods" href="/methods" />
-                <NavbarLink title="Add grant" href="/admin/grants/add" />
+                <AdminLinks />
               </ul>
             </div>
           </nav>

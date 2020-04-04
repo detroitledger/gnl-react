@@ -70,7 +70,7 @@ export default () => {
     <div>
       <h2>Organizations</h2>
       <Switch>
-        <Route path={`${match.path}/:organizationId`}>
+        <Route path={`${match.path}/:slug/:organizationId`}>
           <Organization />
         </Route>
         <Route path={match.path}>
@@ -95,14 +95,7 @@ const Organization = () => {
 
   // Decide if we show grants funded or received
   // We default to funded if there are any
-  const defaultGrantSide =
-    data &&
-    data.organization &&
-    data.organization.grantsFunded &&
-    data.organization.grantsFunded.length > 0
-      ? 'funded'
-      : 'received';
-  const [grantSide, setGrantSide] = useState(defaultGrantSide);
+  const [grantSide, setGrantSide] = useState(false);
 
   if (loading) return 'Loading...';
   if (error) return `Error! ${error}`;
@@ -118,6 +111,10 @@ const Organization = () => {
     receivedYearlySums,
     forms990,
   } = cleanse(data.organization);
+
+  const showGrantSide =
+    grantSide ||
+    (data.organization.grantsFunded.length > 0 ? 'funded' : 'received');
 
   return (
     <Page>
@@ -142,16 +139,16 @@ const Organization = () => {
         Describes grants Ledger staff have been able to document. Does not
         reflect a full, official record of all funding.
       </p>
-      <Nav bsStyle="tabs" activeKey={grantSide} onSelect={setGrantSide}>
+      <Nav bsStyle="tabs" activeKey={showGrantSide} onSelect={setGrantSide}>
         <NavItem eventKey="funded">Grants funded</NavItem>
         <NavItem eventKey="received">Grants received</NavItem>
       </Nav>
       <GrantTable
-        verb={grantSide}
-        grantsReceived={grantsReceived}
-        grantsFunded={grantsFunded}
-        fundedYearlySums={fundedYearlySums}
-        receivedYearlySums={receivedYearlySums}
+        verb={showGrantSide}
+        grants={showGrantSide == 'funded' ? grantsFunded : grantsReceived}
+        sums={
+          showGrantSide === 'funded' ? fundedYearlySums : receivedYearlySums
+        }
       />
     </Page>
   );
