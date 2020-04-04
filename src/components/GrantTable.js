@@ -5,8 +5,10 @@ import YearlySumsBarchart from './YearlySumsBarchart';
 import GrantRow from './GrantRow';
 
 const Grants = (props) => {
-  const grants = props.verb === 'funded' ? props.grantsFunded : props.grantsReceived;
-  const sums = props.verb === 'funded' ? props.fundedYearlySums : props.receivedYearlySums;
+  const grants =
+    props.verb === 'funded' ? props.grantsFunded : props.grantsReceived;
+  const sums =
+    props.verb === 'funded' ? props.fundedYearlySums : props.receivedYearlySums;
   const label = props.verb === 'funded' ? 'Recipient' : 'Funder';
 
   return (
@@ -21,7 +23,7 @@ const Grants = (props) => {
           </tr>
         </thead>
         <tbody>
-          {grants.map(grant => (
+          {grants.map((grant) => (
             <GrantRow {...grant} key={grant.uuid} />
           ))}
         </tbody>

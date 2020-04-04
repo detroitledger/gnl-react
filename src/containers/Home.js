@@ -11,7 +11,8 @@ export default function Index() {
         <Helmet title="Homepage" />
         <h1>The Detroit Ledger</h1>
         <h2>
-          Search <strong>1,657</strong> organizations and <strong>14,189</strong> grants covering{' '}
+          Search <strong>1,657</strong> organizations and{' '}
+          <strong>14,189</strong> grants covering{' '}
           <strong>$4,667,334,800</strong> in Detroit.
         </h2>
 

@@ -1,7 +1,4 @@
-import {
-  SET_ERROR,
-  DISMISS_ERROR,
-} from './types';
+import { SET_ERROR, DISMISS_ERROR } from './types';
 
 export function setError(message) {
   return {

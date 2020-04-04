@@ -1,5 +1,4 @@
 export default class Client {
-
   post(path, args) {
     if (path === '/signin') {
       return new Promise((resolve, reject) => {
@@ -13,5 +12,4 @@ export default class Client {
       });
     }
   }
-
 }

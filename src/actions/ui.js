@@ -1,6 +1,4 @@
-import {
-  UI_SET_GRANT_VIEW,
-} from '../actions/types';
+import { UI_SET_GRANT_VIEW } from '../actions/types';
 
 export function setGrantSide(grantSide) {
   return {
@@ -8,4 +6,3 @@ export function setGrantSide(grantSide) {
     grantSide,
   };
 }
-

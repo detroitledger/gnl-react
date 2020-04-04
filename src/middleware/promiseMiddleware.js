@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 function createThunkMiddleware(extraArgument) {
-  return ({ dispatch, getState }) => next => action => { // eslint-disable-line
+  return ({ dispatch, getState }) => (next) => (action) => {
+    // eslint-disable-line
     if (typeof action === 'function') {
       return action(dispatch, getState, extraArgument);
     }

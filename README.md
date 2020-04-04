@@ -51,4 +51,3 @@ https://gnl-graphql.herokuapp.com
 #### Client Side
 
 Use react-apollo and apollo-client to fetch data via graphql api.
-

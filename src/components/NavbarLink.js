@@ -6,11 +6,7 @@ const NavbarLink = ({ title, href, active = false }) => (
   <li className={active ? 'active' : undefined}>
     <Link to={href}>
       {title}
-      {active && (
-        <span className="sr-only">
-          (current)
-        </span>
-      )}
+      {active && <span className="sr-only">(current)</span>}
     </Link>
   </li>
 );

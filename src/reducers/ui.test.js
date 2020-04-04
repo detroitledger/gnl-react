@@ -9,7 +9,10 @@ describe('uiReducer', () => {
 
   it('should change the grant side from funded to received', () => {
     expect(
-      uiReducer({ grantSide: 'funded' }, { type: UI_SET_GRANT_VIEW, grantSide: 'received' }),
+      uiReducer(
+        { grantSide: 'funded' },
+        { type: UI_SET_GRANT_VIEW, grantSide: 'received' }
+      )
     ).toEqual({
       grantSide: 'received',
     });

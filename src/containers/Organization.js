@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import Helmet from 'react-helmet';
-import { Col, Nav, NavItem, Row} from 'react-bootstrap';
+import { Col, Nav, NavItem, Row } from 'react-bootstrap';
 import moment from 'moment';
 import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
@@ -16,11 +16,10 @@ import OrgNteeLinks from '../components/OrgNteeLinks';
 import OrgNewsArticles from '../components/OrgNewsArticles';
 import Page from '../components/Page';
 
-
-const EIN = ({ein}) => {
+const EIN = ({ ein }) => {
   if (!ein) return null;
-  return (<div className="ein">EIN: {ein}</div>)
-}
+  return <div className="ein">EIN: {ein}</div>;
+};
 
 const Organization = (props) => {
   const {
@@ -46,12 +45,11 @@ const Organization = (props) => {
   let grantSide = props.grantSide;
   if (grantSide === 'none') {
     if (grantsFunded && grantsFunded.length > 0) {
-      grantSide = 'funded'
+      grantSide = 'funded';
     } else {
-      grantSide = 'received'
+      grantSide = 'received';
     }
   }
-
 
   return (
     <Page>
@@ -63,16 +61,18 @@ const Organization = (props) => {
         <Col md={10}>
           <OrgNteeLinks ntees={organization.nteeOrganizationTypes} />
         </Col>
-        <Col md={2} className="eins"><EIN ein={organization.ein} /></Col>
+        <Col md={2} className="eins">
+          <EIN ein={organization.ein} />
+        </Col>
       </Row>
 
-      <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/[]} />
+      <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/ []} />
       {props.data.forms990 && <OrgFinances forms990={props.data.forms990} />}
 
       <h2>Grant Data</h2>
       <p>
-        Describes grants Ledger staff have been able to document. Does not reflect a full,
-        official record of all funding.
+        Describes grants Ledger staff have been able to document. Does not
+        reflect a full, official record of all funding.
       </p>
       <Nav
         bsStyle="tabs"
@@ -91,7 +91,7 @@ const Organization = (props) => {
       />
     </Page>
   );
-}
+};
 
 Organization.propTypes = {
   data: PropTypes.shape({
@@ -177,8 +177,14 @@ export default compose(
       // Sort lists by org
       const flattenedGrantsReceived = sortBy(
         organization.grantsReceived.map((grant) => {
-          const dateFrom = moment(grant.dateFrom, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-          const dateTo = moment(grant.dateTo, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const dateFrom = moment(
+            grant.dateFrom,
+            'ddd, DD MMM YYYY HH:mm:ss ZZ'
+          ).year();
+          const dateTo = moment(
+            grant.dateTo,
+            'ddd, DD MMM YYYY HH:mm:ss ZZ'
+          ).year();
           const years = `${dateFrom} - ${dateTo}`;
 
           return {
@@ -193,15 +199,21 @@ export default compose(
             summary: false,
           };
         }),
-        grant =>
+        (grant) =>
           // Sort by org id (boring) and then the inverse of the start year.
-          grant.orgUuid + 1 / grant.dateFrom,
+          grant.orgUuid + 1 / grant.dateFrom
       );
 
       const flattenedGrantsFunded = sortBy(
         organization.grantsFunded.map((grant) => {
-          const dateFrom = moment(grant.dateFrom, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
-          const dateTo = moment(grant.dateTo, 'ddd, DD MMM YYYY HH:mm:ss ZZ').year();
+          const dateFrom = moment(
+            grant.dateFrom,
+            'ddd, DD MMM YYYY HH:mm:ss ZZ'
+          ).year();
+          const dateTo = moment(
+            grant.dateTo,
+            'ddd, DD MMM YYYY HH:mm:ss ZZ'
+          ).year();
           const years = `${dateFrom} - ${dateTo}`;
 
           return {
@@ -216,32 +228,39 @@ export default compose(
             summary: false,
           };
         }),
-        grant =>
+        (grant) =>
           // Sort by org id (boring) and then the inverse of the start year.
-          grant.orgUuid + 1 / grant.dateFrom,
+          grant.orgUuid + 1 / grant.dateFrom
       );
 
-      const { grants: grantsFunded, yearlySums: fundedYearlySums } = addSummaryRows(
-        flattenedGrantsFunded,
-      );
-      const { grants: grantsReceived, yearlySums: receivedYearlySums } = addSummaryRows(
-        flattenedGrantsReceived,
-      );
+      const {
+        grants: grantsFunded,
+        yearlySums: fundedYearlySums,
+      } = addSummaryRows(flattenedGrantsFunded);
+      const {
+        grants: grantsReceived,
+        yearlySums: receivedYearlySums,
+      } = addSummaryRows(flattenedGrantsReceived);
 
       // Create a map containing a union of years in funded & received sums with zero values
       // This is used to ensure that the bar charts for funded/received have the same y axis
       // categories.
-      const allYears = Object
-        .keys({ ...fundedYearlySums, ...receivedYearlySums })
-        .reduce((acc, cur) => ({ ...acc, [cur]: 0 }), {});
+      const allYears = Object.keys({
+        ...fundedYearlySums,
+        ...receivedYearlySums,
+      }).reduce((acc, cur) => ({ ...acc, [cur]: 0 }), {});
 
       // Augment IRS data
-      const forms990 = organization.forms990 && organization.forms990.map(form990 => ({
-        ...form990,
-        year: Number(form990.tax_period.substring(0, 4)),
-        month: Number(form990.tax_period.substring(4)),
-        monthText: moment.months()[Number(form990.tax_period.substring(4) - 1)],
-      }));
+      const forms990 =
+        organization.forms990 &&
+        organization.forms990.map((form990) => ({
+          ...form990,
+          year: Number(form990.tax_period.substring(0, 4)),
+          month: Number(form990.tax_period.substring(4)),
+          monthText: moment.months()[
+            Number(form990.tax_period.substring(4) - 1)
+          ],
+        }));
 
       return {
         data: {
@@ -256,10 +275,7 @@ export default compose(
       };
     },
   }),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps)
 )(Organization);
 
 /**

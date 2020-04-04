@@ -13,7 +13,8 @@ class Errors extends Component {
       <div className="errors">
         {errors.map((error, i) => (
           <p key={i}>
-            {error} <a onClick={this.props.handleDismissError.bind(this, i)}>[x]</a>
+            {error}{' '}
+            <a onClick={this.props.handleDismissError.bind(this, i)}>[x]</a>
           </p>
         ))}
       </div>
@@ -38,7 +39,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Errors);
+export default connect(mapStateToProps, mapDispatchToProps)(Errors);

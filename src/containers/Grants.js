@@ -1,11 +1,6 @@
 import React from 'react';
 
-import {
-  Switch,
-  Route,
-  useRouteMatch,
-  useParams
-} from "react-router-dom";
+import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 
 export default () => {
   let match = useRouteMatch();
@@ -22,11 +17,10 @@ export default () => {
         </Route>
       </Switch>
     </div>
-  );  
+  );
 };
 
 const Grant = () => {
   let { grantId } = useParams();
   return <h3>Requested grant ID: {grantId}</h3>;
-}
-
+};

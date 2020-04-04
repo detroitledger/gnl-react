@@ -11,7 +11,7 @@ export default function setupAxiosInterceptors(onUnauthenticated) {
     return newConfig;
   };
 
-  const onResponseSuccess = response => response;
+  const onResponseSuccess = (response) => response;
 
   const onResponseError = (error) => {
     if (error.status === 403) {

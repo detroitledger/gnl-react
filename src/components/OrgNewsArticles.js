@@ -37,8 +37,14 @@ const OrgNewsArticles = ({ newses }) => {
                 {news.title}
               </a>
             </h5>
-            <time>{moment(news.date, 'ddd, DD MMM YYYY HH:mm:ss ZZ').format('MMM D, YYYY')}</time>
-            <p className="newsdesc">{news.desc.substring(0, 90).replace(/\w+$/, '…')}</p>
+            <time>
+              {moment(news.date, 'ddd, DD MMM YYYY HH:mm:ss ZZ').format(
+                'MMM D, YYYY'
+              )}
+            </time>
+            <p className="newsdesc">
+              {news.desc.substring(0, 90).replace(/\w+$/, '…')}
+            </p>
           </Col>
         ))}
       </Row>

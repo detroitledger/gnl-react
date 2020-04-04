@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import * as authActions from "../actions/auth";
+import * as authActions from '../actions/auth';
 
 export class Admin extends Component {
   componentDidMount() {
@@ -17,7 +17,7 @@ export class Admin extends Component {
     getUserWithSavedToken: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     callGoogleAuthEndpoint: PropTypes.func.isRequired,
-    login: PropTypes.func.isRequired
+    login: PropTypes.func.isRequired,
   };
 
   authInProgress = () => (
@@ -36,7 +36,7 @@ export class Admin extends Component {
   );
 
   render() {
-    console.log("re-rendering Admin");
+    console.log('re-rendering Admin');
     if (this.props.isFetchingAuth) return this.authInProgress();
 
     if (!this.props.gooUser) {
@@ -50,7 +50,7 @@ export class Admin extends Component {
         <button
           onClick={this.props.callGoogleAuthEndpoint.bind(
             this,
-            "getGoogleUser"
+            'getGoogleUser'
           )}
         >
           getGoogleUser
@@ -64,7 +64,7 @@ export default connect(
   ({ auth }) => ({
     errorAuth: auth.error,
     isFetchingAuth: auth.isFetching,
-    gooUser: auth.user
+    gooUser: auth.user,
   }),
   authActions
 )(Admin);

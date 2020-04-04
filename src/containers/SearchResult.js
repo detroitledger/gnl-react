@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-import { slugify } from "../utils";
+import { slugify } from '../utils';
 
 // Graphql query using name as search parameter on irs organizations
 const NAME_QUERY = gql`
@@ -20,7 +20,7 @@ const NAME_QUERY = gql`
 // Component to query and process search result
 const SearchResult = ({ name }) => {
   const { loading, error, data } = useQuery(NAME_QUERY, {
-    variables: { name: `%${name}%` }
+    variables: { name: `%${name}%` },
   });
 
   if (error) {
