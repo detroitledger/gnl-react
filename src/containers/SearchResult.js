@@ -10,7 +10,7 @@ import { slugify } from '../utils';
 // Graphql query using name as search parameter on irs organizations
 const NAME_QUERY = gql`
   query getOrganizationsByName($name: String!) {
-    organizations(limit: 50, nameLike: $name) {
+    organizations(limit: 10, nameLike: $name) {
       name
       uuid
     }
@@ -24,7 +24,7 @@ const SearchResult = ({ name }) => {
   });
 
   if (error) {
-    debugger;
+    return <p>Sorry, something went wrong!</p>;
   }
 
   if (loading) {
@@ -41,19 +41,14 @@ const SearchResult = ({ name }) => {
 
   // Iterate over all ledger orgs that match name
   const linkedOrgNames = data.organizations.map((org, i) => (
-    <li key={i}>
+    <div key={i}>
       <Link to={`/organizations/${slugify(org.name)}/${org.uuid}`}>
         {org.name}
       </Link>
-    </li>
+    </div>
   ));
 
-  return (
-    <div>
-      <h4>Ledger organizations</h4>
-      <p>{linkedOrgNames}</p>
-    </div>
-  );
+  return <div>{linkedOrgNames}</div>;
 };
 
 SearchResult.propTypes = {

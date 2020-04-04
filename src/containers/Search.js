@@ -20,11 +20,12 @@ class Search extends React.Component {
     return (
       <div>
         <input
+          style={{ width: '100%' }}
           type="text"
           placeholder="Find an organization or funder you care about"
           onChange={this.handleChange}
         />
-        <SearchResult name={this.state.value} />
+        {this.state.value && <SearchResult name={this.state.value} />}
       </div>
     );
   }
