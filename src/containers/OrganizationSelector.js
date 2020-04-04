@@ -30,6 +30,10 @@ const OrganizationSelector = ({ onOrgSelected, setValue, value }) => {
     { isLoading, error, data = { organizations: [] } }
   ] = useLazyQuery(GET_ORGS_NAMED_LIKE);
 
+  if (error) {
+    debugger;
+  }
+
   const options = data.organizations.map(({ name, uuid }) => {
     return {
       label: name,

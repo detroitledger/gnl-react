@@ -23,6 +23,10 @@ const SearchResult = ({ name }) => {
     variables: { name: `%${name}%` }
   });
 
+  if (error) {
+    debugger;
+  }
+
   if (loading) {
     return <p>Loading...</p>;
   }

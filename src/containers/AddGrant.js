@@ -4,6 +4,10 @@ import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
 import DatePicker from "react-datepicker";
 
+import { Link } from "react-router-dom";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 import OrganizationSelector from "./OrganizationSelector";
 
 const ADD_GRANT = gql`
@@ -46,6 +50,7 @@ const AddGrant = () => {
     );
   }
   const error = addGrantError && <p>{addGrantError.message}</p>;
+  const created = addGrantData && <p>Added grant <Link to={`/grants/${addGrantData.addGrant.uuid}`}>{addGrantData.addGrant.uuid}</Link></p>;
 
   return (
     <div className="addGrant">
@@ -88,8 +93,9 @@ const AddGrant = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="amount">Amount</label>
-            <input value={amount} onChange={setAmount} name="amount" />
+            <label htmlFor="amount">Amount
+            <input value={amount} onChange={e => setAmount(e.target.value)} name="amount" />
+            </label>
           </div>
 
           <div className="form-group">
@@ -104,24 +110,25 @@ const AddGrant = () => {
 
           <div className="form-group">
             <label htmlFor="source">Source</label>
-            <input value={source} onChange={setSource} name="amount" />
+            <input value={source} onChange={e => setSource(e.target.value)} name="amount" />
           </div>
 
           <div className="form-group">
             <label htmlFor="description">Description</label>
-            <textarea name="description" onChange={setDescription}>
+            <textarea name="description" onChange={e => setDescription(e.target.value)}>
               {description}
             </textarea>
           </div>
 
           <div className="form-group">
             <label htmlFor="internalNotes">Internal notes</label>
-            <textarea name="internalNotes" onChange={setInternalNotes}>
+            <textarea name="internalNotes" onChange={e => setInternalNotes(e.target.value)}>
               {internalNotes}
             </textarea>
           </div>
 
           <button type="submit">Add Grant</button>
+          {created}
           {addGrantLoading && "Loading..."}
           {error}
         </form>

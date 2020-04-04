@@ -11,10 +11,13 @@ import configureStore from "./store/configureStore";
 
 import createApolloClient from "./network/create-apollo-client";
 
+import PrivateRoute from "./containers/PrivateRoute";
+
 import Home from "./containers/Home";
 import About from "./containers/About";
 import AddGrant from "./containers/AddGrant";
 import Admin from "./containers/Admin";
+import Grants from "./containers/Grants";
 //import Organization from './containers/Organization';
 import Search from "./containers/Search";
 import Methods from "./containers/Methods";
@@ -48,17 +51,18 @@ ReactDOM.render(
               <ul className="nav navbar-nav">
                 <NavbarLink title="About" href="/about" />
                 <NavbarLink title="Data & Methods" href="/methods" />
-                <NavbarLink title="Admin" href="/admin" />
+                <NavbarLink title="Add grant" href="/admin/grants/add" />
               </ul>
             </div>
           </nav>
           <div className="container">
             <Route exact path="/" component={Home} />
+            <Route path="/grants" component={Grants} />
             <Route path="/about" component={About} />
             <Route path="search" component={Search} />
             <Route path="/methods" component={Methods} />
             <Route exact path="/admin" component={Admin} />
-            <Route exact path="/admin/grants/add" component={AddGrant} />
+            <PrivateRoute exact path="/admin/grants/add" component={AddGrant} />
           </div>
           <Footer />
         </div>
