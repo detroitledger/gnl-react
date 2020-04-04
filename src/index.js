@@ -18,7 +18,7 @@ import About from './containers/About';
 import AddGrant from './containers/AddGrant';
 import Admin from './containers/Admin';
 import Grants from './containers/Grants';
-//import Organization from './containers/Organization';
+import Organizations from './containers/Organizations';
 import Search from './containers/Search';
 import Methods from './containers/Methods';
 
@@ -58,6 +58,7 @@ ReactDOM.render(
           <div className="container">
             <Route exact path="/" component={Home} />
             <Route path="/grants" component={Grants} />
+            <Route path="/organizations" component={Organizations} />
             <Route path="/about" component={About} />
             <Route path="search" component={Search} />
             <Route path="/methods" component={Methods} />
