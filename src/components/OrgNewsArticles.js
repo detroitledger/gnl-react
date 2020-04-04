@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -14,9 +14,6 @@ const OrgNewsArticles = ({ newses }) => {
           overflowX: 'hidden',
           overflowY: 'scroll',
           maxHeight: '300px',
-          display: '-webkit-box',
-          display: '-webkit-flex',
-          display: '-ms-flexbox',
           display: 'flex',
           flexWrap: 'wrap',
         }}

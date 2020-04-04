@@ -147,7 +147,7 @@ const Organization = () => {
       </Nav>
       <GrantTable
         verb={showGrantSide}
-        grants={showGrantSide == 'funded' ? grantsFunded : grantsReceived}
+        grants={showGrantSide === 'funded' ? grantsFunded : grantsReceived}
         sums={
           showGrantSide === 'funded' ? fundedYearlySums : receivedYearlySums
         }

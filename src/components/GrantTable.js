@@ -13,7 +13,7 @@ const Grants = ({ verb, grants, sums }) => {
       <table className="grantsTable">
         <thead>
           <tr>
-            <th>Grant</th>
+            <th>{label}</th>
             <th className="dates">Dates</th>
             <th>Amount</th>
           </tr>

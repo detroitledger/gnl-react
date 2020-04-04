@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import numeral from 'numeral';
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -34,13 +33,12 @@ const YearlySumsBarchart = ({ sums }) => {
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
-        className="yearlysums"
         width="100%"
         height={data.length * 25}
         role="img"
       >
         {data.map((d, i) => (
-          <g key={d.label} class="yearlysums__bar">
+          <g key={d.label}>
             <rect x="0" y={i * 25} fill="#ccc" width="100%" height="25"></rect>
             <rect
               x="0"
