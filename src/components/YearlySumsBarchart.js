@@ -46,7 +46,7 @@ const YearlySumsBarchart = ({ sums }) => {
               x="0"
               y={i * 25}
               fill="#0088cc"
-              width={`${(d.value / max) * 100}%`}
+              width={`${((d.value / max) || 0) * 100}%`}
               height="25"
             ></rect>
             <text x="6" y={i * 25 + 12} fill="#fff" dy=".35em">
