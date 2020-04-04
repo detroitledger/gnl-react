@@ -17,6 +17,7 @@ import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
 import OrgNewsArticles from '../components/OrgNewsArticles';
 import Page from '../components/Page';
+import Flag from '../components/Flag';
 
 const GET_ORGANIZATION = gql`
   query getOrg($organizationId: String!) {
@@ -139,6 +140,7 @@ const Organization = () => {
         Describes grants Ledger staff have been able to document. Does not
         reflect a full, official record of all funding.
       </p>
+      <Flag />
       <Nav bsStyle="tabs" activeKey={showGrantSide} onSelect={setGrantSide}>
         <NavItem eventKey="funded">Grants funded</NavItem>
         <NavItem eventKey="received">Grants received</NavItem>
