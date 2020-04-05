@@ -22,7 +22,7 @@
     "@bnchdrff/react-user-tour": "^3.0.1",
     "apollo-boost": "0.4.7",
     "apollo-client": "2.6.8",
-    "axios": "^0.15.3",
+    "axios": "^0.18.1",
     "cross-fetch": "^1.1.1",
     "eslint-plugin-react": "^7.14.3",
     "graphql": "14.5.5",
