@@ -6,12 +6,18 @@ import numeral from 'numeral';
 import YearlySumsBarchart from './YearlySumsBarchart';
 
 const Grants = (props) => {
-  const grants = props.verb === 'funded' ? props.grantsFunded : props.grantsReceived;
-  const sums = props.verb === 'funded' ? props.fundedYearlySums : props.receivedYearlySums;
+  const grants =
+    props.verb === 'funded' ? props.grantsFunded : props.grantsReceived;
+  const sums =
+    props.verb === 'funded' ? props.fundedYearlySums : props.receivedYearlySums;
   const label = props.verb === 'funded' ? 'Recipient' : 'Funder';
 
   const getClassName = ({ index }) => {
-    if (grants[index] && grants[index].hasOwnProperty('summary') && grants[index].summary) {
+    if (
+      grants[index] &&
+      grants[index].hasOwnProperty('summary') &&
+      grants[index].summary
+    ) {
       return 'summary';
     }
 
@@ -49,7 +55,12 @@ const Grants = (props) => {
                   rowHeight={({ index }) => 50}
                   className="grantsTable"
                 >
-                  <Column width={200} flexGrow={1} label={label} cellRenderer={renderOrgName} />
+                  <Column
+                    width={200}
+                    flexGrow={1}
+                    label={label}
+                    cellRenderer={renderOrgName}
+                  />
                   <Column width={100} label="Years" dataKey="years" />
                   <Column
                     width={100}

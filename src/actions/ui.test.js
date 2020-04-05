@@ -1,8 +1,6 @@
 import { setGrantSide } from './ui';
 
-import {
-  UI_SET_GRANT_VIEW,
-} from '../actions/types';
+import { UI_SET_GRANT_VIEW } from '../actions/types';
 
 describe('setGrantSide', () => {
   it('should just return a type and a side', () => {

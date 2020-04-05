@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import numeral from 'numeral';
 
-const Amt = ({ value }) => <td className="amt">{numeral(value).format('0,0[.]00')}</td>;
+const Amt = ({ value }) => (
+  <td className="amt">{numeral(value).format('0,0[.]00')}</td>
+);
 
 const OrgFinances = ({ forms990 }) => {
   if (!forms990 || forms990.length === 0) return null;
 
-  const sortedForms = forms990.sort(f => f.year);
+  const sortedForms = forms990.sort((f) => f.year);
 
   const finances = sortedForms.map((form990, i) => {
     let grantsPaid = false;
@@ -57,8 +59,9 @@ const OrgFinances = ({ forms990 }) => {
     <div className="finances">
       <h2>Finances</h2>
       <p>
-        Dates represent the end of the organization's fiscal year, often different from the calendar
-        year. Not all figures are available for all organizations. Data is from IRS 990 filings.
+        Dates represent the end of the organization's fiscal year, often
+        different from the calendar year. Not all figures are available for all
+        organizations. Data is from IRS 990 filings.
       </p>
 
       <Row>{finances}</Row>

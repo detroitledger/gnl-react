@@ -8,10 +8,13 @@ const IrsData = ({ form990 }) => (
   <div>
     <p>This organization files a Form {form990.filing_type} with the IRS.</p>
     <table>
-     <thead>
-       <tr>
-         <th>Totals for tax period ending {moment(form990.tax_period, 'YYYYMM').format('MMM YYYY')}</th>
-       </tr>
+      <thead>
+        <tr>
+          <th>
+            Totals for tax period ending{' '}
+            {moment(form990.tax_period, 'YYYYMM').format('MMM YYYY')}
+          </th>
+        </tr>
       </thead>
       <tbody>
         <tr>

@@ -7,3 +7,4 @@ build
 *.swp
 webpack/webpack-assets.json
 coverage
+dist/*

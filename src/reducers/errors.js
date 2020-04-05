@@ -1,7 +1,4 @@
-import {
-  SET_ERROR,
-  DISMISS_ERROR,
-} from '../actions/types';
+import { SET_ERROR, DISMISS_ERROR } from '../actions/types';
 
 export default function errorReducer(errors = [], action) {
   switch (action.type) {

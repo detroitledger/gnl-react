@@ -11,7 +11,8 @@ exports[`IrsData component renders irsOrganization data 1`] = `
     <thead>
       <tr>
         <th>
-          Totals for tax period ending 
+          Totals for tax period ending
+           
           Jun 2012
         </th>
       </tr>

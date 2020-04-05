@@ -8,14 +8,15 @@ import {
   AUTH_LOGOUT,
 } from '../actions/types';
 
+import { API_URL } from '../';
+
 const authApiCall = async (path, id_token) => {
-  const res = await fetch(process.env.REACT_APP_API_URL + '/' + path, {
+  const res = await fetch(API_URL + '/' + path, {
     headers: {
       'Content-Type': 'application/json',
       'X-Auth-Token': id_token,
     },
   });
-
   const json = await res.json();
 
   return json;
@@ -34,7 +35,11 @@ const getGoogleOAuth2Session = async () => {
         timeout: 10000,
       });
     });
-    auth2session = await gapi.auth2.init({ client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID || '1031929397869-7oiem44eh6vtenga13efhob6vdugjfn2.apps.googleusercontent.com' });
+    auth2session = await gapi.auth2.init({
+      client_id:
+        process.env.REACT_APP_GOOGLE_CLIENT_ID ||
+        '1031929397869-7oiem44eh6vtenga13efhob6vdugjfn2.apps.googleusercontent.com',
+    });
   }
   return auth2session;
 };
@@ -86,10 +91,16 @@ export const getUserWithSavedToken = () => async (dispatch) => {
           dispatch({ type: AUTH_FAILURE, response });
         }
       } else {
-        dispatch({ type: AUTH_FAILURE, response: { error: 'Auth error: bad response from server' } });
+        dispatch({
+          type: AUTH_FAILURE,
+          response: { error: 'Auth error: bad response from server' },
+        });
       }
     } catch (e) {
-      dispatch({ type: AUTH_FAILURE, response: { error: 'Auth error: error thrown by API client' } });
+      dispatch({
+        type: AUTH_FAILURE,
+        response: { error: 'Auth error: error thrown by API client' },
+      });
     }
   }
 };
@@ -108,7 +119,10 @@ export const login = () => async (dispatch) => {
 
     dispatch({ type: AUTH_SUCCESS, response });
   } catch (e) {
-    dispatch({ type: AUTH_FAILURE, response: { error: 'enable popup windows please' } });
+    dispatch({
+      type: AUTH_FAILURE,
+      response: { error: 'enable popup windows please' },
+    });
   }
 };
 
@@ -130,7 +144,6 @@ export const logout = () => async (dispatch) => {
   dispatch({ type: AUTH_LOGOUT });
 };
 
-
 export const callGoogleAuthEndpoint = (path) => async (dispatch, getState) => {
   const response = await authApiCall(path, getState().auth.idToken);
   if (response.error) {
@@ -143,4 +156,4 @@ export const callGoogleAuthEndpoint = (path) => async (dispatch, getState) => {
     }
   }
   return response;
-}; 
+};

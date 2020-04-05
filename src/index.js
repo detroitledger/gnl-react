@@ -11,20 +11,26 @@ import configureStore from './store/configureStore';
 
 import createApolloClient from './network/create-apollo-client';
 
+import PrivateRoute from './containers/PrivateRoute';
+
 import Home from './containers/Home';
 import About from './containers/About';
+import AddGrant from './containers/AddGrant';
 import Admin from './containers/Admin';
-//import Editor from './editor/App';
-//import Organization from './containers/Organization';
+import Grants from './containers/Grants';
+import Organizations from './containers/Organizations';
 import Search from './containers/Search';
 import Methods from './containers/Methods';
+
+import AdminLinks from './containers/AdminLinks';
 
 import NavbarLink from './components/NavbarLink';
 import Footer from './components/Footer';
 
 import './styles/main.scss';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://gnl-graphql.herokuapp.com';
+export const API_URL =
+  process.env.REACT_APP_API_URL || 'https://gnl-graphql.herokuapp.com';
 const client = createApolloClient(API_URL);
 
 const initialState = window['__INITIAL_STATE__'];
@@ -47,21 +53,25 @@ ReactDOM.render(
               <ul className="nav navbar-nav">
                 <NavbarLink title="About" href="/about" />
                 <NavbarLink title="Data & Methods" href="/methods" />
-                <NavbarLink title="Admin" href="/admin" />
+                <AdminLinks />
               </ul>
             </div>
           </nav>
           <div className="container">
             <Route exact path="/" component={Home} />
+            <Route path="/grants" component={Grants} />
+            <Route path="/organizations" component={Organizations} />
             <Route path="/about" component={About} />
             <Route path="search" component={Search} />
             <Route path="/methods" component={Methods} />
-            <Route path="/admin" component={Admin} />
+            <Route exact path="/admin" component={Admin} />
+            <PrivateRoute exact path="/admin/grants/add" component={AddGrant} />
           </div>
           <Footer />
         </div>
       </Router>
-    </Provider>,
+    </Provider>
+    ,
   </ApolloProvider>,
-  document.getElementById('root'),
+  document.getElementById('root')
 );

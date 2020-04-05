@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -14,9 +14,6 @@ const OrgNewsArticles = ({ newses }) => {
           overflowX: 'hidden',
           overflowY: 'scroll',
           maxHeight: '300px',
-          display: '-webkit-box',
-          display: '-webkit-flex',
-          display: '-ms-flexbox',
           display: 'flex',
           flexWrap: 'wrap',
         }}
@@ -37,8 +34,14 @@ const OrgNewsArticles = ({ newses }) => {
                 {news.title}
               </a>
             </h5>
-            <time>{moment(news.date, 'ddd, DD MMM YYYY HH:mm:ss ZZ').format('MMM D, YYYY')}</time>
-            <p className="newsdesc">{news.desc.substring(0, 90).replace(/\w+$/, '…')}</p>
+            <time>
+              {moment(news.date, 'ddd, DD MMM YYYY HH:mm:ss ZZ').format(
+                'MMM D, YYYY'
+              )}
+            </time>
+            <p className="newsdesc">
+              {news.desc.substring(0, 90).replace(/\w+$/, '…')}
+            </p>
           </Col>
         ))}
       </Row>
