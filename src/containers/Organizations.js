@@ -20,12 +20,12 @@ import Page from '../components/Page';
 import Flag from '../components/Flag';
 
 const GET_ORGANIZATION = gql`
-  query getOrg($organizationId: String!) {
+  query getOrg($organizationId: String!, $grantTextLike: TextLike) {
     organization(uuid: $organizationId) {
       name
       description
       ein
-      grantsFunded {
+      grantsFunded(textLike: $grantTextLike) {
         uuid
         dateFrom
         dateTo
@@ -36,7 +36,7 @@ const GET_ORGANIZATION = gql`
         amount
         description
       }
-      grantsReceived {
+      grantsReceived(textLike: $grantTextLike) {
         uuid
         dateFrom
         dateTo
@@ -65,7 +65,7 @@ const GET_ORGANIZATION = gql`
 `;
 
 export default () => {
-  let match = useRouteMatch();
+  const match = useRouteMatch();
 
   return (
     <div>
@@ -88,10 +88,16 @@ const EIN = ({ ein }) => {
 };
 
 const Organization = () => {
-  let { organizationId } = useParams();
+  const { organizationId } = useParams();
+
+  const [grantDescriptionLike, setGrantDescriptionLike] = useState(null);
 
   const { loading, error, data } = useQuery(GET_ORGANIZATION, {
-    variables: { organizationId },
+    variables: grantDescriptionLike ?
+    {
+      organizationId,
+      grantTextLike: { description: `%${grantDescriptionLike}%` },
+    } : { organizationId },
   });
 
   // Decide if we show grants funded or received
@@ -141,10 +147,17 @@ const Organization = () => {
         reflect a full, official record of all funding.
       </p>
       <Flag />
-      <Nav bsStyle="tabs" activeKey={showGrantSide} onSelect={setGrantSide}>
+      <Nav bsStyle="tabs" activeKey={showGrantSide} onSelect={key => setGrantSide(key)}>
         <NavItem eventKey="funded">Grants funded</NavItem>
         <NavItem eventKey="received">Grants received</NavItem>
       </Nav>
+      <input
+        style={{ width: '100%' }}
+        type="text"
+        value={grantDescriptionLike}
+        placeholder="Filter by grant description"
+        onChange={e => setGrantDescriptionLike(e.target.value)}
+      />
       <GrantTable
         verb={showGrantSide}
         grants={showGrantSide === 'funded' ? grantsFunded : grantsReceived}

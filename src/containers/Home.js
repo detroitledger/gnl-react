@@ -57,6 +57,36 @@ const GET_STATS = gql`
       uuid
       totalReceived
     }
+
+    topNteeGrantTypes: nteeGrantTypes(
+      limit: 5
+      orderBy: total
+      orderByDirection: DESC
+    ) {
+      name
+      uuid
+      total
+    }
+
+    topFundedNteeOrganizationTypes: nteeOrganizationTypes(
+      limit: 5
+      orderBy: totalFunded
+      orderByDirection: DESC
+    ) {
+      name
+      uuid
+      total: totalFunded
+    }
+
+    topReceivedNteeOrganizationTypes: nteeOrganizationTypes(
+      limit: 5
+      orderBy: totalReceived
+      orderByDirection: DESC
+    ) {
+      name
+      uuid
+      total: totalReceived
+    }
   }
 `;
 
@@ -93,7 +123,9 @@ export default function Index() {
         <ol>
           {data.topFunders.map((funder) => (
             <li key={funder.uuid}>
-              <Link to={`/organizations/${slugify(funder.name)}/${funder.uuid}`}>
+              <Link
+                to={`/organizations/${slugify(funder.name)}/${funder.uuid}`}
+              >
                 {funder.name}
               </Link>{' '}
               ({numeral(funder.totalFunded).format('$0,0[.]00')})
@@ -106,7 +138,9 @@ export default function Index() {
           {data.topRecipients.map((recipient) => (
             <li key={recipient.uuid}>
               <Link
-                to={`/organizations/${slugify(recipient.name)}/${recipient.uuid}`}
+                to={`/organizations/${slugify(recipient.name)}/${
+                  recipient.uuid
+                }`}
               >
                 {recipient.name}
               </Link>{' '}
@@ -126,7 +160,9 @@ export default function Index() {
         <ol>
           {data.mostConnectedFunders.map((funder) => (
             <li key={funder.uuid}>
-              <Link to={`/organizations/${slugify(funder.name)}/${funder.uuid}`}>
+              <Link
+                to={`/organizations/${slugify(funder.name)}/${funder.uuid}`}
+              >
                 {funder.name}
               </Link>
             </li>
@@ -143,10 +179,76 @@ export default function Index() {
           {data.mostConnectedRecipients.map((recipient) => (
             <li key={recipient.uuid}>
               <Link
-                to={`/organizations/${slugify(recipient.name)}/${recipient.uuid}`}
+                to={`/organizations/${slugify(recipient.name)}/${
+                  recipient.uuid
+                }`}
               >
                 {recipient.name}
               </Link>
+            </li>
+          ))}
+        </ol>
+        <h2>Most connected recipients</h2>
+        <p>
+          The most connected recipients receive grants from the most unique
+          funders. These aren't necessarily organizations that receive the most
+          money, but are organizations that receive support from a variety of
+          different foundations.
+        </p>
+        <ol>
+          {data.mostConnectedRecipients.map((recipient) => (
+            <li key={recipient.uuid}>
+              <Link
+                to={`/organizations/${slugify(recipient.name)}/${
+                  recipient.uuid
+                }`}
+              >
+                {recipient.name}
+              </Link>
+            </li>
+          ))}
+        </ol>
+        <h2>Top NTEE grant types by amount</h2>
+        <p></p>
+        <ol>
+          {data.topNteeGrantTypes.map((ntee) => (
+            <li key={ntee.uuid}>
+              <Link to={`/ntee-grant-type/${slugify(ntee.name)}/${ntee.uuid}`}>
+                {ntee.name}
+              </Link>{' '}
+              ({numeral(ntee.total).format('$0,0[.]00')})
+            </li>
+          ))}
+        </ol>
+        <h2>Top NTEE organization types by grant money funded</h2>
+        <p></p>
+        <ol>
+          {data.topFundedNteeOrganizationTypes.map((ntee) => (
+            <li key={ntee.uuid}>
+              <Link
+                to={`/ntee-organization-type/${slugify(ntee.name)}/${
+                  ntee.uuid
+                }`}
+              >
+                {ntee.name}
+              </Link>{' '}
+              ({numeral(ntee.total).format('$0,0[.]00')})
+            </li>
+          ))}
+        </ol>
+        <h2>Top NTEE organization types by grant money received</h2>
+        <p></p>
+        <ol>
+          {data.topReceivedNteeOrganizationTypes.map((ntee) => (
+            <li key={ntee.uuid}>
+              <Link
+                to={`/ntee-organization-type/${slugify(ntee.name)}/${
+                  ntee.uuid
+                }`}
+              >
+                {ntee.name}
+              </Link>{' '}
+              ({numeral(ntee.total).format('$0,0[.]00')})
             </li>
           ))}
         </ol>
