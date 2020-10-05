@@ -9,7 +9,7 @@ import Helmet from 'react-helmet';
 
 import { Col, Row } from 'react-bootstrap';
 
-import { slugify, stripHtml, extractYear } from '../utils';
+import { slugify, stripHtml, extractYear, dollarsFormatter } from '../utils';
 
 import Page from '../components/Page';
 import Flag from '../components/Flag';
@@ -104,21 +104,13 @@ const Grant = () => {
 
 const cleanse = (grant) => {
   const dateFrom = extractYear(grant.dateFrom);
-
   const dateTo = extractYear(grant.dateTo);
-
-  const formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-  });
-
   const desc = grant.description ? stripHtml(grant.description) : 'No description available';
 
   return {
     dateFrom,
     dateTo,
     description: desc,
-    amount: formatter.format(parseInt(grant.amount, 10)),
+    amount: dollarsFormatter.format(grant.amount),
   }
 };

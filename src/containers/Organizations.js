@@ -12,7 +12,7 @@ import Helmet from 'react-helmet';
 
 import { Col, Nav, NavItem, Row } from 'react-bootstrap';
 
-import { stripHtml, extractYear } from '../utils';
+import { stripHtml, extractYear, dollarsFormatter } from '../utils';
 
 import GrantTable from '../components/GrantTable';
 import OrgFinances from '../components/OrgFinances';
@@ -27,6 +27,8 @@ const GET_ORGANIZATION = gql`
       name
       description
       ein
+      totalFunded
+      totalReceived
       grantsFunded {
         uuid
         dateFrom
@@ -144,8 +146,8 @@ const Organization = () => {
       </p>
       <Flag />
       <Nav bsStyle="tabs" activeKey={showGrantSide} onSelect={setGrantSide}>
-        <NavItem eventKey="funded">Grants funded</NavItem>
-        <NavItem eventKey="received">Grants received</NavItem>
+        <NavItem eventKey="funded">Gave {dollarsFormatter.format(data.organization.totalFunded) || `$0`}</NavItem>
+        <NavItem eventKey="received">Received ${dollarsFormatter.format(data.organization.totalReceived) || `$0`}</NavItem>
       </Nav>
       <GrantTable
         verb={showGrantSide}

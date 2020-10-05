@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
+import { dollarsFormatter } from '../utils';
+
 
 const YearlySumsBarchart = ({ sums }) => {
   const data = Object.keys(sums).map((k, i) => ({
@@ -48,7 +46,7 @@ const YearlySumsBarchart = ({ sums }) => {
               height="25"
             ></rect>
             <text x="6" y={i * 25 + 12} fill="#fff" dy=".35em">
-              {d.label}: {formatter.format(d.value)}
+              {d.label}: {dollarsFormatter.format(d.value)}
             </text>
           </g>
         ))}

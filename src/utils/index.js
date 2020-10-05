@@ -17,4 +17,12 @@ export const extractYear = (dateString) =>
   moment(
     dateString,
     'ddd, DD MMM YYYY HH:mm:ss ZZ'
-  ).year()
+  ).year();
+
+
+export const dollarsFormatter =
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+  });
