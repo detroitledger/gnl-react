@@ -28,10 +28,14 @@ const GET_GRANT = gql`
       from {
         name
         uuid
+        countGrantsFrom
+        totalFunded
       }
       to {
         name
         uuid
+        countGrantsTo
+        totalReceived
       }
     }
   }
@@ -42,7 +46,7 @@ export default () => {
 
   return (
     <div>
-      <h2>Grants</h2>
+      <h2>Grant</h2>
       <Switch>
         <Route path={`${match.path}/:grantId`}>
           <Grant />
@@ -65,14 +69,14 @@ const Grant = () => {
   if (loading) return 'Loading...';
   if (error) return `Error! ${error}`;
 
-  if (!data.grant) return `Oof!`;
+  if (!data.grant) return `Failed to load grant data!`;
 
   const { to, from, source } = data.grant;
   const { dateFrom, dateTo, amount, description } = cleanse(data.grant);
 
   return (
     <Page>
-      <Helmet title={grantId} />
+      <Helmet title={`Grant from ${from.name} to ${to.name}`} />
       <h1>{amount}</h1>
 
       <Row>

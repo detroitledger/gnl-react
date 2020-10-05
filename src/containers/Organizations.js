@@ -101,7 +101,7 @@ const Organization = () => {
   if (loading) return 'Loading...';
   if (error) return `Error! ${error}`;
 
-  if (!data.organization) return `Oof!`;
+  if (!data.organization) return `Failed to load org data!`;
 
   const { name, description, ein, nteeOrganizationTypes } = data.organization;
 
@@ -173,7 +173,7 @@ const cleanse = (organization) => {
       return {
         org: grant.from.name,
         orgUuid: grant.from.uuid,
-        description: grant.description || 'n/a',
+        description: grant.description || 'No description available',
         amount: grant.amount,
         uuid: grant.uuid,
         dateFrom,
@@ -202,7 +202,7 @@ const cleanse = (organization) => {
       return {
         org: grant.to.name,
         orgUuid: grant.to.uuid,
-        description: grant.description || 'n/a',
+        description: grant.description || 'No description available',
         amount: grant.amount,
         uuid: grant.uuid,
         dateFrom,
