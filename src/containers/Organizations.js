@@ -169,11 +169,12 @@ const cleanse = (organization) => {
         'ddd, DD MMM YYYY HH:mm:ss ZZ'
       ).year();
       const years = `${dateFrom} - ${dateTo}`;
+      const desc = grant.description ? grant.description.replace(/<[^>]*>?/gm, '') : 'No description available';
 
       return {
         org: grant.from.name,
         orgUuid: grant.from.uuid,
-        description: grant.description || 'No description available',
+        description: desc,
         amount: grant.amount,
         uuid: grant.uuid,
         dateFrom,
@@ -198,11 +199,12 @@ const cleanse = (organization) => {
         'ddd, DD MMM YYYY HH:mm:ss ZZ'
       ).year();
       const years = `${dateFrom} - ${dateTo}`;
+      const desc = grant.description ? grant.description.replace(/<[^>]*>?/gm, '') : 'No description available';
 
       return {
         org: grant.to.name,
         orgUuid: grant.to.uuid,
-        description: grant.description || 'No description available',
+        description: desc,
         amount: grant.amount,
         uuid: grant.uuid,
         dateFrom,

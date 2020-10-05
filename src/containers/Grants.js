@@ -121,10 +121,12 @@ const cleanse = (grant) => {
     minimumFractionDigits: 0,
   });
 
+  const desc = grant.description ? grant.description.replace(/<[^>]*>?/gm, '') : 'No description available';
+
   return {
     dateFrom, 
     dateTo,
-    description: grant.description || 'No description available.',
+    description: desc,
     amount: formatter.format(parseInt(grant.amount, 10)),
   }
 };
