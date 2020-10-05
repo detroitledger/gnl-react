@@ -9,9 +9,7 @@ import Helmet from 'react-helmet';
 
 import { Col, Row } from 'react-bootstrap';
 
-import moment from 'moment';
-
-import { slugify } from '../utils';
+import { slugify, stripHtml, extractYear } from '../utils';
 
 import Page from '../components/Page';
 import Flag from '../components/Flag';
@@ -105,15 +103,9 @@ const Grant = () => {
 };
 
 const cleanse = (grant) => {
-  const dateFrom = moment(
-    grant.dateFrom,
-    'ddd, DD MMM YYYY HH:mm:ss ZZ'
-  ).year();
+  const dateFrom = extractYear(grant.dateFrom);
 
-  const dateTo = moment(
-    grant.dateTo,
-    'ddd, DD MMM YYYY HH:mm:ss ZZ'
-  ).year();
+  const dateTo = extractYear(grant.dateTo);
 
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -121,10 +113,10 @@ const cleanse = (grant) => {
     minimumFractionDigits: 0,
   });
 
-  const desc = grant.description ? grant.description.replace(/<[^>]*>?/gm, '') : 'No description available';
+  const desc = grant.description ? stripHtml(grant.description) : 'No description available';
 
   return {
-    dateFrom, 
+    dateFrom,
     dateTo,
     description: desc,
     amount: formatter.format(parseInt(grant.amount, 10)),

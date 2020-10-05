@@ -12,6 +12,8 @@ import Helmet from 'react-helmet';
 
 import { Col, Nav, NavItem, Row } from 'react-bootstrap';
 
+import { stripHtml, extractYear } from '../utils';
+
 import GrantTable from '../components/GrantTable';
 import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
@@ -160,16 +162,10 @@ const cleanse = (organization) => {
   // Sort lists by org
   const flattenedGrantsReceived = sortBy(
     organization.grantsReceived.map((grant) => {
-      const dateFrom = moment(
-        grant.dateFrom,
-        'ddd, DD MMM YYYY HH:mm:ss ZZ'
-      ).year();
-      const dateTo = moment(
-        grant.dateTo,
-        'ddd, DD MMM YYYY HH:mm:ss ZZ'
-      ).year();
+      const dateFrom = extractYear(grant.dateFrom);
+      const dateTo = extractYear(grant.dateTo);
       const years = `${dateFrom} - ${dateTo}`;
-      const desc = grant.description ? grant.description.replace(/<[^>]*>?/gm, '') : 'No description available';
+      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
 
       return {
         org: grant.from.name,
@@ -190,16 +186,10 @@ const cleanse = (organization) => {
 
   const flattenedGrantsFunded = sortBy(
     organization.grantsFunded.map((grant) => {
-      const dateFrom = moment(
-        grant.dateFrom,
-        'ddd, DD MMM YYYY HH:mm:ss ZZ'
-      ).year();
-      const dateTo = moment(
-        grant.dateTo,
-        'ddd, DD MMM YYYY HH:mm:ss ZZ'
-      ).year();
+      const dateFrom = extractYear(grant.dateFrom);
+      const dateTo = extractYear(grant.dateTo);
       const years = `${dateFrom} - ${dateTo}`;
-      const desc = grant.description ? grant.description.replace(/<[^>]*>?/gm, '') : 'No description available';
+      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
 
       return {
         org: grant.to.name,
