@@ -7,12 +7,13 @@ import { useQuery } from '@apollo/react-hooks';
 
 import Helmet from 'react-helmet';
 
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Nav, NavItem } from 'react-bootstrap';
 
 import { slugify, stripHtml, extractYear, dollarsFormatter } from '../utils';
 
 import Page from '../components/Page';
 import Flag from '../components/Flag';
+import GrantTable from '../components/GrantTable';
 
 const GET_GRANT = gql`
   query grant($grantId: String!) {
@@ -34,6 +35,28 @@ const GET_GRANT = gql`
         uuid
         countGrantsTo
         totalReceived
+      }
+      relatedTo(limit: 10) {
+        uuid
+        amount
+        description
+        dateTo
+        dateFrom
+        from {
+          name
+          uuid
+        }
+      }
+      relatedFrom(limit: 10) {
+        uuid
+        amount
+        description
+        dateTo
+        dateFrom
+        to {
+          name
+          uuid
+        }
       }
     }
   }
@@ -69,8 +92,11 @@ const Grant = () => {
 
   if (!data.grant) return `Failed to load grant data!`;
 
-  const { to, from, source } = data.grant;
+  const { to, from, source, relatedTo, relatedFrom } = data.grant;
   const { dateFrom, dateTo, amount, description } = cleanse(data.grant);
+
+  // static for now, handle state later
+  const showGrantSide = 'received';
 
   return (
     <Page>
@@ -96,8 +122,19 @@ const Grant = () => {
       <p>{description}</p>
       <p>Source {source}</p>
       <Flag />
-
-      <p>**related grants table tbd**</p>
+      <h2>Related grants</h2>
+      <Nav bsStyle="tabs" activeKey={showGrantSide}>
+        <NavItem eventKey="received">Grants from {from.name}</NavItem>
+        <NavItem eventKey="funded">Grants to {to.name}</NavItem>
+      </Nav>
+      <GrantTable
+        relatedGrants
+        verb={showGrantSide}
+        grants={showGrantSide === 'funded' ? relatedTo : relatedFrom}
+        sums={
+          showGrantSide === 'funded' ? to.totalReceived : from.totalFunded
+        }
+      />
     </Page>
   );
 };
