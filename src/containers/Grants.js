@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 
@@ -8,6 +8,8 @@ import { useQuery } from '@apollo/react-hooks';
 import Helmet from 'react-helmet';
 
 import { Col, Row, Nav, NavItem } from 'react-bootstrap';
+
+import { sortBy } from 'lodash';
 
 import { slugify, stripHtml, extractYear, dollarsFormatter } from '../utils';
 
@@ -87,6 +89,8 @@ const Grant = () => {
     variables: { grantId },
   });
 
+  const [grantRelation, setGrantRelation] = useState(false);
+
   if (loading) return 'Loading...';
   if (error) return `Error! ${error}`;
 
@@ -94,9 +98,13 @@ const Grant = () => {
 
   const { to, from, source, relatedTo, relatedFrom } = data.grant;
   const { dateFrom, dateTo, amount, description } = cleanse(data.grant);
+  
+  const flattenedRelatedTo = flattenRelatedGrants(relatedTo, 'to');
+  const flattenedRelatedFrom = flattenRelatedGrants(relatedFrom, 'from');
 
-  // static for now, handle state later
-  const showGrantSide = 'received';
+  const showGrantsRelated =
+    grantRelation ||
+    (flattenedRelatedTo > 0 ? 'recieved' : 'funded');
 
   return (
     <Page>
@@ -122,17 +130,18 @@ const Grant = () => {
       <p>{description}</p>
       <p>Source {source}</p>
       <Flag />
+
       <h2>Related grants</h2>
-      <Nav bsStyle="tabs" activeKey={showGrantSide}>
-        <NavItem eventKey="received">Grants from {from.name}</NavItem>
-        <NavItem eventKey="funded">Grants to {to.name}</NavItem>
+      <Nav bsStyle="tabs" activeKey={showGrantsRelated} onSelect={setGrantRelation}>
+        <NavItem eventKey="funded">Grants from {from.name}</NavItem>
+        <NavItem eventKey="received">Grants to {to.name}</NavItem>
       </Nav>
       <GrantTable
         relatedGrants
-        verb={showGrantSide}
-        grants={showGrantSide === 'funded' ? relatedTo : relatedFrom}
+        verb={showGrantsRelated}
+        grants={showGrantsRelated === 'received' ? flattenedRelatedTo : flattenedRelatedFrom}
         sums={
-          showGrantSide === 'funded' ? to.totalReceived : from.totalFunded
+          showGrantsRelated === 'received' ? to.totalReceived : from.totalFunded
         }
       />
     </Page>
@@ -150,4 +159,31 @@ const cleanse = (grant) => {
     description: desc,
     amount: dollarsFormatter.format(grant.amount),
   }
+};
+
+const flattenRelatedGrants = (relatedGrants, direction) => {
+  const flattenedRelatedGrants = sortBy(
+    relatedGrants.map((grant) => {
+      const dateFrom = extractYear(grant.dateFrom);
+      const dateTo = extractYear(grant.dateTo);
+      const years = `${dateFrom} - ${dateTo}`;
+      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
+
+      return {
+        org: direction === 'to' ? grant.from.name : grant.to.name,
+        orgUuid: direction === 'to' ? grant.from.uuid : grant.to.uuid,
+        description: desc,
+        amount: grant.amount,
+        uuid: grant.uuid,
+        dateFrom,
+        dateTo,
+        years,
+      }
+    }),
+    (grant) =>
+    // Sort by org id (boring) and then the inverse of the start year.
+    grant.orgUuid + 1 / grant.dateFrom
+  );
+
+  return flattenedRelatedGrants
 };

@@ -31,6 +31,7 @@ Grants.propTypes = {
   grants: PropTypes.array,
   sums: PropTypes.object.isRequired,
   verb: PropTypes.string.isRequired,
+  relatedGrants: PropTypes.bool,
 };
 
 export default Grants;
