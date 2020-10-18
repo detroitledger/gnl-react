@@ -60,6 +60,13 @@ const GET_ORGANIZATION = gql`
         uuid
         name
       }
+      news {
+        uuid
+        title
+        date
+        description
+        link
+      }
     }
   }
 `;
@@ -98,12 +105,16 @@ const Organization = () => {
   // We default to funded if there are any
   const [grantSide, setGrantSide] = useState(false);
 
+  // Show up to 4 news articles by default
+  const defaultNewsLimit = 4
+  const [newsLimit, setNewsLimit] = useState(defaultNewsLimit);
+
   if (loading) return 'Loading...';
   if (error) return `Error! ${error}`;
 
   if (!data.organization) return `Oof!`;
 
-  const { name, description, ein, nteeOrganizationTypes } = data.organization;
+  const { name, description, ein, nteeOrganizationTypes, news } = data.organization;
 
   const {
     grantsFunded,
@@ -132,7 +143,13 @@ const Organization = () => {
         </Col>
       </Row>
 
-      <OrgNewsArticles newses={/*organization.ledgerNewsArticles*/ []} />
+      {news && <OrgNewsArticles newses={news} limit={newsLimit} />}
+      {news.length > defaultNewsLimit ? 
+        <button onClick={(news) => setNewsLimit(newsLimit === defaultNewsLimit ? news.length : defaultNewsLimit)}>
+          {newsLimit === defaultNewsLimit ? `Show more news` : `Show less news`}
+        </button>
+      : ``}
+
       {forms990 && <OrgFinances forms990={forms990} />}
 
       <h2>Grant Data</h2>

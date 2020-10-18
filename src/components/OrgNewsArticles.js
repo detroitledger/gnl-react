@@ -1,51 +1,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
-const OrgNewsArticles = ({ newses }) => {
+const OrgNewsArticles = ({ newses, limit }) => {
   if (!newses || newses.length === 0) return null;
 
   return (
-    <Grid>
-      <h4>News</h4>
+    <div className="news">
+      <h2>News</h2>
       <Row
         style={{
-          overflowX: 'hidden',
-          overflowY: 'scroll',
-          maxHeight: '300px',
           display: 'flex',
           flexWrap: 'wrap',
         }}
       >
-        {newses.map((news, i) => (
+        {newses.slice(0,limit).map((news) => (
           <Col
             xs={12}
             sm={4}
             md={3}
-            key={i}
+            key={news.uuid}
             style={{
               display: 'flex',
               flexDirection: 'column',
             }}
           >
-            <h5>
+            <h4>
               <a href={news.link} rel="nofollow">
                 {news.title}
               </a>
-            </h5>
+            </h4>
             <time>
-              {moment(news.date, 'ddd, DD MMM YYYY HH:mm:ss ZZ').format(
+              {moment(news.date).format(
                 'MMM D, YYYY'
               )}
             </time>
             <p className="newsdesc">
-              {news.desc.substring(0, 90).replace(/\w+$/, '…')}
+              {news.description.substring(0, 90).replace(/\w+$/, '…')}
             </p>
           </Col>
         ))}
       </Row>
-    </Grid>
+    </div>
   );
 };
 
