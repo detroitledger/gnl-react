@@ -164,7 +164,7 @@ const Organization = () => {
       <Flag />
       <Nav bsStyle="tabs" activeKey={showGrantSide} onSelect={setGrantSide}>
         <NavItem eventKey="funded">Gave {dollarsFormatter.format(data.organization.totalFunded) || `$0`}</NavItem>
-        <NavItem eventKey="received">Received ${dollarsFormatter.format(data.organization.totalReceived) || `$0`}</NavItem>
+        <NavItem eventKey="received">Received {dollarsFormatter.format(data.organization.totalReceived) || `$0`}</NavItem>
       </Nav>
       <GrantTable
         verb={showGrantSide}
