@@ -133,8 +133,8 @@ const Grant = () => {
 
       <h2>Related grants</h2>
       <Nav bsStyle="tabs" activeKey={showGrantsRelated} onSelect={setGrantRelation}>
-        <NavItem eventKey="funded">From {from.name} ({from.countGrantsFrom})</NavItem>
-        <NavItem eventKey="received">To {to.name} ({to.countGrantsTo})</NavItem>
+        <NavItem eventKey="funded">From {from.name}</NavItem>
+        <NavItem eventKey="received">To {to.name}</NavItem>
       </Nav>
       <GrantTable
         relatedGrants
