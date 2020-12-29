@@ -9,7 +9,7 @@ import Helmet from 'react-helmet';
 
 import { Col, Row, Nav, NavItem } from 'react-bootstrap';
 
-import { sortBy } from 'lodash';
+import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 
 import { slugify, stripHtml, extractYear, dollarsFormatter } from '../utils';
 
@@ -38,7 +38,7 @@ const GET_GRANT = gql`
         countGrantsTo
         totalReceived
       }
-      relatedTo(limit: 10) {
+      relatedTo {
         uuid
         amount
         description
@@ -49,7 +49,7 @@ const GET_GRANT = gql`
           uuid
         }
       }
-      relatedFrom(limit: 10) {
+      relatedFrom {
         uuid
         amount
         description
@@ -133,16 +133,13 @@ const Grant = () => {
 
       <h2>Related grants</h2>
       <Nav bsStyle="tabs" activeKey={showGrantsRelated} onSelect={setGrantRelation}>
-        <NavItem eventKey="funded">Grants from {from.name}</NavItem>
-        <NavItem eventKey="received">Grants to {to.name}</NavItem>
+        <NavItem eventKey="funded">From {from.name} ({from.countGrantsFrom})</NavItem>
+        <NavItem eventKey="received">To {to.name} ({to.countGrantsTo})</NavItem>
       </Nav>
       <GrantTable
         relatedGrants
         verb={showGrantsRelated}
         grants={showGrantsRelated === 'received' ? flattenedRelatedTo : flattenedRelatedFrom}
-        sums={
-          showGrantsRelated === 'received' ? to.totalReceived : from.totalFunded
-        }
       />
     </Page>
   );
@@ -178,12 +175,50 @@ const flattenRelatedGrants = (relatedGrants, direction) => {
         dateFrom,
         dateTo,
         years,
+        summary: false
       }
     }),
     (grant) =>
-    // Sort by org id (boring) and then the inverse of the start year.
-    grant.orgUuid + 1 / grant.dateFrom
+      // Sort by org id (boring) and then the inverse of the start year.
+      grant.orgUuid + 1 / grant.dateFrom
   );
 
-  return flattenedRelatedGrants
+  return addSummaryRows(flattenedRelatedGrants);
 };
+
+// For related grants we only care about inserting the summary rows into grants, not YearlySums
+function addSummaryRows(grantsOrig) {
+  const grants = grantsOrig;
+  const uniqOrgs = uniq(map(grants, 'orgUuid'));
+
+  // Get stats per org, and stick em right in the array of grants as summary rows!
+  let insertAt = 0;
+  uniqOrgs.forEach((orgUuid) => {
+    let org = '';
+
+    const sum = filter(grants, { orgUuid }).reduce((memo, grant) => {
+      // This'll happen over and over but that is just fine. We just want the right name.
+      org = grant.org;
+
+      return memo + grant.amount;
+    }, 0);
+
+    // Find first row of this org's grant
+    insertAt = findIndex(grants, { orgUuid }, insertAt);
+
+    // Splice in their stats row there
+    // Add 1 to search index since we inserted another row
+    grants.splice(insertAt, 0, {
+      org,
+      orgUuid,
+      description: `${org}: Summary`,
+      amount: sum,
+      uuid: `summaryrow-${orgUuid}`,
+      start: null,
+      end: null,
+      summary: true,
+    });
+  });
+
+  return grants;
+}

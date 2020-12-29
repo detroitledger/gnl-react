@@ -29,7 +29,7 @@ const Grants = ({ relatedGrants, verb, grants, sums }) => {
 
 Grants.propTypes = {
   grants: PropTypes.array,
-  sums: PropTypes.object.isRequired,
+  sums: PropTypes.object,
   verb: PropTypes.string.isRequired,
   relatedGrants: PropTypes.bool,
 };
