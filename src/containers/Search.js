@@ -18,9 +18,8 @@ class Search extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="search-wrapper">
         <input
-          style={{ width: '100%' }}
           type="text"
           placeholder="Find an organization or funder you care about"
           onChange={this.handleChange}

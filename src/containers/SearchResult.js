@@ -24,11 +24,11 @@ const SearchResult = ({ name }) => {
   });
 
   if (error) {
-    return <p>Sorry, something went wrong!</p>;
+    return <p className="center">Sorry, something went wrong!</p>;
   }
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className="center">Loading...</p>;
   }
 
   if (!data || !data.organizations) {
@@ -41,14 +41,14 @@ const SearchResult = ({ name }) => {
 
   // Iterate over all ledger orgs that match name
   const linkedOrgNames = data.organizations.map((org, i) => (
-    <div key={i}>
+    <h2 className="result" key={i}>
       <Link to={`/organizations/${slugify(org.name)}/${org.uuid}`}>
         {org.name}
       </Link>
-    </div>
+    </h2>
   ));
 
-  return <div>{linkedOrgNames}</div>;
+  return <div className="search-results">{linkedOrgNames}</div>;
 };
 
 SearchResult.propTypes = {

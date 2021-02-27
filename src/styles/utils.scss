@@ -1,25 +1,38 @@
 $font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
- $body-color: #3d4447;
+$body-color: #3d4447;
 $blue: #0088cc;
 $blue-accent: #60aadb;
- $green: #04952e;
+$green: #04952e;
 $green-accent: #04ae36;
- $gray: #a4b6be;
+$gray: #a4b6be;
 $light-gray: #ddd;
- $light-tan: #f1ecd1;
+$light-tan: #f1ecd1;
 $lighter-tan: #f7f4e5;
 $darker-tan: #e5dcaa;
 $bright-tan: #fff1a5;
- @mixin highlight-tan {
+
+$border-width: 5px;
+$space: 1rem;
+$space-2: 1.5rem;
+$space-3: 2rem;
+$space-5: 5rem;
+
+$med: 2.5rem;
+$big: 3rem;
+
+.center { text-align: center; }
+
+@mixin highlight-tan {
   background: $lighter-tan;
   border: 1px solid $darker-tan;
   padding: 2px 5px;
 }
+
  /* Loading spinner */
 .spinner {
   width: 50px;
   height: 50px;
-   position: relative;
+  position: relative;
   margin: 20px auto;
 }
  .double-bounce1, .double-bounce2 {

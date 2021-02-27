@@ -7,7 +7,7 @@ import Stats from './Stats';
 
 export default function Index() {
   return (
-    <section>
+    <section className="home">
       <Page>
         <Helmet title="Homepage" />
         <h1>The Detroit Ledger</h1>
