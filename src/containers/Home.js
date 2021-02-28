@@ -1,9 +1,9 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-import Page from '../components/Page';
-import Search from './Search';
-import Stats from './Stats';
+import Page from 'components/Page';
+import Search from 'containers/Search';
+import Stats from 'containers/Stats';
 
 export default function Index() {
   return (
