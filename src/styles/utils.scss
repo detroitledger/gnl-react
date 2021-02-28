@@ -4,6 +4,7 @@ $blue: #0088cc;
 $blue-accent: #60aadb;
 $green: #04952e;
 $green-accent: #04ae36;
+$money: #04ae3614;
 $gray: #a4b6be;
 $light-gray: #ddd;
 $light-tan: #f1ecd1;
@@ -17,9 +18,15 @@ $space-2: 1.5rem;
 $space-3: 2rem;
 $space-5: 5rem;
 
-$med: 2.5rem;
-$big: 3rem;
+$m: 2.2rem;
+$l: 2.5rem;
+$xl: 2.5rem;
+$xxl: 3rem;
 
+.size-medium { font-size: $m; }
+.size-large { font-size: $l; }
+.font-weight-light { font-weight: 300; }
+.leading-reg { line-height: 1.5; }
 .center { text-align: center; }
 
 @mixin highlight-tan {

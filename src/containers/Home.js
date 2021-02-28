@@ -15,9 +15,7 @@ export default function Index() {
         <h1>The Detroit Ledger</h1>
         <Stats />
         <Search />
-        <section className="toplists">
-          <TopLists />
-        </section>
+        <TopLists />
       </Page>
     </section>
   );
