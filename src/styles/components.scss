@@ -130,6 +130,20 @@ footer {
     }
   }
 }
+ /* TopLists --------------------------------------------------------------------- */
+.toplists {
+  width: 100%;
+
+  h2,h3 {
+    text-align: left;
+    font-weight: 800;
+  }
+
+  h2 {
+    font-size: 3rem;
+    border-bottom: $border-width solid $green-accent;
+  }
+}
 
 
 /* Callouts ----------------------------------------------------------------- */

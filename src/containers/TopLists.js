@@ -1,66 +1,82 @@
 import React from 'react';
+import _ from 'lodash';
 
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
-import { dollarsFormatter } from '../utils';
+import { Col, Row } from 'react-bootstrap';
+
+import TopListsList from 'components/TopListsList';
 
 
 // Graphql queries for top recipients and funders
 const GET_TOP_RECIPIENTS = gql`
   query topRecipients {
-    organizations(orderBy: totalReceived, orderByDirection: DESC, limit: 5) {
+    organizations(orderBy: totalReceived, orderByDirection: DESC, limit: 20) {
       name
+      uuid
       totalReceived
+      publicFunder
     }
   }
 `;
 
  const GET_TOP_FUNDERS = gql`
  query topFunders {
-    organizations(orderBy: totalFunded, orderByDirection: DESC, limit: 5) {
+    organizations(orderBy: totalFunded, orderByDirection: DESC, limit: 20) {
       name
+      uuid
       totalFunded
+      publicFunder
     }
   }
  `;
 
 
 const TopLists = () => {
-  const { data: dataR, error: errorR, loading: loadingR } = useQuery(GET_TOP_RECIPIENTS);
-  const { data, error, loading } = useQuery(GET_TOP_FUNDERS);
+  const { data: recipients, error: errorR, loading: loadingR } = useQuery(GET_TOP_RECIPIENTS);
+  const { data: funders, error: errorF, loading: loadingF } = useQuery(GET_TOP_FUNDERS);
 
-  if (error || errorR) {
+  if (errorF || errorR) {
     return <p>Sorry, something went wrong!</p>;
   }
 
-  if (loading || loadingR) {
-    return <p>Loading stats...</p>;
+  if (loadingF || loadingR) {
+    return <p>Loading top organizations...</p>;
   }
 
-  let topRecipients = dataR.organizations;
-  let topFunders = data.organizations;
+  let topRecipientsPublic = _.filter(recipients.organizations, org => org.publicFunder === true).slice(0,5);
+  let topRecipientsPrivate = _.filter(recipients.organizations, org => org.publicFunder !== true).slice(0,5);
+
+  let topFundersPublic = _.filter(funders.organizations, org => org.publicFunder === true).slice(0,5);
+  let topFundersPrivate = _.filter(funders.organizations, org => org.publicFunder !== true).slice(0,5);
 
   return (
-    <div sytle={{ dispay: 'flex', flexDirection: 'row' }}>
-      <div>
-        <h3>Top Recipients</h3>
-        <span>These organizations received the most:</span>
-        <ol>
-            {topRecipients.map((r, i) => (
-                <li key={i}>{r.name} ({dollarsFormatter.format(r.totalReceived)})</li>
-            ))}
-        </ol>
-      </div>
-      <div>
-        <h3>Top Funders</h3>
-        <span>These organizations gave the most:</span>
-        <ol>
-            {topFunders.map((r, i) => (
-                <li key={i}>{r.name} ({dollarsFormatter.format(r.totalFunded)})</li>
-            ))}
-        </ol>
-      </div>
+    <div>
+      <Row>
+        <h2>Top Funders</h2>
+        <p>These organizations gave the most. Public funders are often government agencies, while private funders are often philanthropic organizations who file Form 990-PF.</p>
+        <Col md={6}>
+          <h3>Public Funders</h3>
+          <TopListsList organizations={topFundersPublic} direction="totalFunded" />
+        </Col>
+        <Col md={6}>
+          <h3>Private Funders</h3>
+          <TopListsList organizations={topFundersPrivate} direction="totalFunded" />
+        </Col>
+      </Row>
+      <Row>
+        <h2>Top Recipients</h2>
+        <p>These organizations received the most. Public recipients are often government agencies and private recipients are often registered nonprofit organizations. Some recipients may be ranked highly because they act as "pass through" organizations for grants between the federal government or other endowments and local recipients.</p>
+        <Col md={6}>
+          <h3>Public Recipients</h3>
+          <TopListsList organizations={topRecipientsPublic} direction="totalReceived" />
+        </Col>
+        <Col md={6}>
+          <h3>Private Recipients</h3>
+          <TopListsList organizations={topRecipientsPrivate} direction="totalReceived" />
+        </Col>
+      </Row>
     </div>
   );
 };

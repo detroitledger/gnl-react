@@ -4,6 +4,8 @@ import Helmet from 'react-helmet';
 import Page from 'components/Page';
 import Search from 'containers/Search';
 import Stats from 'containers/Stats';
+import TopLists from 'containers/TopLists';
+
 
 export default function Index() {
   return (
@@ -13,7 +15,9 @@ export default function Index() {
         <h1>The Detroit Ledger</h1>
         <Stats />
         <Search />
-        <TopLists />
+        <section className="toplists">
+          <TopLists />
+        </section>
       </Page>
     </section>
   );

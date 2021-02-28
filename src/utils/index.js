@@ -4,3 +4,11 @@ export const slugify = (string) =>
     .replace(/ /g, '-')
     .replace(/[-]+/g, '-')
     .replace(/[^\w-]+/g, '');
+
+
+export const dollarsFormatter =
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+  });
