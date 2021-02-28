@@ -12,6 +12,8 @@ import Helmet from 'react-helmet';
 
 import { Col, Nav, NavItem, Row } from 'react-bootstrap';
 
+import { stripHtml, extractYear, dollarsFormatter } from '../utils';
+
 import GrantTable from '../components/GrantTable';
 import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
@@ -25,6 +27,8 @@ const GET_ORGANIZATION = gql`
       name
       description
       ein
+      totalFunded
+      totalReceived
       grantsFunded {
         uuid
         dateFrom
@@ -112,7 +116,7 @@ const Organization = () => {
   if (loading) return 'Loading...';
   if (error) return `Error! ${error}`;
 
-  if (!data.organization) return `Oof!`;
+  if (!data.organization) return `Failed to load org data!`;
 
   const { name, description, ein, nteeOrganizationTypes, news } = data.organization;
 
@@ -159,8 +163,8 @@ const Organization = () => {
       </p>
       <Flag />
       <Nav bsStyle="tabs" activeKey={showGrantSide} onSelect={setGrantSide}>
-        <NavItem eventKey="funded">Grants funded</NavItem>
-        <NavItem eventKey="received">Grants received</NavItem>
+        <NavItem eventKey="funded">Gave {dollarsFormatter.format(data.organization.totalFunded) || `$0`}</NavItem>
+        <NavItem eventKey="received">Received {dollarsFormatter.format(data.organization.totalReceived) || `$0`}</NavItem>
       </Nav>
       <GrantTable
         verb={showGrantSide}
@@ -177,20 +181,15 @@ const cleanse = (organization) => {
   // Sort lists by org
   const flattenedGrantsReceived = sortBy(
     organization.grantsReceived.map((grant) => {
-      const dateFrom = moment(
-        grant.dateFrom,
-        'ddd, DD MMM YYYY HH:mm:ss ZZ'
-      ).year();
-      const dateTo = moment(
-        grant.dateTo,
-        'ddd, DD MMM YYYY HH:mm:ss ZZ'
-      ).year();
+      const dateFrom = extractYear(grant.dateFrom);
+      const dateTo = extractYear(grant.dateTo);
       const years = `${dateFrom} - ${dateTo}`;
+      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
 
       return {
         org: grant.from.name,
         orgUuid: grant.from.uuid,
-        description: grant.description || 'n/a',
+        description: desc,
         amount: grant.amount,
         uuid: grant.uuid,
         dateFrom,
@@ -206,20 +205,15 @@ const cleanse = (organization) => {
 
   const flattenedGrantsFunded = sortBy(
     organization.grantsFunded.map((grant) => {
-      const dateFrom = moment(
-        grant.dateFrom,
-        'ddd, DD MMM YYYY HH:mm:ss ZZ'
-      ).year();
-      const dateTo = moment(
-        grant.dateTo,
-        'ddd, DD MMM YYYY HH:mm:ss ZZ'
-      ).year();
+      const dateFrom = extractYear(grant.dateFrom);
+      const dateTo = extractYear(grant.dateTo);
       const years = `${dateFrom} - ${dateTo}`;
+      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
 
       return {
         org: grant.to.name,
         orgUuid: grant.to.uuid,
-        description: grant.description || 'n/a',
+        description: desc,
         amount: grant.amount,
         uuid: grant.uuid,
         dateFrom,
