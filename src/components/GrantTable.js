@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import YearlySumsBarchart from './YearlySumsBarchart';
 import GrantRow from './GrantRow';
 
-const Grants = ({ verb, grants, sums }) => {
+const Grants = ({ relatedGrants, verb, grants, sums }) => {
   const label = verb === 'funded' ? 'Recipient' : 'Funder';
 
   return (
     <div>
-      {sums && <YearlySumsBarchart sums={sums} />}
+      {!relatedGrants ? sums && <YearlySumsBarchart sums={sums} /> : ``}
       <table className="grantsTable">
         <thead>
           <tr>
@@ -29,8 +29,9 @@ const Grants = ({ verb, grants, sums }) => {
 
 Grants.propTypes = {
   grants: PropTypes.array,
-  sums: PropTypes.object.isRequired,
+  sums: PropTypes.object,
   verb: PropTypes.string.isRequired,
+  relatedGrants: PropTypes.bool,
 };
 
 export default Grants;

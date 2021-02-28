@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
-import numeral from 'numeral';
+
+import { dollarsFormatter } from '../utils';
 
 const Amt = ({ value }) => (
-  <td className="amt">{numeral(value).format('0,0[.]00')}</td>
+  <td className="amt">{dollarsFormatter.format(value)}</td>
 );
 
 const OrgFinances = ({ forms990 }) => {

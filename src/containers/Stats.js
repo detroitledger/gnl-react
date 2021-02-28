@@ -1,9 +1,11 @@
 import React from 'react';
+import numeral from 'numeral';
 
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
-import numeral from 'numeral';
+import { dollarsFormatter } from '../utils';
+
 
 // Graphql query using name as search parameter on irs organizations
 const GET_STATS = gql`
@@ -35,7 +37,7 @@ const Stats = ({ name }) => {
       Search <strong>{numeral(totalNumOrgs).format('0,0')}</strong>{' '}
       organizations and <strong>{numeral(totalNumGrants).format('0,0')}</strong>{' '}
       grants covering{' '}
-      <strong>{numeral(totalGrantsDollars).format('$0,0[.]00')}</strong> in
+      <strong>{dollarsFormatter.format(totalGrantsDollars)}</strong> in
       Detroit.
     </h2>
   );
