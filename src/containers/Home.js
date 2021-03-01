@@ -11,13 +11,11 @@ export default function Index() {
   return (
     <section className="home">
       <Page>
-        <Helmet title="Homepage" />
+        <Helmet title="The Detroit Ledger" />
         <h1>The Detroit Ledger</h1>
         <Stats />
         <Search />
-        <section className="toplists">
-          <TopLists />
-        </section>
+        <TopLists />
       </Page>
     </section>
   );

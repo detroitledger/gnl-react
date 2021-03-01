@@ -104,7 +104,7 @@ footer {
 
     p {
       font-weight: 300;
-      font-size: $big;
+      font-size: $l;
       padding-top: $space-3;
       max-width: none;
     }
@@ -133,8 +133,15 @@ footer {
  /* TopLists --------------------------------------------------------------------- */
 .toplists {
   width: 100%;
+  background-color: $money;
+  padding-bottom: $space-3;
 
-  h2,h3 {
+  a, a:link, a:visited {
+    color: $body-color;
+    border-bottom: 1px dotted $body-color;
+  }
+
+  h2, h3 {
     text-align: left;
     font-weight: 800;
   }
@@ -142,6 +149,7 @@ footer {
   h2 {
     font-size: 3rem;
     border-bottom: $border-width solid $green-accent;
+    color: $green-accent;
   }
 }
 
