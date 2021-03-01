@@ -136,8 +136,9 @@ footer {
   background-color: $money;
   padding-bottom: $space-3;
 
-  a {
-    border-bottom-color: $money;
+  a, a:link, a:visited {
+    color: $body-color;
+    border-bottom: 1px dotted $body-color;
   }
 
   h2, h3 {
