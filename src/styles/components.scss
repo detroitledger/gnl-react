@@ -152,8 +152,6 @@ footer {
     color: $green-accent;
   }
 }
-
-
 /* Callouts ----------------------------------------------------------------- */
  .callout {
   letter-spacing: -0.05em;
@@ -179,6 +177,24 @@ footer {
 @import "orgs";
  /* NTEEs  ------------------------------------------------------------------- */
 .ntee {
+  width: 100%;
+  background-color: $money;
+  padding-bottom: $space-3;
+  margin-top: $space-3;
+  margin-bottom: $space-3;
+
+  h1 {
+    font-size: 3rem;
+    border-bottom: $border-width solid $green-accent;
+    color: $green-accent;
+    font-weight: 800;
+    text-align: left;
+  }
+
+  li {
+    font-weight: 800;
+  }
+
   h3 {
     border-bottom: $banker-bar;
     padding-bottom: 5px;
