@@ -21,6 +21,7 @@ import Grants from './containers/Grants';
 import Organizations from './containers/Organizations';
 import Search from './containers/Search';
 import Methods from './containers/Methods';
+import OrgNteeTags from './containers/OrgNteeTags';
 
 import AdminLinks from './containers/AdminLinks';
 
@@ -61,6 +62,7 @@ ReactDOM.render(
             <Route exact path="/" component={Home} />
             <Route path="/grants" component={Grants} />
             <Route path="/organizations" component={Organizations} />
+            <Route path="/ntees" component={OrgNteeTags} />
             <Route path="/about" component={About} />
             <Route path="search" component={Search} />
             <Route path="/methods" component={Methods} />
