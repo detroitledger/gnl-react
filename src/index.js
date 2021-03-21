@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import { Provider } from 'react-redux';
 
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/client';
 
 import configureStore from './store/configureStore';
 

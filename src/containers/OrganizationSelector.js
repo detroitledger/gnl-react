@@ -1,5 +1,4 @@
-import { useLazyQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { useLazyQuery, gql } from '@apollo/client';
 import PropTypes from 'prop-types';
 import React from 'react';
 
