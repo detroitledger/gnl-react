@@ -124,36 +124,20 @@ const Organization = () => {
 
   if (!data.organization) return `Failed to load org data!`;
 
-  // Fetch all grantsFunded & grantsReceived to render full grants table and accurate yearly sum bar charts
-  // if (data.organization.grantsFunded.length < data.organization.countGrantsFrom) {
+  // Fetch all grantsFunded & grantsReceived to render full grants table and accurate yearly sums bar chart
+  // if (data.organization.grantsFunded.length < data.organization.countGrantsFrom || data.organization.grantsReceived.length < data.organization.countGrantsTo) {
   //   fetchMore({
   //     variables: {
-  //       offset: data.organization.grantsFunded.length,
+  //       offset: Math.max(data.organization.grantsFunded.length, data.organization.grantsReceived.length),
   //     },
-  //     updateQuery: (previousResult, { fetchMoreResult }) => {
-  //       let previousGrantsFunded = previousResult.organization.grantsFunded;
-  //       let fetchMoreGrantsFunded = fetchMoreResult.organization.grantsFunded;
-
+  //     updateQuery: (prev, { fetchMoreResult }) => {
   //       return Object.assign(
-  //         previousResult.organization,
-  //         { ...fetchMoreResult.organization, grantsFunded: [...previousGrantsFunded, ...fetchMoreGrantsFunded] }
-  //       );
-  //     }
-  //   });
-  // }
-
-  // if (data.organization.grantsReceived.length < data.organization.countGrantsTo) {
-  //   fetchMore({
-  //     variables: {
-  //       offset: data.organization.grantsReceived.length,
-  //     },
-  //     updateQuery: (previousResult, { fetchMoreResult }) => {
-  //       let previousGrantsReceived = previousResult.organization.grantsReceived;
-  //       let fetchMoreGrantsReceived = fetchMoreResult.organization.grantsReceived;
-
-  //       return Object.assign(
-  //         previousResult.organization,
-  //         { ...fetchMoreResult.organization, grantsReceived: [...previousGrantsReceived, ...fetchMoreGrantsReceived] }
+  //         prev.organization,
+  //         {
+  //           ...fetchMoreResult.organization,
+  //           grantsFunded: fetchMoreResult.organization.grantsFunded.length > 0 ? [...prev.organization.grantsFunded, ...fetchMoreResult.organization.grantsFunded] : prev.organization.grantsFunded,
+  //           grantsReceived: fetchMoreResult.organization.grantsReceived.length > 0 ? [...prev.organization.grantsReceived, ...fetchMoreResult.organization.grantsReceived] : prev.organization.grantsReceived
+  //         }
   //       );
   //     }
   //   });
