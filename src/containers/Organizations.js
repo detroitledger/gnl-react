@@ -22,14 +22,16 @@ import Page from '../components/Page';
 import Flag from '../components/Flag';
 
 const GET_ORGANIZATION = gql`
-  query getOrg($organizationId: String!) {
+  query getOrg($organizationId: String!, $offset: Int, $limit: Int) {
     organization(uuid: $organizationId) {
       name
       description
       ein
       totalFunded
       totalReceived
-      grantsFunded {
+      countGrantsFrom
+      countGrantsTo
+      grantsFunded (offset: $offset, limit: $limit, orderBy: uuid) {
         uuid
         dateFrom
         dateTo
@@ -40,7 +42,7 @@ const GET_ORGANIZATION = gql`
         amount
         description
       }
-      grantsReceived {
+      grantsReceived (offset: $offset, limit: $limit, orderBy: uuid) {
         uuid
         dateFrom
         dateTo
@@ -101,12 +103,16 @@ const EIN = ({ ein }) => {
 const Organization = () => {
   let { organizationId } = useParams();
 
-  const { loading, error, data } = useQuery(GET_ORGANIZATION, {
-    variables: { organizationId },
+  const { loading, error, data, fetchMore } = useQuery(GET_ORGANIZATION, {
+    variables: { 
+      organizationId: organizationId,
+      offset: 0,
+      limit: 100
+    },
+    notifyOnNetworkStatusChange: true,  // Update 'loading' prop after fetchMore
   });
 
-  // Decide if we show grants funded or received
-  // We default to funded if there are any
+  // Decide if we show grants funded or received, default to funded if there are any
   const [grantSide, setGrantSide] = useState(false);
 
   // Show up to 4 news articles by default
@@ -117,6 +123,43 @@ const Organization = () => {
   if (error) return `Error! ${error}`;
 
   if (!data.organization) return `Failed to load org data!`;
+
+  // Fetch all grantsFunded & grantsReceived to render full grants table and accurate yearly sum bar charts
+  // if (data.organization.grantsFunded.length < data.organization.countGrantsFrom) {
+  //   fetchMore({
+  //     variables: {
+  //       offset: data.organization.grantsFunded.length,
+  //     },
+  //     updateQuery: (previousResult, { fetchMoreResult }) => {
+  //       let previousGrantsFunded = previousResult.organization.grantsFunded;
+  //       let fetchMoreGrantsFunded = fetchMoreResult.organization.grantsFunded;
+
+  //       return Object.assign(
+  //         previousResult.organization,
+  //         { ...fetchMoreResult.organization, grantsFunded: [...previousGrantsFunded, ...fetchMoreGrantsFunded] }
+  //       );
+  //     }
+  //   });
+  // }
+
+  // if (data.organization.grantsReceived.length < data.organization.countGrantsTo) {
+  //   fetchMore({
+  //     variables: {
+  //       offset: data.organization.grantsReceived.length,
+  //     },
+  //     updateQuery: (previousResult, { fetchMoreResult }) => {
+  //       let previousGrantsReceived = previousResult.organization.grantsReceived;
+  //       let fetchMoreGrantsReceived = fetchMoreResult.organization.grantsReceived;
+
+  //       return Object.assign(
+  //         previousResult.organization,
+  //         { ...fetchMoreResult.organization, grantsReceived: [...previousGrantsReceived, ...fetchMoreGrantsReceived] }
+  //       );
+  //     }
+  //   });
+  // }
+
+  console.log(`Fetched ${data.organization.grantsFunded.length}/${data.organization.countGrantsFrom} grants funded & ${data.organization.grantsReceived.length}/${data.organization.countGrantsTo} grants received.`)
 
   const { name, description, ein, nteeOrganizationTypes, news } = data.organization;
 
