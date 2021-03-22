@@ -19,7 +19,7 @@
   "dependencies": {
     "@apollo/client": "^3.3.12",
     "@bnchdrff/react-user-tour": "^3.0.1",
-    "axios": "^0.15.3",
+    "axios": "^0.21.1",
     "cross-fetch": "^1.1.1",
     "eslint-plugin-react": "^7.14.3",
     "graphql": "14.5.5",
