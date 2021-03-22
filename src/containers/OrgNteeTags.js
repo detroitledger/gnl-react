@@ -18,9 +18,11 @@ const GET_ORG_NTEE_TAG = gql`
       description
       totalFunded
       totalReceived
-      organizations(orderBy: name) {
+      organizations(limit: 100, orderBy: name) {
         uuid
         name
+        totalFunded
+        totalReceived
       }
     }
   }
@@ -65,21 +67,35 @@ const OrgNteeTag = () => {
           Based on our grants, organizations in this category have:
         </p>
         <ul className="size-medium font-weight-light">
-          <li>Received {dollarsFormatter.format(ntee.totalReceived)}</li>
           <li>Funded {dollarsFormatter.format(ntee.totalFunded)}</li>
+          <li>Received {dollarsFormatter.format(ntee.totalReceived)}</li>
         </ul>
       </div>
       <div>
-        <h2>Organizations with this code:</h2>
-        <ul>
-          {ntee.organizations.map((org, i) => (
-            <li className="result size-medium" key={i}>
-              <Link to={`/organizations/${slugify(org.name)}/${org.uuid}`}>
-                {org.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <h2>{ntee.name} organizations:</h2>
+        <table className="grantsTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th className="dates">Funded</th>
+              <th>Received</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ntee.organizations &&
+              ntee.organizations.map((org, i) => (
+                <tr key={i}>
+                  <td>
+                    <Link to={`/organizations/${slugify(org.name)}/${org.uuid}`}>
+                      {org.name}
+                    </Link>
+                  </td>
+                  <td>{org.totalFunded ? dollarsFormatter.format(org.totalFunded) : ''}</td>
+                  <td>{org.totalReceived ? dollarsFormatter.format(org.totalReceived) : ''}</td>
+                </tr>
+              ))}
+          </tbody>
+      </table>
       </div>
     </Page>
   );
