@@ -5,8 +5,7 @@ import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 import moment from 'moment';
 
-import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, gql } from '@apollo/client';
 
 import Helmet from 'react-helmet';
 
