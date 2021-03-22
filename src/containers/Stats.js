@@ -1,8 +1,7 @@
 import React from 'react';
 import numeral from 'numeral';
 
-import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { useQuery, gql } from '@apollo/client';
 
 import { dollarsFormatter } from '../utils';
 

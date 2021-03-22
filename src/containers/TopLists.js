@@ -1,8 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { useQuery, gql } from '@apollo/client';
 
 import { Col, Row } from 'react-bootstrap';
 
