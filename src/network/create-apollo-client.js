@@ -1,20 +1,13 @@
-import ApolloClient, { InMemoryCache } from 'apollo-boost';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { offsetLimitPagination } from "@apollo/client/utilities";
 import store from 'store/dist/store.modern';
 
 const cache = new InMemoryCache({
   typePolicies: {
     Organization: {
       fields: {
-        grantsFunded: {
-          merge(existing, incoming, { mergeObjects }) {
-            return mergeObjects(existing, incoming);
-          },
-        },
-        grantsReceived: {
-          merge(existing, incoming, { mergeObjects }) {
-            return mergeObjects(existing, incoming);
-          }
-        }
+        grantsFunded: offsetLimitPagination(),
+        grantsReceived: offsetLimitPagination(),
       },
     },
   },
