@@ -53,7 +53,12 @@ const GrantsTableWrapper = (props) => {
 
   if (!data.organization) return `Failed to load org data!`;
 
-  if (data.organization.grantsFunded.length < props.countGrantsFrom || data.organization.grantsReceived.length < props.countGrantsTo) {
+  const loadMoreGrantsFunded = data.organization.grantsFunded.length <  props.countGrantsFrom;
+  const loadMoreGrantsReceived = data.organization.grantsReceived.length < props.countGrantsTo;
+
+  // If our initial response is fewer records than the total grant count for either side,
+  //   fetchMore records and merge the arrays using apollo's offset-based pagination
+  if (loadMoreGrantsFunded || loadMoreGrantsReceived) {
     fetchMore({
       variables: {
         grantsFundedOffset: data.organization.grantsFunded.length,
