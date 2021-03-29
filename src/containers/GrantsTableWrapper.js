@@ -72,6 +72,7 @@ const GrantsTableWrapper = (props) => {
      and ${data.organization.grantsReceived.length}/${props.countGrantsTo} grants received.`
   );
 
+  // Do this after offset-basd fetching because arrays lengthen during cleansing
   const {
     grantsFunded,
     grantsReceived,
@@ -90,67 +91,72 @@ const GrantsTableWrapper = (props) => {
   );
 };
 
+/**
+ * Flatten, format, and sort our grant attributes
+ * and calculate organization- and year-level totals
+ */
 const cleanse = (organization) => {
-  // Sort lists by org
-  const flattenedGrantsReceived = sortBy(
-    organization.grantsReceived.map((grant) => {
-      const dateFrom = extractYear(grant.dateFrom);
-      const dateTo = extractYear(grant.dateTo);
-      const years = `${dateFrom} - ${dateTo}`;
-      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
+  // Flatten grantsReceived & grantsFunded nested objects
+  const flattenedGrantsReceived = organization.grantsReceived.map((grant) => {
+    const dateFrom = extractYear(grant.dateFrom);
+    const dateTo = extractYear(grant.dateTo);
+    const years = `${dateFrom} - ${dateTo}`;
+    const desc = grant.description ? stripHtml(grant.description) : 'No description available';
 
-      return {
-        org: grant.from.name,
-        orgUuid: grant.from.uuid,
-        description: desc,
-        amount: grant.amount,
-        uuid: grant.uuid,
-        dateFrom,
-        dateTo,
-        years,
-        summary: false,
-      };
-    }),
-    (grant) =>
-      // Sort by org id (boring) and then the inverse of the start year.
-      grant.orgUuid + 1 / grant.dateFrom
+    return {
+      org: grant.from.name,
+      orgUuid: grant.from.uuid,
+      description: desc,
+      amount: grant.amount,
+      uuid: grant.uuid,
+      dateFrom,
+      dateTo,
+      years,
+      summary: false,
+    };
+  });
+
+  const flattenedGrantsFunded = organization.grantsFunded.map((grant) => {
+    const dateFrom = extractYear(grant.dateFrom);
+    const dateTo = extractYear(grant.dateTo);
+    const years = `${dateFrom} - ${dateTo}`;
+    const desc = grant.description ? stripHtml(grant.description) : 'No description available';
+
+    return {
+      org: grant.to.name,
+      orgUuid: grant.to.uuid,
+      description: desc,
+      amount: grant.amount,
+      uuid: grant.uuid,
+      dateFrom,
+      dateTo,
+      years,
+      summary: false,
+    };
+  });
+
+  // Sort flattened lists by org id (boring) and then the inverse of the start year.
+  const sortedFlatGrantsReceived = sortBy(
+    flattenedGrantsReceived,
+    (grant) => grant.orgUuid + 1 / grant.dateFrom
   );
 
-  const flattenedGrantsFunded = sortBy(
-    organization.grantsFunded.map((grant) => {
-      const dateFrom = extractYear(grant.dateFrom);
-      const dateTo = extractYear(grant.dateTo);
-      const years = `${dateFrom} - ${dateTo}`;
-      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
-
-      return {
-        org: grant.to.name,
-        orgUuid: grant.to.uuid,
-        description: desc,
-        amount: grant.amount,
-        uuid: grant.uuid,
-        dateFrom,
-        dateTo,
-        years,
-        summary: false,
-      };
-    }),
-    (grant) =>
-      // Sort by org id (boring) and then the inverse of the start year.
-      grant.orgUuid + 1 / grant.dateFrom
+  const sortedFlatGrantsFunded = sortBy(
+    flattenedGrantsFunded,
+    (grant) => grant.orgUuid + 1 / grant.dateFrom
   );
 
+  // Insert summary rows with org-level totals into the lists
   const { grants: grantsFunded, yearlySums: fundedYearlySums } = addSummaryRows(
-    flattenedGrantsFunded
+    sortedFlatGrantsFunded
   );
 
   const { grants: grantsReceived, yearlySums: receivedYearlySums } = addSummaryRows(
-    flattenedGrantsReceived
+    sortedFlatGrantsReceived
   );
 
   // Create a map containing a union of years in funded & received sums with zero values
-  // This is used to ensure that the bar charts for funded/received have the same y axis
-  // categories.
+  // This is used to ensure that the bar charts for funded/received have the same y axis categories
   const allYears = Object.keys({
     ...fundedYearlySums,
     ...receivedYearlySums,
