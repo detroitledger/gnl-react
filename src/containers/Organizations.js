@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 
-import { uniq, map, filter, findIndex, sortBy } from 'lodash';
 import moment from 'moment';
 
 import { useQuery, gql } from '@apollo/client';
@@ -11,9 +10,10 @@ import Helmet from 'react-helmet';
 
 import { Col, Nav, NavItem, Row } from 'react-bootstrap';
 
-import { stripHtml, extractYear, dollarsFormatter } from '../utils';
+import { dollarsFormatter } from '../utils';
 
-import GrantTable from '../components/GrantTable';
+import GrantsTableWrapper from './GrantsTableWrapper';
+
 import OrgFinances from '../components/OrgFinances';
 import OrgNteeLinks from '../components/OrgNteeLinks';
 import OrgNewsArticles from '../components/OrgNewsArticles';
@@ -28,28 +28,8 @@ const GET_ORGANIZATION = gql`
       ein
       totalFunded
       totalReceived
-      grantsFunded {
-        uuid
-        dateFrom
-        dateTo
-        to {
-          name
-          uuid
-        }
-        amount
-        description
-      }
-      grantsReceived {
-        uuid
-        dateFrom
-        dateTo
-        from {
-          name
-          uuid
-        }
-        amount
-        description
-      }
+      countGrantsFrom
+      countGrantsTo
       forms990 {
         id
         tax_period
@@ -101,11 +81,12 @@ const Organization = () => {
   let { organizationId } = useParams();
 
   const { loading, error, data } = useQuery(GET_ORGANIZATION, {
-    variables: { organizationId },
+    variables: { 
+      organizationId: organizationId,
+    },
   });
 
-  // Decide if we show grants funded or received
-  // We default to funded if there are any
+  // Decide if we show grants funded or received, default to funded if there are any
   const [grantSide, setGrantSide] = useState(false);
 
   // Show up to 4 news articles by default
@@ -119,17 +100,11 @@ const Organization = () => {
 
   const { name, description, ein, nteeOrganizationTypes, news } = data.organization;
 
-  const {
-    grantsFunded,
-    grantsReceived,
-    fundedYearlySums,
-    receivedYearlySums,
-    forms990,
-  } = cleanse(data.organization);
+  const { forms990 } = cleanse(data.organization);
 
   const showGrantSide =
     grantSide ||
-    (data.organization.grantsFunded.length > 0 ? 'funded' : 'received');
+    (data.organization.countGrantsFrom > 0 ? 'funded' : 'received');
 
   return (
     <Page>
@@ -165,83 +140,17 @@ const Organization = () => {
         <NavItem eventKey="funded">Gave {dollarsFormatter.format(data.organization.totalFunded) || `$0`}</NavItem>
         <NavItem eventKey="received">Received {dollarsFormatter.format(data.organization.totalReceived) || `$0`}</NavItem>
       </Nav>
-      <GrantTable
-        verb={showGrantSide}
-        grants={showGrantSide === 'funded' ? grantsFunded : grantsReceived}
-        sums={
-          showGrantSide === 'funded' ? fundedYearlySums : receivedYearlySums
-        }
+      <GrantsTableWrapper 
+        showGrantSide={showGrantSide} 
+        organizationId={organizationId}
+        countGrantsFrom={data.organization.countGrantsFrom}
+        countGrantsTo={data.organization.countGrantsTo}
       />
     </Page>
   );
 };
 
 const cleanse = (organization) => {
-  // Sort lists by org
-  const flattenedGrantsReceived = sortBy(
-    organization.grantsReceived.map((grant) => {
-      const dateFrom = extractYear(grant.dateFrom);
-      const dateTo = extractYear(grant.dateTo);
-      const years = `${dateFrom} - ${dateTo}`;
-      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
-
-      return {
-        org: grant.from.name,
-        orgUuid: grant.from.uuid,
-        description: desc,
-        amount: grant.amount,
-        uuid: grant.uuid,
-        dateFrom,
-        dateTo,
-        years,
-        summary: false,
-      };
-    }),
-    (grant) =>
-      // Sort by org id (boring) and then the inverse of the start year.
-      grant.orgUuid + 1 / grant.dateFrom
-  );
-
-  const flattenedGrantsFunded = sortBy(
-    organization.grantsFunded.map((grant) => {
-      const dateFrom = extractYear(grant.dateFrom);
-      const dateTo = extractYear(grant.dateTo);
-      const years = `${dateFrom} - ${dateTo}`;
-      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
-
-      return {
-        org: grant.to.name,
-        orgUuid: grant.to.uuid,
-        description: desc,
-        amount: grant.amount,
-        uuid: grant.uuid,
-        dateFrom,
-        dateTo,
-        years,
-        summary: false,
-      };
-    }),
-    (grant) =>
-      // Sort by org id (boring) and then the inverse of the start year.
-      grant.orgUuid + 1 / grant.dateFrom
-  );
-
-  const { grants: grantsFunded, yearlySums: fundedYearlySums } = addSummaryRows(
-    flattenedGrantsFunded
-  );
-  const {
-    grants: grantsReceived,
-    yearlySums: receivedYearlySums,
-  } = addSummaryRows(flattenedGrantsReceived);
-
-  // Create a map containing a union of years in funded & received sums with zero values
-  // This is used to ensure that the bar charts for funded/received have the same y axis
-  // categories.
-  const allYears = Object.keys({
-    ...fundedYearlySums,
-    ...receivedYearlySums,
-  }).reduce((acc, cur) => ({ ...acc, [cur]: 0 }), {});
-
   // Augment IRS data
   const forms990 =
     organization.forms990 &&
@@ -253,61 +162,6 @@ const cleanse = (organization) => {
     }));
 
   return {
-    grantsFunded,
-    fundedYearlySums: { ...allYears, ...fundedYearlySums },
-    grantsReceived,
-    receivedYearlySums: { ...allYears, ...receivedYearlySums },
     forms990,
   };
 };
-
-/**
- * Add summary rows to table data,
- * and provide yearly totals.
- */
-function addSummaryRows(grantsOrig) {
-  // Copy the provided array.
-  const grants = grantsOrig;
-
-  // Get orgs
-  const uniqOrgs = uniq(map(grants, 'orgUuid'));
-
-  // Get stats per org, and stick em right in the array of grants as summary rows!
-  const yearlySums = {};
-  let insertAt = 0;
-  uniqOrgs.forEach((orgUuid) => {
-    let org = '';
-
-    const sum = filter(grants, { orgUuid }).reduce((memo, grant) => {
-      // along the way, build our yearly sums!
-      if (yearlySums[grant.dateFrom] > 0) {
-        yearlySums[grant.dateFrom] += grant.amount;
-      } else {
-        yearlySums[grant.dateFrom] = grant.amount;
-      }
-
-      // This'll happen over and over but that is just fine. We just want the right name.
-      org = grant.org;
-
-      return memo + grant.amount;
-    }, 0);
-
-    // Find first row of this org's grant
-    insertAt = findIndex(grants, { orgUuid }, insertAt);
-
-    // Splice in their stats row there
-    // Add 1 to search index since we inserted another row
-    grants.splice(insertAt, 0, {
-      org,
-      description: `${org}:`,
-      orgUuid,
-      amount: sum,
-      uuid: `summaryrow-${orgUuid}`,
-      start: null,
-      end: null,
-      summary: true,
-    });
-  });
-
-  return { grants, yearlySums };
-}
