@@ -62,7 +62,7 @@ const OrgNteeTag = () => {
     <Page>
       <Helmet title={`NTEE: ${ntee.name}`} />
       <div className="ntee container">
-        <h1>{ntee.name} ({ntee.code})</h1>
+        <h1>{ntee.name} {ntee.code ? `(${ntee.code})` : ``}</h1>
         <p className="size-medium font-weight-light">
           Based on our grants, organizations in this category have:
         </p>
@@ -72,11 +72,10 @@ const OrgNteeTag = () => {
         </ul>
       </div>
       <div>
-        <h2>{ntee.name} organizations:</h2>
         <table className="grantsTable">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Organization</th>
               <th className="dates">Funded</th>
               <th>Received</th>
             </tr>
@@ -87,7 +86,7 @@ const OrgNteeTag = () => {
                 <tr key={i}>
                   <td>
                     <Link to={`/organizations/${slugify(org.name)}/${org.uuid}`}>
-                      {org.name}
+                      <strong>{org.name}</strong>
                     </Link>
                   </td>
                   <td>{org.totalFunded ? dollarsFormatter.format(org.totalFunded) : ''}</td>
