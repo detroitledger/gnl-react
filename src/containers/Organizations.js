@@ -81,7 +81,7 @@ const Organization = () => {
   let { organizationId } = useParams();
 
   const { loading, error, data } = useQuery(GET_ORGANIZATION, {
-    variables: { 
+    variables: {
       organizationId: organizationId,
     },
   });
@@ -90,7 +90,7 @@ const Organization = () => {
   const [grantSide, setGrantSide] = useState(false);
 
   // Show up to 4 news articles by default
-  const defaultNewsLimit = 4
+  const defaultNewsLimit = 4;
   const [newsLimit, setNewsLimit] = useState(defaultNewsLimit);
 
   if (loading) return 'Loading...';
@@ -98,7 +98,13 @@ const Organization = () => {
 
   if (!data.organization) return `Failed to load org data!`;
 
-  const { name, description, ein, nteeOrganizationTypes, news } = data.organization;
+  const {
+    name,
+    description,
+    ein,
+    nteeOrganizationTypes,
+    news,
+  } = data.organization;
 
   const { forms990 } = cleanse(data.organization);
 
@@ -122,11 +128,19 @@ const Organization = () => {
       </Row>
 
       {news && <OrgNewsArticles newses={news} limit={newsLimit} />}
-      {news.length > defaultNewsLimit ? 
-        <button onClick={(news) => setNewsLimit(newsLimit === defaultNewsLimit ? news.length : defaultNewsLimit)}>
+      {news.length > defaultNewsLimit ? (
+        <button
+          onClick={(news) =>
+            setNewsLimit(
+              newsLimit === defaultNewsLimit ? news.length : defaultNewsLimit
+            )
+          }
+        >
           {newsLimit === defaultNewsLimit ? `Show more news` : `Show less news`}
         </button>
-      : ``}
+      ) : (
+        ``
+      )}
 
       {forms990 && <OrgFinances forms990={forms990} />}
 
@@ -137,11 +151,16 @@ const Organization = () => {
       </p>
       <Flag />
       <Nav bsStyle="tabs" activeKey={showGrantSide} onSelect={setGrantSide}>
-        <NavItem eventKey="funded">Gave {dollarsFormatter.format(data.organization.totalFunded) || `$0`}</NavItem>
-        <NavItem eventKey="received">Received {dollarsFormatter.format(data.organization.totalReceived) || `$0`}</NavItem>
+        <NavItem eventKey="funded">
+          Gave {dollarsFormatter.format(data.organization.totalFunded) || `$0`}
+        </NavItem>
+        <NavItem eventKey="received">
+          Received{' '}
+          {dollarsFormatter.format(data.organization.totalReceived) || `$0`}
+        </NavItem>
       </Nav>
-      <GrantsTableWrapper 
-        showGrantSide={showGrantSide} 
+      <GrantsTableWrapper
+        showGrantSide={showGrantSide}
         organizationId={organizationId}
         countGrantsFrom={data.organization.countGrantsFrom}
         countGrantsTo={data.organization.countGrantsTo}

@@ -9,9 +9,14 @@ import { stripHtml, extractYear } from '../utils';
 import GrantTable from '../components/GrantTable';
 
 const GET_ORGANIZATION_GRANTS = gql`
-  query getOrg($organizationId: String!, $grantsFundedOffset: Int, $grantsReceivedOffset: Int, $limit: Int) {
+  query getOrg(
+    $organizationId: String!
+    $grantsFundedOffset: Int
+    $grantsReceivedOffset: Int
+    $limit: Int
+  ) {
     organization(uuid: $organizationId) {
-      grantsFunded (offset: $grantsFundedOffset, limit: $limit, orderBy: uuid) {
+      grantsFunded(offset: $grantsFundedOffset, limit: $limit, orderBy: uuid) {
         uuid
         dateFrom
         dateTo
@@ -22,7 +27,11 @@ const GET_ORGANIZATION_GRANTS = gql`
         amount
         description
       }
-      grantsReceived (offset: $grantsReceivedOffset, limit: $limit, orderBy: uuid) {
+      grantsReceived(
+        offset: $grantsReceivedOffset
+        limit: $limit
+        orderBy: uuid
+      ) {
         uuid
         dateFrom
         dateTo
@@ -38,23 +47,28 @@ const GET_ORGANIZATION_GRANTS = gql`
 `;
 
 const GrantsTableWrapper = (props) => {
-  const { loading, error, data, fetchMore } = useQuery(GET_ORGANIZATION_GRANTS, {
-    variables: { 
-      organizationId: props.organizationId,
-      grantsFundedOffset: 0,
-      grantsReceivedOffset: 0,
-      limit: 100
-    },
-    notifyOnNetworkStatusChange: true,  // Update 'loading' prop after fetchMore
-  });
+  const { loading, error, data, fetchMore } = useQuery(
+    GET_ORGANIZATION_GRANTS,
+    {
+      variables: {
+        organizationId: props.organizationId,
+        grantsFundedOffset: 0,
+        grantsReceivedOffset: 0,
+        limit: 100,
+      },
+      notifyOnNetworkStatusChange: true, // Update 'loading' prop after fetchMore
+    }
+  );
 
   if (loading) return 'Loading...';
   if (error) return `Error! ${error}`;
 
   if (!data.organization) return `Failed to load org data!`;
 
-  const loadMoreGrantsFunded = data.organization.grantsFunded.length <  props.countGrantsFrom;
-  const loadMoreGrantsReceived = data.organization.grantsReceived.length < props.countGrantsTo;
+  const loadMoreGrantsFunded =
+    data.organization.grantsFunded.length < props.countGrantsFrom;
+  const loadMoreGrantsReceived =
+    data.organization.grantsReceived.length < props.countGrantsTo;
 
   // If our initial response is fewer records than the total grant count for either side,
   //   fetchMore records and merge the arrays using apollo's offset-based pagination
@@ -101,7 +115,9 @@ const cleanse = (organization) => {
     const dateFrom = extractYear(grant.dateFrom);
     const dateTo = extractYear(grant.dateTo);
     const years = `${dateFrom} - ${dateTo}`;
-    const desc = grant.description ? stripHtml(grant.description) : 'No description available';
+    const desc = grant.description
+      ? stripHtml(grant.description)
+      : 'No description available';
 
     return {
       org: grant.from.name,
@@ -120,7 +136,9 @@ const cleanse = (organization) => {
     const dateFrom = extractYear(grant.dateFrom);
     const dateTo = extractYear(grant.dateTo);
     const years = `${dateFrom} - ${dateTo}`;
-    const desc = grant.description ? stripHtml(grant.description) : 'No description available';
+    const desc = grant.description
+      ? stripHtml(grant.description)
+      : 'No description available';
 
     return {
       org: grant.to.name,
@@ -151,9 +169,10 @@ const cleanse = (organization) => {
     sortedFlatGrantsFunded
   );
 
-  const { grants: grantsReceived, yearlySums: receivedYearlySums } = addSummaryRows(
-    sortedFlatGrantsReceived
-  );
+  const {
+    grants: grantsReceived,
+    yearlySums: receivedYearlySums,
+  } = addSummaryRows(sortedFlatGrantsReceived);
 
   // Create a map containing a union of years in funded & received sums with zero values
   // This is used to ensure that the bar charts for funded/received have the same y axis categories
@@ -184,7 +203,7 @@ function addSummaryRows(grantsOrig) {
   // Get stats per org, and stick em right in the array of grants as summary rows!
   const yearlySums = {};
   let insertAt = 0;
-  
+
   uniqOrgs.forEach((orgUuid) => {
     let org = '';
 
@@ -220,6 +239,6 @@ function addSummaryRows(grantsOrig) {
   });
 
   return { grants, yearlySums };
-};
+}
 
 export default GrantsTableWrapper;

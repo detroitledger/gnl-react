@@ -15,7 +15,7 @@ const OrgNewsArticles = ({ newses, limit }) => {
           flexWrap: 'wrap',
         }}
       >
-        {newses.slice(0,limit).map((news) => (
+        {newses.slice(0, limit).map((news) => (
           <Col
             xs={12}
             sm={4}
@@ -31,11 +31,7 @@ const OrgNewsArticles = ({ newses, limit }) => {
                 {news.title}
               </a>
             </h4>
-            <time>
-              {moment(news.date).format(
-                'MMM D, YYYY'
-              )}
-            </time>
+            <time>{moment(news.date).format('MMM D, YYYY')}</time>
             <p className="newsdesc">
               {news.description.substring(0, 90).replace(/\w+$/, '…')}
             </p>
