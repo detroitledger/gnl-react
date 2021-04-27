@@ -1,4 +1,3 @@
-/* global jest */
 import IrsData from './IrsData.js';
 import React from 'react';
 import renderer from 'react-test-renderer';

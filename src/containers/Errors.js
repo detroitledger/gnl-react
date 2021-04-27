@@ -14,7 +14,9 @@ class Errors extends Component {
         {errors.map((error, i) => (
           <p key={i}>
             {error}{' '}
-            <a onClick={this.props.handleDismissError.bind(this, i)}>[x]</a>
+            <button onClick={this.props.handleDismissError.bind(this, i)}>
+              [x]
+            </button>
           </p>
         ))}
       </div>
