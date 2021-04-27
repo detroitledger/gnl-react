@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { offsetLimitPagination } from "@apollo/client/utilities";
+import { offsetLimitPagination } from '@apollo/client/utilities';
 import store from 'store/dist/store.modern';
 
 const cache = new InMemoryCache({

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { dollarsFormatter } from '../utils';
 
-
 const YearlySumsBarchart = ({ sums }) => {
   const data = Object.keys(sums).map((k, i) => ({
     label: k,
@@ -41,7 +40,7 @@ const YearlySumsBarchart = ({ sums }) => {
       >
         {data.map((d, i) => (
           <g key={d.label}>
-            <rect 
+            <rect
               x="0"
               y={i * baseHeight}
               width="100%"
@@ -57,9 +56,9 @@ const YearlySumsBarchart = ({ sums }) => {
               stroke="#ebf9ef"
               strokeWidth="3px"
             ></rect>
-            <text 
+            <text
               x="6"
-              y={i * baseHeight + (baseHeight / 2)}
+              y={i * baseHeight + baseHeight / 2}
               dy=".35em"
               fill="#000"
             >

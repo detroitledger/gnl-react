@@ -97,13 +97,12 @@ const Grant = () => {
 
   const { to, from, source, relatedTo, relatedFrom } = data.grant;
   const { dateFrom, dateTo, amount, description } = cleanse(data.grant);
-  
+
   const flattenedRelatedTo = flattenRelatedGrants(relatedTo, 'to');
   const flattenedRelatedFrom = flattenRelatedGrants(relatedFrom, 'from');
 
   const showGrantsRelated =
-    grantRelation ||
-    (flattenedRelatedTo > 0 ? 'recieved' : 'funded');
+    grantRelation || (flattenedRelatedTo > 0 ? 'recieved' : 'funded');
 
   return (
     <Page>
@@ -114,31 +113,45 @@ const Grant = () => {
         <Col md={6}>
           From
           <h2>
-            <a href={`/organizations/${slugify(from.name)}/${from.uuid}`}>{from.name}</a>
+            <a href={`/organizations/${slugify(from.name)}/${from.uuid}`}>
+              {from.name}
+            </a>
           </h2>
         </Col>
         <Col md={6}>
-          To 
+          To
           <h2>
-            <a href={`/organizations/${slugify(to.name)}/${to.uuid}`}>{to.name}</a>
+            <a href={`/organizations/${slugify(to.name)}/${to.uuid}`}>
+              {to.name}
+            </a>
           </h2>
         </Col>
       </Row>
-      <p>From {dateFrom} to {dateTo}</p>
+      <p>
+        From {dateFrom} to {dateTo}
+      </p>
 
       <p>{description}</p>
       <p>Source {source}</p>
       <Flag />
 
       <h2>Related grants</h2>
-      <Nav bsStyle="tabs" activeKey={showGrantsRelated} onSelect={setGrantRelation}>
+      <Nav
+        bsStyle="tabs"
+        activeKey={showGrantsRelated}
+        onSelect={setGrantRelation}
+      >
         <NavItem eventKey="funded">From {from.name}</NavItem>
         <NavItem eventKey="received">To {to.name}</NavItem>
       </Nav>
       <GrantTable
         relatedGrants
         verb={showGrantsRelated}
-        grants={showGrantsRelated === 'received' ? flattenedRelatedTo : flattenedRelatedFrom}
+        grants={
+          showGrantsRelated === 'received'
+            ? flattenedRelatedTo
+            : flattenedRelatedFrom
+        }
       />
     </Page>
   );
@@ -147,14 +160,16 @@ const Grant = () => {
 const cleanse = (grant) => {
   const dateFrom = extractYear(grant.dateFrom);
   const dateTo = extractYear(grant.dateTo);
-  const desc = grant.description ? stripHtml(grant.description) : 'No description available';
+  const desc = grant.description
+    ? stripHtml(grant.description)
+    : 'No description available';
 
   return {
     dateFrom,
     dateTo,
     description: desc,
     amount: dollarsFormatter.format(grant.amount),
-  }
+  };
 };
 
 const flattenRelatedGrants = (relatedGrants, direction) => {
@@ -163,7 +178,9 @@ const flattenRelatedGrants = (relatedGrants, direction) => {
       const dateFrom = extractYear(grant.dateFrom);
       const dateTo = extractYear(grant.dateTo);
       const years = `${dateFrom} - ${dateTo}`;
-      const desc = grant.description ? stripHtml(grant.description) : 'No description available';
+      const desc = grant.description
+        ? stripHtml(grant.description)
+        : 'No description available';
 
       return {
         org: direction === 'to' ? grant.from.name : grant.to.name,
@@ -174,8 +191,8 @@ const flattenRelatedGrants = (relatedGrants, direction) => {
         dateFrom,
         dateTo,
         years,
-        summary: false
-      }
+        summary: false,
+      };
     }),
     (grant) =>
       // Sort by org id (boring) and then the inverse of the start year.

@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Link, Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
+import {
+  Link,
+  Switch,
+  Route,
+  useRouteMatch,
+  useParams,
+} from 'react-router-dom';
 
 import { useQuery, gql } from '@apollo/client';
 
@@ -62,7 +68,9 @@ const OrgNteeTag = () => {
     <Page>
       <Helmet title={`NTEE: ${ntee.name}`} />
       <div className="ntee container">
-        <h1>{ntee.name} {ntee.code ? `(${ntee.code})` : ``}</h1>
+        <h1>
+          {ntee.name} {ntee.code ? `(${ntee.code})` : ``}
+        </h1>
         <p className="size-medium font-weight-light">
           Based on our grants, organizations in this category have:
         </p>
@@ -85,16 +93,26 @@ const OrgNteeTag = () => {
               ntee.organizations.map((org, i) => (
                 <tr key={i}>
                   <td>
-                    <Link to={`/organizations/${slugify(org.name)}/${org.uuid}`}>
+                    <Link
+                      to={`/organizations/${slugify(org.name)}/${org.uuid}`}
+                    >
                       <strong>{org.name}</strong>
                     </Link>
                   </td>
-                  <td>{org.totalFunded ? dollarsFormatter.format(org.totalFunded) : ''}</td>
-                  <td>{org.totalReceived ? dollarsFormatter.format(org.totalReceived) : ''}</td>
+                  <td>
+                    {org.totalFunded
+                      ? dollarsFormatter.format(org.totalFunded)
+                      : ''}
+                  </td>
+                  <td>
+                    {org.totalReceived
+                      ? dollarsFormatter.format(org.totalReceived)
+                      : ''}
+                  </td>
                 </tr>
               ))}
           </tbody>
-      </table>
+        </table>
       </div>
     </Page>
   );

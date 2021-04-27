@@ -6,7 +6,6 @@ import Search from 'containers/Search';
 import Stats from 'containers/Stats';
 import TopLists from 'containers/TopLists';
 
-
 export default function Index() {
   return (
     <section className="home">

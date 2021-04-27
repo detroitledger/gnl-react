@@ -5,7 +5,6 @@ import { useQuery, gql } from '@apollo/client';
 
 import { dollarsFormatter } from '../utils';
 
-
 // Graphql query using name as search parameter on irs organizations
 const GET_STATS = gql`
   query stats {
@@ -36,8 +35,7 @@ const Stats = ({ name }) => {
       Search <strong>{numeral(totalNumOrgs).format('0,0')}</strong>{' '}
       organizations and <strong>{numeral(totalNumGrants).format('0,0')}</strong>{' '}
       grants covering{' '}
-      <strong>{dollarsFormatter.format(totalGrantsDollars)}</strong> in
-      Detroit.
+      <strong>{dollarsFormatter.format(totalGrantsDollars)}</strong> in Detroit.
     </h2>
   );
 };
