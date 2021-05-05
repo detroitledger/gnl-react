@@ -33,6 +33,7 @@ export default (apiUrl) => {
         },
       },
     },
+    dataIdFromObject: ({ uuid, __typename }) => `${__typename}:${uuid}`,
   });
 
   return new ApolloClient({

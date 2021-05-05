@@ -33,12 +33,12 @@ const OrganizationSelector = ({ onOrgSelected, setValue, value }) => {
     debugger;
   }
 
-  const options = data.organizations.map(({ name, uuid }) => {
-    return {
-      label: name,
-      value: uuid,
-    };
-  });
+  const options = data.organizations
+    ? data.organizations.map(({ name, uuid }) => ({
+        label: name,
+        value: uuid,
+      }))
+    : [value];
 
   const handleInputChange = (inputValue) => {
     setValue(inputValue);
@@ -52,6 +52,7 @@ const OrganizationSelector = ({ onOrgSelected, setValue, value }) => {
   return (
     <Select
       isClearable
+      value={value || undefined}
       onChange={handleChange}
       onInputChange={handleInputChange}
       className="basic-single"

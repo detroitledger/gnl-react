@@ -1,20 +1,15 @@
 import React from 'react';
 
-import {
-  Link,
-  Switch,
-  Route,
-  useRouteMatch,
-  useParams,
-} from 'react-router-dom';
+import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 
 import { useQuery, gql } from '@apollo/client';
 
 import Helmet from 'react-helmet';
 
 import Page from '../components/Page';
+import OrgLink from '../components/OrgLink';
 
-import { dollarsFormatter, slugify } from '../utils';
+import { dollarsFormatter } from '../utils';
 
 const GET_ORG_NTEE_TAG = gql`
   query getNteeOrganizationTypes($nteeUuid: String!) {
@@ -93,11 +88,9 @@ const OrgNteeTag = () => {
               ntee.organizations.map((org, i) => (
                 <tr key={i}>
                   <td>
-                    <Link
-                      to={`/organizations/${slugify(org.name)}/${org.uuid}`}
-                    >
-                      <strong>{org.name}</strong>
-                    </Link>
+                    <strong>
+                      <OrgLink name={org.name} uuid={org.uuid} />
+                    </strong>
                   </td>
                   <td>
                     {org.totalFunded
