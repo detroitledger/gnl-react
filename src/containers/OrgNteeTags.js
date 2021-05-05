@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
+import {
+  Link,
+  Switch,
+  Route,
+  useRouteMatch,
+  useParams,
+} from 'react-router-dom';
 
 import { useQuery, gql } from '@apollo/client';
 
@@ -8,7 +14,7 @@ import Helmet from 'react-helmet';
 
 import Page from '../components/Page';
 
-import { dollarsFormatter } from '../utils';
+import { dollarsFormatter, slugify } from '../utils';
 
 const GET_ORG_NTEE_TAG = gql`
   query getNteeOrganizationTypes($nteeUuid: String!) {
@@ -18,6 +24,12 @@ const GET_ORG_NTEE_TAG = gql`
       description
       totalFunded
       totalReceived
+      organizations(limit: 100, orderBy: name) {
+        uuid
+        name
+        totalFunded
+        totalReceived
+      }
     }
   }
 `;
@@ -57,15 +69,50 @@ const OrgNteeTag = () => {
       <Helmet title={`NTEE: ${ntee.name}`} />
       <div className="ntee container">
         <h1>
-          {ntee.name} ({ntee.code})
+          {ntee.name} {ntee.code ? `(${ntee.code})` : ``}
         </h1>
         <p className="size-medium font-weight-light">
           Based on our grants, organizations in this category have:
         </p>
         <ul className="size-medium font-weight-light">
-          <li>Received {dollarsFormatter.format(ntee.totalReceived)}</li>
           <li>Funded {dollarsFormatter.format(ntee.totalFunded)}</li>
+          <li>Received {dollarsFormatter.format(ntee.totalReceived)}</li>
         </ul>
+      </div>
+      <div>
+        <table className="grantsTable">
+          <thead>
+            <tr>
+              <th>Organization</th>
+              <th className="dates">Funded</th>
+              <th>Received</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ntee.organizations &&
+              ntee.organizations.map((org, i) => (
+                <tr key={i}>
+                  <td>
+                    <Link
+                      to={`/organizations/${slugify(org.name)}/${org.uuid}`}
+                    >
+                      <strong>{org.name}</strong>
+                    </Link>
+                  </td>
+                  <td>
+                    {org.totalFunded
+                      ? dollarsFormatter.format(org.totalFunded)
+                      : ''}
+                  </td>
+                  <td>
+                    {org.totalReceived
+                      ? dollarsFormatter.format(org.totalReceived)
+                      : ''}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </div>
     </Page>
   );
