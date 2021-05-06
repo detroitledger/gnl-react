@@ -79,12 +79,6 @@
       "plugin:prettier/recommended"
     ]
   },
-  "ava": {
-    "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

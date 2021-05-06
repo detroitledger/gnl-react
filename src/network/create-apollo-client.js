@@ -1,27 +1,43 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache,
+} from '@apollo/client';
 import { offsetLimitPagination } from '@apollo/client/utilities';
 import store from 'store/dist/store.modern';
 
-const cache = new InMemoryCache({
-  typePolicies: {
-    Organization: {
-      fields: {
-        grantsFunded: offsetLimitPagination(),
-        grantsReceived: offsetLimitPagination(),
+export default (apiUrl) => {
+  const httpLink = new HttpLink({
+    uri: apiUrl,
+  });
+
+  const authLink = new ApolloLink((operation, forward) => {
+    const token = store.get('idToken');
+
+    operation.setContext({
+      headers: {
+        'X-Auth-Token': token ? token : '',
+      },
+    });
+
+    return forward(operation);
+  });
+
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Organization: {
+        fields: {
+          grantsFunded: offsetLimitPagination(),
+          grantsReceived: offsetLimitPagination(),
+        },
       },
     },
-  },
-});
+    dataIdFromObject: ({ uuid, __typename }) => `${__typename}:${uuid}`,
+  });
 
-export default (apiUrl) => {
   return new ApolloClient({
-    uri: apiUrl,
-    cache: cache,
-    request: (op) =>
-      op.setContext({
-        headers: {
-          'X-Auth-Token': store.get('idToken'),
-        },
-      }),
+    link: authLink.concat(httpLink),
+    cache,
   });
 };

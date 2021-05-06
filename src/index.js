@@ -21,6 +21,8 @@ import Grants from './containers/Grants';
 import Organizations from './containers/Organizations';
 import Search from './containers/Search';
 import Methods from './containers/Methods';
+import ManagePdfs from './containers/ManagePdfs';
+import EditPdf from './containers/EditPdf';
 import OrgNteeTags from './containers/OrgNteeTags';
 
 import AdminLinks from './containers/AdminLinks';
@@ -68,6 +70,8 @@ ReactDOM.render(
             <Route path="/methods" component={Methods} />
             <Route exact path="/admin" component={Admin} />
             <PrivateRoute exact path="/admin/grants/add" component={AddGrant} />
+            <PrivateRoute exact path={'/admin/pdfs'} component={ManagePdfs} />
+            <PrivateRoute path={'/admin/pdfs/:uuid'} component={EditPdf} />
           </div>
           <Footer />
         </div>

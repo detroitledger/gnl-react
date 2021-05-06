@@ -7,6 +7,7 @@ const AdminLinks = ({ user }) =>
   user ? (
     <>
       <NavbarLink title="Add grant" href="/admin/grants/add" />
+      <NavbarLink title="Manage PDFs" href="/admin/pdfs" />
       <NavbarLink title="Account" href="/admin" />
     </>
   ) : (
