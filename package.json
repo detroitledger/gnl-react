@@ -20,7 +20,7 @@
     "@apollo/client": "^3.3.12",
     "@bnchdrff/react-user-tour": "^3.0.1",
     "axios": "^0.15.3",
-    "cross-fetch": "^1.1.1",
+    "cross-fetch": "^3.1.5",
     "eslint-plugin-react": "^7.14.3",
     "graphql": "14.5.5",
     "graphql-tools": "^0.9.0",
